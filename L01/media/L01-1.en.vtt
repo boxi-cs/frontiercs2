@@ -1,0 +1,405 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.039
+Welcome to Lecture 1 of the
+
+2
+00:00:02.104 --> 00:00:03.392
+FrontierCS 2 course
+
+3
+00:00:03.392 --> 00:00:05.260
+on machine-learning systems.
+
+4
+00:00:05.610 --> 00:00:08.171
+Each task gives an AI agent real research
+
+5
+00:00:08.234 --> 00:00:10.232
+code with one key part to write
+
+6
+00:00:10.295 --> 00:00:11.794
+and a human reference to
+
+7
+00:00:11.857 --> 00:00:13.293
+beat on every workload
+
+8
+00:00:13.293 --> 00:00:14.730
+including hidden ones.
+
+9
+00:00:15.080 --> 00:00:18.386
+This lecture covers six tasks.
+
+10
+00:00:18.386 --> 00:00:20.920
+We start with SVG-EAR.
+
+11
+00:00:21.500 --> 00:00:23.923
+A video diffusion model makes a clip
+
+12
+00:00:23.990 --> 00:00:25.740
+from noise in fifty steps.
+
+13
+00:00:26.090 --> 00:00:28.981
+An eighty-one-frame clip at seven twenty p has
+
+14
+00:00:29.044 --> 00:00:31.621
+seventy-five thousand six hundred tokens
+
+15
+00:00:31.621 --> 00:00:32.753
+and in attention
+
+16
+00:00:32.753 --> 00:00:34.890
+every token looks at every other.
+
+17
+00:00:35.240 --> 00:00:37.983
+Sparse VideoGen2 clusters the tokens and
+
+18
+00:00:38.051 --> 00:00:40.520
+computes only the pairs that matter.
+
+19
+00:00:40.870 --> 00:00:43.669
+SVG-EAR, from ECCV 2026
+
+20
+00:00:43.669 --> 00:00:47.750
+also estimates the pairs it skips.
+
+21
+00:00:48.330 --> 00:00:49.581
+In the case study
+
+22
+00:00:49.581 --> 00:00:51.456
+the example has one query
+
+23
+00:00:51.456 --> 00:00:53.610
+and four keys in two clusters.
+
+24
+00:00:53.960 --> 00:00:56.760
+Each key's weight is e to its score.
+
+25
+00:00:57.110 --> 00:01:00.230
+In cluster A, both keys score one.
+
+26
+00:01:00.580 --> 00:01:03.300
+In B, they score zero and two.
+
+27
+00:01:03.650 --> 00:01:05.638
+To estimate a skipped cluster
+
+28
+00:01:05.638 --> 00:01:07.890
+give every key the average score.
+
+29
+00:01:08.240 --> 00:01:11.840
+For A, that is exact: five point four four.
+
+30
+00:01:12.190 --> 00:01:15.037
+For B, it is also five point four four
+
+31
+00:01:15.037 --> 00:01:18.030
+but the truth is eight point three nine.
+
+32
+00:01:18.610 --> 00:01:19.839
+Pause and predict.
+
+33
+00:01:19.908 --> 00:01:21.751
+You can compute one cluster
+
+34
+00:01:21.820 --> 00:01:23.391
+and estimate the other.
+
+35
+00:01:23.391 --> 00:01:25.508
+By estimated weight, they tie.
+
+36
+00:01:25.508 --> 00:01:27.010
+Which do you compute?
+
+37
+00:01:30.560 --> 00:01:31.257
+Compute B.
+
+38
+00:01:31.257 --> 00:01:33.140
+A's estimate has no error
+
+39
+00:01:33.140 --> 00:01:35.302
+so the output comes out exact.
+
+40
+00:01:35.371 --> 00:01:37.672
+SVG-EAR ranks blocks by how wrong
+
+41
+00:01:37.742 --> 00:01:39.416
+their estimate would be
+
+42
+00:01:39.416 --> 00:01:40.880
+not by their weight.
+
+43
+00:01:41.960 --> 00:01:44.760
+Our small layer has sixteen key clusters
+
+44
+00:01:44.830 --> 00:01:46.440
+and thirty-two queries.
+
+45
+00:01:46.790 --> 00:01:48.396
+Compute two of the sixteen
+
+46
+00:01:48.458 --> 00:01:50.003
+blocks and drop the rest
+
+47
+00:01:50.065 --> 00:01:51.733
+and the mean error is about
+
+48
+00:01:51.794 --> 00:01:53.030
+zero point two four.
+
+49
+00:01:53.380 --> 00:01:54.608
+Estimate the rest
+
+50
+00:01:54.608 --> 00:01:57.540
+and it falls to zero point zero six seven.
+
+51
+00:01:57.890 --> 00:01:59.165
+Rank by error too
+
+52
+00:01:59.165 --> 00:02:02.210
+and it falls to zero point zero two eight.
+
+53
+00:02:02.560 --> 00:02:05.200
+At every budget, the order holds.
+
+54
+00:02:05.780 --> 00:02:07.626
+The task removes this attention
+
+55
+00:02:07.686 --> 00:02:09.353
+layer from two video models
+
+56
+00:02:09.353 --> 00:02:11.140
+and the agent writes it back.
+
+57
+00:02:11.490 --> 00:02:13.852
+A pass is judged on twelve clips
+
+58
+00:02:13.852 --> 00:02:16.930
+against the human reference, clip by clip.
+
+59
+00:02:17.280 --> 00:02:19.539
+Each clip must take at least
+
+60
+00:02:19.619 --> 00:02:21.474
+four percent less time
+
+61
+00:02:21.555 --> 00:02:23.410
+and lose almost nothing
+
+62
+00:02:23.491 --> 00:02:27.040
+on three image scores: PSNR, SSIM and LPIPS.
+
+63
+00:02:27.390 --> 00:02:29.328
+Twelve clips, four bars each
+
+64
+00:02:29.328 --> 00:02:30.665
+forty-eight checks
+
+65
+00:02:30.665 --> 00:02:32.670
+and a pass needs all of them.
+
+66
+00:02:33.250 --> 00:02:34.296
+No model passed
+
+67
+00:02:34.361 --> 00:02:36.387
+though thirteen of sixteen beat
+
+68
+00:02:36.452 --> 00:02:37.890
+the reference's score.
+
+69
+00:02:38.240 --> 00:02:39.874
+The best, GPT-6 Astra
+
+70
+00:02:39.949 --> 00:02:42.623
+scored forty-eight point six against
+
+71
+00:02:42.697 --> 00:02:44.480
+thirty-three point nine.
+
+72
+00:02:44.830 --> 00:02:45.897
+Every fourth step
+
+73
+00:02:45.956 --> 00:02:47.616
+it measures its own error on
+
+74
+00:02:47.676 --> 00:02:49.158
+thirty-two probe queries
+
+75
+00:02:49.158 --> 00:02:51.470
+and sets each head's budget from that.
+
+76
+00:02:51.820 --> 00:02:52.524
+On average
+
+77
+00:02:52.524 --> 00:02:55.340
+it beat the reference on all four measures.
+
+78
+00:02:55.690 --> 00:02:57.208
+But on Wan clip three
+
+79
+00:02:57.277 --> 00:02:59.347
+its PSNR fell zero point eight
+
+80
+00:02:59.416 --> 00:03:01.210
+decibels short of the bar.
+
+81
+00:03:01.560 --> 00:03:04.200
+It missed five checks, and failed.
+
+82
+00:03:04.780 --> 00:03:06.334
+Astra also added a term
+
+83
+00:03:06.401 --> 00:03:07.820
+the paper leaves out.
+
+84
+00:03:08.170 --> 00:03:10.066
+The exponential bends upward
+
+85
+00:03:10.131 --> 00:03:12.288
+so the estimate from the centroid
+
+86
+00:03:12.354 --> 00:03:13.530
+is never too high.
+
+87
+00:03:13.880 --> 00:03:16.431
+A second-order fix adds half the variance
+
+88
+00:03:16.493 --> 00:03:18.360
+of the scores to the exponent.
+
+89
+00:03:18.710 --> 00:03:19.658
+For cluster B
+
+90
+00:03:19.658 --> 00:03:21.892
+that gives eight point nine six
+
+91
+00:03:21.892 --> 00:03:22.907
+a little high
+
+92
+00:03:22.907 --> 00:03:25.750
+but far closer than five point four four.
+
+93
+00:03:26.330 --> 00:03:30.090
+Claude Opus 5.5 stayed closest to the paper.
+
+94
+00:03:30.440 --> 00:03:32.630
+It passed all twelve speed checks
+
+95
+00:03:32.630 --> 00:03:35.400
+but only thirty-two of forty-eight in all.
+
+96
+00:03:35.750 --> 00:03:37.430
+Three things to take away.
+
+97
+00:03:37.780 --> 00:03:39.460
+Estimate what you skip.
+
+98
+00:03:39.810 --> 00:03:42.210
+Rank by the error of that estimate.
+
+99
+00:03:42.560 --> 00:03:44.501
+And a pass needs every check
+
+100
+00:03:44.501 --> 00:03:45.840
+not a good average.
+
+101
+00:03:46.190 --> 00:03:47.950
+Next, Continuum.

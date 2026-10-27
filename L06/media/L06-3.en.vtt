@@ -1,0 +1,293 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:01.636
+To trace a path back
+
+2
+00:00:01.636 --> 00:00:03.290
+you need the whole table
+
+3
+00:00:03.290 --> 00:00:05.580
+or at least all of Myers's columns.
+
+4
+00:00:05.930 --> 00:00:09.137
+Edlib traces back directly only when its estimate
+
+5
+00:00:09.203 --> 00:00:11.690
+of that storage is below one mebibyte.
+
+6
+00:00:12.040 --> 00:00:14.200
+Our thousand-base pairs fit.
+
+7
+00:00:14.550 --> 00:00:17.135
+The task's pairs need thirty mebibytes
+
+8
+00:00:17.135 --> 00:00:19.190
+and about two hundred seventy.
+
+9
+00:00:19.540 --> 00:00:21.762
+Yet the human reference in the task
+
+10
+00:00:21.826 --> 00:00:23.540
+uses only eighty kibibytes.
+
+11
+00:00:24.120 --> 00:00:25.749
+Hirschberg found the way out
+
+12
+00:00:25.807 --> 00:00:27.262
+in nineteen seventy-five
+
+13
+00:00:27.262 --> 00:00:28.600
+for a related problem.
+
+14
+00:00:28.950 --> 00:00:31.190
+Cut the query at its middle row.
+
+15
+00:00:31.540 --> 00:00:33.324
+Compute the top half's last
+
+16
+00:00:33.390 --> 00:00:34.580
+row going forward.
+
+17
+00:00:34.930 --> 00:00:36.678
+Then compute the bottom half's
+
+18
+00:00:36.736 --> 00:00:37.959
+costs going backward
+
+19
+00:00:38.017 --> 00:00:39.590
+by running the same code on
+
+20
+00:00:39.648 --> 00:00:40.930
+both strings reversed.
+
+21
+00:00:41.280 --> 00:00:42.132
+At each column
+
+22
+00:00:42.189 --> 00:00:44.574
+the two numbers add up to the best cost of
+
+23
+00:00:44.631 --> 00:00:46.960
+a path that crosses the middle row there.
+
+24
+00:00:47.310 --> 00:00:50.681
+Here the sums are five, three, one
+
+25
+00:00:50.681 --> 00:00:52.030
+two and four.
+
+26
+00:00:52.380 --> 00:00:55.236
+The smallest, one, is the distance
+
+27
+00:00:55.236 --> 00:00:56.460
+at column two.
+
+28
+00:00:56.810 --> 00:00:59.450
+That is where an optimal path crosses.
+
+29
+00:01:00.030 --> 00:01:01.379
+Pause and predict
+
+30
+00:01:01.379 --> 00:01:04.750
+why is the smallest sum always the distance?
+
+31
+00:01:08.300 --> 00:01:11.110
+Every path from the top-left to the bottom-right
+
+32
+00:01:11.168 --> 00:01:13.100
+crosses the middle row somewhere.
+
+33
+00:01:13.450 --> 00:01:15.632
+The sum at a column is the cheapest
+
+34
+00:01:15.695 --> 00:01:17.690
+path forced through that column.
+
+35
+00:01:18.040 --> 00:01:19.680
+So the cheapest of them is
+
+36
+00:01:19.743 --> 00:01:21.320
+the cheapest path of all.
+
+37
+00:01:22.400 --> 00:01:23.947
+Once the crossing is known
+
+38
+00:01:24.005 --> 00:01:26.068
+the top-left and bottom-right pieces
+
+39
+00:01:26.125 --> 00:01:28.131
+are two smaller alignment problems
+
+40
+00:01:28.131 --> 00:01:30.480
+and the other two pieces can be dropped.
+
+41
+00:01:30.830 --> 00:01:32.537
+Solve each the same way
+
+42
+00:01:32.608 --> 00:01:34.314
+and stop when a piece is
+
+43
+00:01:34.386 --> 00:01:35.950
+one row or one column.
+
+44
+00:01:36.300 --> 00:01:38.851
+Only two rows of the table are ever kept
+
+45
+00:01:38.851 --> 00:01:41.340
+plus the recursion and the path itself.
+
+46
+00:01:41.920 --> 00:01:44.560
+The price of linear memory is time.
+
+47
+00:01:44.910 --> 00:01:46.580
+The first split computes
+
+48
+00:01:46.649 --> 00:01:48.110
+the whole table once.
+
+49
+00:01:48.460 --> 00:01:50.856
+The pieces below add half as much
+
+50
+00:01:50.856 --> 00:01:52.759
+then a quarter, and so on
+
+51
+00:01:52.759 --> 00:01:54.380
+about twice the table.
+
+52
+00:01:54.730 --> 00:01:56.723
+On our ninety-nine percent pair
+
+53
+00:01:56.785 --> 00:01:58.592
+that is two million cells for
+
+54
+00:01:58.654 --> 00:02:00.086
+a table of one million
+
+55
+00:02:00.086 --> 00:02:02.640
+and the path it returns costs seventeen
+
+56
+00:02:02.640 --> 00:02:04.010
+exactly the distance.
+
+57
+00:02:04.590 --> 00:02:07.059
+Edlib splits the target in half instead
+
+58
+00:02:07.120 --> 00:02:09.157
+because Myers's algorithm gives a
+
+59
+00:02:09.219 --> 00:02:11.070
+whole column of costs at once.
+
+60
+00:02:11.420 --> 00:02:14.137
+It bands every half by the known distance
+
+61
+00:02:14.202 --> 00:02:16.790
+and traces back directly any piece whose
+
+62
+00:02:16.855 --> 00:02:18.860
+estimate is under one mebibyte.
+
+63
+00:02:19.210 --> 00:02:21.112
+But in this task the reference
+
+64
+00:02:21.175 --> 00:02:22.824
+peaks at eighty kibibytes
+
+65
+00:02:22.887 --> 00:02:24.472
+so a solution must choose
+
+66
+00:02:24.535 --> 00:02:25.930
+a much smaller budget.
+
+67
+00:02:26.510 --> 00:02:28.852
+So: a forward pass and a backward
+
+68
+00:02:28.923 --> 00:02:30.910
+pass meet in the middle row.
+
+69
+00:02:31.260 --> 00:02:34.220
+Recurse on two pieces and drop the rest.
+
+70
+00:02:34.570 --> 00:02:36.124
+Two rows of memory cost
+
+71
+00:02:36.191 --> 00:02:37.610
+about twice the time.
+
+72
+00:02:37.960 --> 00:02:39.648
+Next, the task itself
+
+73
+00:02:39.648 --> 00:02:41.720
+and what the agents wrote.

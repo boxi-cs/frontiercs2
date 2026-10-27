@@ -1,0 +1,325 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.020
+Two tasks train a model briefly.
+
+2
+00:00:03.370 --> 00:00:05.370
+DeTok trains an image tokenizer
+
+3
+00:00:05.435 --> 00:00:06.338
+as a denoiser
+
+4
+00:00:06.402 --> 00:00:08.467
+it hides image patches and mixes
+
+5
+00:00:08.531 --> 00:00:10.015
+noise into the latents
+
+6
+00:00:10.080 --> 00:00:11.757
+and the decoder must still
+
+7
+00:00:11.822 --> 00:00:13.370
+rebuild the clean image.
+
+8
+00:00:13.720 --> 00:00:16.409
+But the judged run is only sixteen updates
+
+9
+00:00:16.409 --> 00:00:19.160
+at a learning rate of ten to the minus six.
+
+10
+00:00:19.510 --> 00:00:21.837
+Most runs ended at the reference's
+
+11
+00:00:21.905 --> 00:00:22.863
+image quality
+
+12
+00:00:22.863 --> 00:00:25.190
+so wall time decided most scores.
+
+13
+00:00:25.540 --> 00:00:26.455
+Opus, for one
+
+14
+00:00:26.521 --> 00:00:29.398
+reproduced the model's roughly three hundred
+
+15
+00:00:29.463 --> 00:00:32.210
+forty-three million random numbers faster
+
+16
+00:00:32.210 --> 00:00:33.060
+bit for bit.
+
+17
+00:00:33.640 --> 00:00:35.831
+DyT replaces LayerNorm with
+
+18
+00:00:35.912 --> 00:00:39.320
+one element-wise function: a learned tanh.
+
+19
+00:00:39.670 --> 00:00:42.774
+LayerNorm uses a token's mean and variance
+
+20
+00:00:42.774 --> 00:00:45.590
+so one outlier rescales every feature.
+
+21
+00:00:45.940 --> 00:00:48.340
+DyT treats each feature alone
+
+22
+00:00:48.340 --> 00:00:50.820
+and caps the outlier near one.
+
+23
+00:00:51.170 --> 00:00:53.170
+With no statistics to compute
+
+24
+00:00:53.170 --> 00:00:54.370
+it can be faster.
+
+25
+00:00:54.720 --> 00:00:56.402
+The reference and most runs
+
+26
+00:00:56.465 --> 00:00:57.524
+stayed at chance
+
+27
+00:00:57.524 --> 00:00:59.580
+twenty percent for five classes
+
+28
+00:00:59.580 --> 00:01:01.200
+so the race was on speed.
+
+29
+00:01:01.550 --> 00:01:02.776
+At equal accuracy
+
+30
+00:01:02.844 --> 00:01:05.773
+the score stops at seventy once the step is
+
+31
+00:01:05.841 --> 00:01:08.430
+about one point one nine times faster.
+
+32
+00:01:09.010 --> 00:01:10.610
+Three models passed.
+
+33
+00:01:10.960 --> 00:01:13.128
+GPT-6 Astra also reached the
+
+34
+00:01:13.205 --> 00:01:15.760
+top score of seventy, and failed.
+
+35
+00:01:16.110 --> 00:01:18.421
+The score times only the training step
+
+36
+00:01:18.480 --> 00:01:20.199
+but the pass rule also checks
+
+37
+00:01:20.258 --> 00:01:21.147
+inference time
+
+38
+00:01:21.147 --> 00:01:22.925
+and on one workload of three
+
+39
+00:01:22.984 --> 00:01:24.406
+its inference was slower
+
+40
+00:01:24.466 --> 00:01:25.710
+than the reference's.
+
+41
+00:01:26.290 --> 00:01:28.850
+The last task is Polar Express.
+
+42
+00:01:29.200 --> 00:01:31.233
+A matrix's polar factor keeps
+
+43
+00:01:31.303 --> 00:01:32.776
+its singular vectors
+
+44
+00:01:32.776 --> 00:01:35.440
+but sets every singular value to one.
+
+45
+00:01:35.790 --> 00:01:37.060
+An odd polynomial
+
+46
+00:01:37.060 --> 00:01:39.529
+applied with matrix products only
+
+47
+00:01:39.529 --> 00:01:42.350
+acts on each singular value separately.
+
+48
+00:01:42.700 --> 00:01:45.278
+The classical Newton–Schulz iteration
+
+49
+00:01:45.348 --> 00:01:47.020
+applies one fixed cubic.
+
+50
+00:01:47.370 --> 00:01:49.679
+Polar Express picks, for each step
+
+51
+00:01:49.745 --> 00:01:52.121
+the best polynomial for the interval
+
+52
+00:01:52.187 --> 00:01:53.770
+the previous steps left.
+
+53
+00:01:54.120 --> 00:01:56.915
+In our toy, starting from one thousandth
+
+54
+00:01:56.983 --> 00:01:59.710
+Newton–Schulz still has an error of zero
+
+55
+00:01:59.778 --> 00:02:01.960
+point nine four after ten steps.
+
+56
+00:02:02.310 --> 00:02:04.141
+The greedy schedule is down to
+
+57
+00:02:04.202 --> 00:02:05.910
+three point five millionths.
+
+58
+00:02:06.490 --> 00:02:07.910
+Pause and predict.
+
+59
+00:02:07.989 --> 00:02:10.197
+Polar Express is in the same
+
+60
+00:02:10.276 --> 00:02:12.090
+field as KV Compaction.
+
+61
+00:02:12.440 --> 00:02:14.920
+How many of the sixteen models passed it?
+
+62
+00:02:18.470 --> 00:02:19.350
+Fourteen.
+
+63
+00:02:19.700 --> 00:02:22.124
+It has an exact oracle, the SVD
+
+64
+00:02:22.200 --> 00:02:24.169
+an optimal polynomial from
+
+65
+00:02:24.245 --> 00:02:25.912
+a classical algorithm
+
+66
+00:02:25.912 --> 00:02:28.260
+and a check that needs no GPU.
+
+67
+00:02:28.610 --> 00:02:30.933
+KV Compaction has none of these
+
+68
+00:02:30.933 --> 00:02:32.530
+and nobody passed it.
+
+69
+00:02:33.610 --> 00:02:35.831
+That ends the Machine Learning lecture
+
+70
+00:02:35.831 --> 00:02:36.970
+with three lessons.
+
+71
+00:02:37.320 --> 00:02:38.958
+Every workload decides
+
+72
+00:02:38.958 --> 00:02:42.019
+Opus ran a hundred and eight times faster
+
+73
+00:02:42.019 --> 00:02:44.440
+and still failed on two articles.
+
+74
+00:02:44.790 --> 00:02:46.997
+Fit the method to the measurement
+
+75
+00:02:46.997 --> 00:02:49.139
+short runs left speed to decide
+
+76
+00:02:49.139 --> 00:02:51.670
+and averaging suited the image scores.
+
+77
+00:02:52.020 --> 00:02:54.757
+And training data must be exactly right
+
+78
+00:02:54.757 --> 00:02:57.220
+because its mistakes fail silently.
+
+79
+00:02:57.570 --> 00:02:59.838
+The interactive notes for this lecture
+
+80
+00:02:59.898 --> 00:03:01.330
+have every task in full.
+
+81
+00:03:01.680 --> 00:03:05.040
+Next time: Lecture 8, databases.

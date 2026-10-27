@@ -1,0 +1,333 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:01.730
+Spectrum, from 2024
+
+2
+00:00:01.802 --> 00:00:04.090
+runs smart-contract transactions
+
+3
+00:00:04.161 --> 00:00:06.735
+in parallel, but commits them in the
+
+4
+00:00:06.807 --> 00:00:08.380
+order consensus fixed.
+
+5
+00:00:08.730 --> 00:00:09.587
+On a conflict
+
+6
+00:00:09.649 --> 00:00:12.282
+it rolls the later one back to a checkpoint
+
+7
+00:00:12.343 --> 00:00:13.690
+taken partway through.
+
+8
+00:00:14.040 --> 00:00:16.308
+A checkpoint saves the code position
+
+9
+00:00:16.371 --> 00:00:17.758
+and the operand stack
+
+10
+00:00:17.821 --> 00:00:19.522
+and copying a deep stack at
+
+11
+00:00:19.585 --> 00:00:21.160
+every checkpoint is slow.
+
+12
+00:00:21.740 --> 00:00:24.220
+So keep the stack in pages of four.
+
+13
+00:00:24.570 --> 00:00:27.091
+A checkpoint keeps only the page table
+
+14
+00:00:27.156 --> 00:00:29.289
+and a page is copied on its first
+
+15
+00:00:29.354 --> 00:00:30.970
+write after a checkpoint.
+
+16
+00:00:31.320 --> 00:00:33.880
+In our model, with sixteen checkpoints of
+
+17
+00:00:33.942 --> 00:00:35.503
+a two-hundred-item stack
+
+18
+00:00:35.566 --> 00:00:37.814
+copying the whole stack copies three
+
+19
+00:00:37.876 --> 00:00:40.061
+thousand two hundred items to save
+
+20
+00:00:40.061 --> 00:00:41.560
+and as many to restore.
+
+21
+00:00:41.910 --> 00:00:43.758
+The paged stack copies none
+
+22
+00:00:43.827 --> 00:00:45.127
+to save or restore
+
+23
+00:00:45.196 --> 00:00:47.112
+and one thousand two hundred
+
+24
+00:00:47.181 --> 00:00:48.550
+fifty-two on writes.
+
+25
+00:00:48.900 --> 00:00:51.324
+Claude Opus 5.5 built this design
+
+26
+00:00:51.324 --> 00:00:53.606
+and was one of only two passes
+
+27
+00:00:53.606 --> 00:00:55.959
+a pass needs wins on throughput
+
+28
+00:00:55.959 --> 00:00:58.740
+creation and restore time, and memory.
+
+29
+00:00:59.320 --> 00:01:00.950
+Seer, also from 2024
+
+30
+00:01:01.027 --> 00:01:03.123
+predicts which way contract
+
+31
+00:01:03.201 --> 00:01:04.520
+branches will go.
+
+32
+00:01:04.870 --> 00:01:07.304
+Each branch gets a small predictor
+
+33
+00:01:07.375 --> 00:01:10.310
+that answers taken, not taken, or unsure.
+
+34
+00:01:10.660 --> 00:01:13.065
+Claude Opus 5.5 predicted the last
+
+35
+00:01:13.136 --> 00:01:15.399
+direction only after it had held
+
+36
+00:01:15.470 --> 00:01:17.380
+across two distinct blocks.
+
+37
+00:01:17.730 --> 00:01:19.659
+On our trace of sixty branches
+
+38
+00:01:19.721 --> 00:01:21.526
+that halves the wrong guesses
+
+39
+00:01:21.588 --> 00:01:23.268
+of the last-direction rule
+
+40
+00:01:23.268 --> 00:01:25.570
+at the price of more unsure answers.
+
+41
+00:01:25.920 --> 00:01:27.002
+On the real task
+
+42
+00:01:27.002 --> 00:01:29.611
+ten runs reached the same rounded means
+
+43
+00:01:29.611 --> 00:01:31.520
+and the pass rule split them.
+
+44
+00:01:31.870 --> 00:01:34.290
+Kimi K3 passed with eighty-one
+
+45
+00:01:34.368 --> 00:01:36.632
+while GPT-6 Astra failed with
+
+46
+00:01:36.710 --> 00:01:38.350
+eighty-one point two.
+
+47
+00:01:38.930 --> 00:01:41.401
+The last task is a persistent treap
+
+48
+00:01:41.401 --> 00:01:42.706
+from a 2025 paper
+
+49
+00:01:42.774 --> 00:01:45.520
+an ordered index where every transaction
+
+50
+00:01:45.589 --> 00:01:46.962
+makes a new version
+
+51
+00:01:46.962 --> 00:01:49.570
+and every old version stays readable.
+
+52
+00:01:49.920 --> 00:01:52.656
+An update copies only the path it changes
+
+53
+00:01:52.656 --> 00:01:54.480
+and shares everything else.
+
+54
+00:01:54.830 --> 00:01:55.655
+In our model
+
+55
+00:01:55.719 --> 00:01:58.194
+about a dozen new nodes per update keep
+
+56
+00:01:58.258 --> 00:02:00.670
+three thousand and one versions alive.
+
+57
+00:02:01.250 --> 00:02:04.850
+Claude Opus 5.5 made the updates parallel.
+
+58
+00:02:05.200 --> 00:02:07.263
+Nodes with a high priority form
+
+59
+00:02:07.330 --> 00:02:08.727
+the top of the treap
+
+60
+00:02:08.727 --> 00:02:11.323
+and each subtree below them is a unit
+
+61
+00:02:11.323 --> 00:02:12.720
+owned by one worker.
+
+62
+00:02:13.070 --> 00:02:15.758
+Workers copy paths inside their own units
+
+63
+00:02:15.822 --> 00:02:18.702
+and a linker thread copies the short top path
+
+64
+00:02:18.766 --> 00:02:21.070
+and publishes each version in order.
+
+65
+00:02:21.420 --> 00:02:23.820
+Twelve of sixteen models passed.
+
+66
+00:02:24.170 --> 00:02:25.830
+Opus scored forty point two
+
+67
+00:02:25.889 --> 00:02:28.438
+about four point seven times the throughput
+
+68
+00:02:28.498 --> 00:02:29.742
+of a serial scaffold
+
+69
+00:02:29.742 --> 00:02:32.410
+where the reference reaches one point three.
+
+70
+00:02:32.990 --> 00:02:35.710
+That ends the lecture, with three lessons.
+
+71
+00:02:36.060 --> 00:02:37.636
+Do the cheap pass first
+
+72
+00:02:37.636 --> 00:02:39.343
+drop rows before joining
+
+73
+00:02:39.409 --> 00:02:41.575
+and stop probing when more probes
+
+74
+00:02:41.641 --> 00:02:43.020
+are unlikely to help.
+
+75
+00:02:43.370 --> 00:02:46.044
+Reorganize the data, not just the loop
+
+76
+00:02:46.044 --> 00:02:49.130
+as the best JoinBoost and Spectrum runs did.
+
+77
+00:02:49.480 --> 00:02:52.282
+And the pass rule decides: on Yannakakis
+
+78
+00:02:52.350 --> 00:02:54.263
+thirty-nine strict wins were
+
+79
+00:02:54.332 --> 00:02:56.040
+too many for every model.
+
+80
+00:02:56.390 --> 00:02:59.167
+As an exercise, use pages of sixteen items
+
+81
+00:02:59.233 --> 00:03:00.490
+in the stack model
+
+82
+00:03:00.490 --> 00:03:02.870
+and see what happens to the copies.
+
+83
+00:03:03.220 --> 00:03:07.060
+Next time: Lecture 9, programming languages.

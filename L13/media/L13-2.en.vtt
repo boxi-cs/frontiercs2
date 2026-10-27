@@ -1,0 +1,381 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:01.874
+The task removes the body
+
+2
+00:00:01.937 --> 00:00:03.260
+of the sampling loop.
+
+3
+00:00:03.610 --> 00:00:05.221
+The agent decides how many
+
+4
+00:00:05.283 --> 00:00:06.770
+denoising steps to take
+
+5
+00:00:06.831 --> 00:00:08.752
+from one to two hundred network
+
+6
+00:00:08.814 --> 00:00:11.416
+calls per prediction, where to place them
+
+7
+00:00:11.416 --> 00:00:13.770
+and how each step updates the sample.
+
+8
+00:00:14.120 --> 00:00:15.460
+One contract holds
+
+9
+00:00:15.531 --> 00:00:18.988
+the entries of the plan fixed by the observations
+
+10
+00:00:19.059 --> 00:00:20.822
+must come back unchanged
+
+11
+00:00:20.822 --> 00:00:23.080
+and every entry must be finite.
+
+12
+00:00:23.430 --> 00:00:25.075
+Fixing the seed is forbidden
+
+13
+00:00:25.131 --> 00:00:27.514
+and the sampler runs in a separate process
+
+14
+00:00:27.570 --> 00:00:29.555
+that can only ask for network calls
+
+15
+00:00:29.612 --> 00:00:31.030
+and fresh random numbers.
+
+16
+00:00:31.610 --> 00:00:34.200
+A simulated robot pushes a T-shaped
+
+17
+00:00:34.274 --> 00:00:37.530
+block into a target region: the Push-T task.
+
+18
+00:00:37.880 --> 00:00:39.932
+An episode runs at most three
+
+19
+00:00:40.003 --> 00:00:41.560
+hundred control steps.
+
+20
+00:00:41.910 --> 00:00:44.146
+The controller observes two steps
+
+21
+00:00:44.146 --> 00:00:44.870
+plans ten
+
+22
+00:00:44.870 --> 00:00:47.830
+and carries out eight before planning again.
+
+23
+00:00:48.180 --> 00:00:50.124
+A step's reward is the share of
+
+24
+00:00:50.187 --> 00:00:51.942
+the target the block covers
+
+25
+00:00:52.005 --> 00:00:53.635
+divided by zero point nine
+
+26
+00:00:53.698 --> 00:00:55.140
+five and capped at one.
+
+27
+00:00:55.490 --> 00:00:57.812
+An episode succeeds when the coverage
+
+28
+00:00:57.875 --> 00:00:59.570
+passes ninety-five percent.
+
+29
+00:01:00.150 --> 00:01:00.672
+To pass
+
+30
+00:01:00.737 --> 00:01:03.542
+in every group of episodes the sampler must
+
+31
+00:01:03.607 --> 00:01:06.347
+match or beat the authors' sampler on mean
+
+32
+00:01:06.412 --> 00:01:08.500
+best reward and on success rate
+
+33
+00:01:08.500 --> 00:01:10.065
+and be strictly faster
+
+34
+00:01:10.065 --> 00:01:12.870
+both per prediction and for the whole run.
+
+35
+00:01:13.220 --> 00:01:14.980
+The score is separate.
+
+36
+00:01:15.330 --> 00:01:18.129
+It compares each workload with an anchor
+
+37
+00:01:18.129 --> 00:01:20.450
+a plain twenty-step DDPM sampler.
+
+38
+00:01:20.800 --> 00:01:22.359
+The score is the quality
+
+39
+00:01:22.424 --> 00:01:23.917
+gained over the anchor
+
+40
+00:01:23.917 --> 00:01:26.320
+times the worse of two speed ratios.
+
+41
+00:01:26.670 --> 00:01:28.433
+So a sampler no better than
+
+42
+00:01:28.498 --> 00:01:31.305
+the anchor scores zero, however fast it is
+
+43
+00:01:31.305 --> 00:01:33.524
+and a slow sampler scores little
+
+44
+00:01:33.524 --> 00:01:34.830
+however good it is.
+
+45
+00:01:35.410 --> 00:01:37.010
+Pause and predict.
+
+46
+00:01:37.360 --> 00:01:39.294
+Every run was faster on average
+
+47
+00:01:39.356 --> 00:01:41.040
+than the hundred-step loop.
+
+48
+00:01:41.390 --> 00:01:43.470
+How many of the sixteen passed?
+
+49
+00:01:47.020 --> 00:01:48.380
+None of them passed.
+
+50
+00:01:48.730 --> 00:01:50.684
+And yet all sixteen scored above
+
+51
+00:01:50.745 --> 00:01:53.370
+the human reference, which scored fourteen.
+
+52
+00:01:54.450 --> 00:01:56.290
+Here are five of the runs.
+
+53
+00:01:56.640 --> 00:01:58.530
+GLM 5.3 had the best score
+
+54
+00:01:58.530 --> 00:02:00.210
+fifty-nine point eight
+
+55
+00:02:00.280 --> 00:02:02.800
+at forty-two point five milliseconds
+
+56
+00:02:02.870 --> 00:02:03.920
+per prediction.
+
+57
+00:02:04.270 --> 00:02:06.256
+Step 5 Preview had the highest
+
+58
+00:02:06.322 --> 00:02:07.779
+success rate of these
+
+59
+00:02:07.779 --> 00:02:09.567
+zero point four one seven
+
+60
+00:02:09.633 --> 00:02:11.420
+against zero point two five
+
+61
+00:02:11.487 --> 00:02:13.870
+for the reference, and still failed.
+
+62
+00:02:14.220 --> 00:02:16.466
+The pass rule looks at every group
+
+63
+00:02:16.530 --> 00:02:18.520
+and success is a coin with only
+
+64
+00:02:18.584 --> 00:02:20.060
+a few tosses per group.
+
+65
+00:02:20.410 --> 00:02:22.911
+A sampler nineteen times faster could
+
+66
+00:02:22.979 --> 00:02:25.210
+lose a group by a single episode.
+
+67
+00:02:25.790 --> 00:02:28.752
+Claude Opus 5.5 scored fifty-seven
+
+68
+00:02:28.839 --> 00:02:29.710
+point one.
+
+69
+00:02:30.060 --> 00:02:32.227
+It called the network five times
+
+70
+00:02:32.227 --> 00:02:34.460
+at the five levels from part one.
+
+71
+00:02:34.810 --> 00:02:36.929
+At each level it made a clean guess
+
+72
+00:02:36.929 --> 00:02:38.695
+clipped to the allowed range
+
+73
+00:02:38.695 --> 00:02:41.050
+and wrote the observed entries back in.
+
+74
+00:02:41.400 --> 00:02:43.649
+Between levels it took second-order
+
+75
+00:02:43.713 --> 00:02:45.449
+DPM-Solver plus plus jumps
+
+76
+00:02:45.513 --> 00:02:47.569
+and corrected each landing point
+
+77
+00:02:47.633 --> 00:02:49.240
+with the UniPC corrector
+
+78
+00:02:49.240 --> 00:02:51.425
+which reuses the guess just made
+
+79
+00:02:51.425 --> 00:02:53.160
+so it costs no extra call.
+
+80
+00:02:53.510 --> 00:02:55.738
+That is sixty point four milliseconds
+
+81
+00:02:55.798 --> 00:02:56.701
+per prediction
+
+82
+00:02:56.701 --> 00:02:59.110
+against one thousand one hundred fifty.
+
+83
+00:02:59.460 --> 00:03:01.385
+But its success rate was zero
+
+84
+00:03:01.452 --> 00:03:02.779
+point one six seven
+
+85
+00:03:02.779 --> 00:03:05.700
+against zero point two five, and it failed.
+
+86
+00:03:06.280 --> 00:03:09.000
+So: one call gives the average.
+
+87
+00:03:09.350 --> 00:03:12.345
+All sixteen runs beat the reference's score
+
+88
+00:03:12.345 --> 00:03:13.502
+and none passed
+
+89
+00:03:13.502 --> 00:03:16.021
+because a pass asks for never worse
+
+90
+00:03:16.021 --> 00:03:17.110
+in every group.
+
+91
+00:03:17.460 --> 00:03:18.341
+As an exercise
+
+92
+00:03:18.400 --> 00:03:20.633
+find three levels for the second-order
+
+93
+00:03:20.691 --> 00:03:22.983
+sampler that leave fewer than thirty of
+
+94
+00:03:23.041 --> 00:03:24.980
+a thousand samples in the middle.
+
+95
+00:03:25.330 --> 00:03:27.810
+Next: MuJoCo Playground.

@@ -1,0 +1,329 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.504
+Two tasks write a loss over
+
+2
+00:00:02.586 --> 00:00:04.300
+many samples at once.
+
+3
+00:00:04.650 --> 00:00:06.616
+The Fréchet distance compares two
+
+4
+00:00:06.676 --> 00:00:09.118
+sets of images by the mean and covariance
+
+5
+00:00:09.178 --> 00:00:10.250
+of their features.
+
+6
+00:00:10.600 --> 00:00:13.062
+The Representation Fréchet Loss makes it
+
+7
+00:00:13.123 --> 00:00:15.400
+a training loss for image generators.
+
+8
+00:00:15.750 --> 00:00:18.114
+The statistics must cover many images
+
+9
+00:00:18.114 --> 00:00:20.790
+but only the current batch has a gradient.
+
+10
+00:00:21.140 --> 00:00:22.919
+So a feature queue keeps past
+
+11
+00:00:22.981 --> 00:00:24.637
+features without gradients
+
+12
+00:00:24.699 --> 00:00:26.294
+and mixes in the new batch
+
+13
+00:00:26.356 --> 00:00:27.460
+with its gradient.
+
+14
+00:00:28.040 --> 00:00:30.409
+Our toy generator has one feature
+
+15
+00:00:30.409 --> 00:00:32.360
+with a target mean of zero.
+
+16
+00:00:32.710 --> 00:00:34.899
+With a queue of sixteen features
+
+17
+00:00:34.966 --> 00:00:36.757
+its mean dips only to minus
+
+18
+00:00:36.823 --> 00:00:38.150
+zero point one nine.
+
+19
+00:00:38.500 --> 00:00:40.147
+With five hundred twelve
+
+20
+00:00:40.147 --> 00:00:42.980
+it overshoots to minus one point six four.
+
+21
+00:00:43.330 --> 00:00:44.735
+A long window lags
+
+22
+00:00:44.735 --> 00:00:46.805
+it still sees old features
+
+23
+00:00:46.805 --> 00:00:48.210
+and keeps pushing.
+
+24
+00:00:48.560 --> 00:00:50.305
+Claude Opus 5.5 found the
+
+25
+00:00:50.375 --> 00:00:51.980
+same lesson on its own
+
+26
+00:00:52.050 --> 00:00:53.935
+it replaced the long window
+
+27
+00:00:54.005 --> 00:00:55.680
+with an exponential one.
+
+28
+00:00:56.030 --> 00:00:57.442
+It had the best score
+
+29
+00:00:57.442 --> 00:01:00.202
+seven point two against three point eight
+
+30
+00:01:00.202 --> 00:01:01.550
+but no model passed.
+
+31
+00:01:02.130 --> 00:01:04.756
+LeJEPA trains an encoder without labels
+
+32
+00:01:04.822 --> 00:01:07.120
+two noisy views of one hidden state
+
+33
+00:01:07.186 --> 00:01:09.090
+should give matching outputs.
+
+34
+00:01:09.440 --> 00:01:11.760
+Alone, that is easy to cheat
+
+35
+00:01:11.760 --> 00:01:14.080
+map everything to one point.
+
+36
+00:01:14.430 --> 00:01:15.183
+In our toy
+
+37
+00:01:15.251 --> 00:01:17.783
+an encoder shrunk a hundred times has
+
+38
+00:01:17.852 --> 00:01:20.110
+an alignment loss of almost zero.
+
+39
+00:01:20.460 --> 00:01:22.404
+So a regularizer, SIGReg
+
+40
+00:01:22.482 --> 00:01:24.427
+pushes the outputs toward
+
+41
+00:01:24.504 --> 00:01:26.060
+a standard Gaussian.
+
+42
+00:01:26.410 --> 00:01:27.143
+In our toy
+
+43
+00:01:27.143 --> 00:01:29.410
+a whitening loss plays that role
+
+44
+00:01:29.410 --> 00:01:32.010
+and only the rotation is good on both.
+
+45
+00:01:32.360 --> 00:01:34.840
+Three of sixteen models passed.
+
+46
+00:01:35.420 --> 00:01:37.732
+A world model is a learned simulator
+
+47
+00:01:37.732 --> 00:01:39.731
+given a frame and some actions
+
+48
+00:01:39.731 --> 00:01:41.980
+it predicts the frames that follow.
+
+49
+00:01:42.330 --> 00:01:44.436
+Nano World Model uses diffusion
+
+50
+00:01:44.502 --> 00:01:46.148
+and each future frame has
+
+51
+00:01:46.214 --> 00:01:47.530
+its own noise level.
+
+52
+00:01:47.880 --> 00:01:50.681
+One rule covers the common schedules
+
+53
+00:01:50.757 --> 00:01:52.725
+frame number f starts late
+
+54
+00:01:52.800 --> 00:01:54.920
+by f times the lag, in rows.
+
+55
+00:01:55.270 --> 00:01:57.321
+With a lag of the whole schedule
+
+56
+00:01:57.321 --> 00:02:00.055
+each frame finishes before the next starts
+
+57
+00:02:00.055 --> 00:02:02.230
+the sequential mode the task uses.
+
+58
+00:02:02.810 --> 00:02:05.130
+A diffusion sample is random.
+
+59
+00:02:05.480 --> 00:02:08.712
+Part of its error is shared by every sample
+
+60
+00:02:08.712 --> 00:02:09.960
+and part is not.
+
+61
+00:02:10.310 --> 00:02:12.630
+Averaging cancels the second part.
+
+62
+00:02:12.980 --> 00:02:14.155
+In our toy frame
+
+63
+00:02:14.224 --> 00:02:16.642
+one sample has a PSNR of twenty-one
+
+64
+00:02:16.711 --> 00:02:18.162
+point seven decibels
+
+65
+00:02:18.231 --> 00:02:20.511
+and an average of sixteen reaches
+
+66
+00:02:20.580 --> 00:02:22.100
+thirty-one point five.
+
+67
+00:02:22.450 --> 00:02:25.026
+Claude Opus 5.5 did exactly this
+
+68
+00:02:25.026 --> 00:02:28.383
+sixteen samplers of fifty steps, averaged
+
+69
+00:02:28.461 --> 00:02:30.569
+then re-noised slightly and
+
+70
+00:02:30.647 --> 00:02:32.130
+denoised once more.
+
+71
+00:02:32.480 --> 00:02:34.314
+It was the only model to pass
+
+72
+00:02:34.375 --> 00:02:36.453
+with eighty-one point four against
+
+73
+00:02:36.514 --> 00:02:37.920
+seventy-nine point one.
+
+74
+00:02:38.500 --> 00:02:41.222
+So: in a population loss only the new
+
+75
+00:02:41.295 --> 00:02:43.135
+batch carries a gradient
+
+76
+00:02:43.135 --> 00:02:44.900
+and a long window lags.
+
+77
+00:02:45.250 --> 00:02:47.810
+Matching views needs a regularizer.
+
+78
+00:02:48.160 --> 00:02:51.016
+And sixteen short samplers, averaged
+
+79
+00:02:51.016 --> 00:02:52.560
+made the only pass.
+
+80
+00:02:52.910 --> 00:02:54.900
+Next: two short training runs
+
+81
+00:02:54.966 --> 00:02:56.756
+and the second easiest task
+
+82
+00:02:56.823 --> 00:02:57.950
+in the benchmark.

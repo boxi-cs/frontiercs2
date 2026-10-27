@@ -1,0 +1,317 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.350
+Welcome to Lecture 5 of the
+
+2
+00:00:02.426 --> 00:00:04.780
+FrontierCS 2 course, on theory.
+
+3
+00:00:05.130 --> 00:00:07.685
+FrontierCS 2 takes a research paper
+
+4
+00:00:07.756 --> 00:00:09.530
+removes its key idea from
+
+5
+00:00:09.601 --> 00:00:11.162
+the authors' own code
+
+6
+00:00:11.162 --> 00:00:13.930
+and asks an AI agent to write it back.
+
+7
+00:00:14.280 --> 00:00:17.339
+The agent passes only if it beats the authors'
+
+8
+00:00:17.405 --> 00:00:19.400
+code on every hidden workload.
+
+9
+00:00:19.750 --> 00:00:23.485
+Theory has one task: the binary fuse filter
+
+10
+00:00:23.485 --> 00:00:26.710
+from a 2022 paper by Graf and Lemire.
+
+11
+00:00:27.060 --> 00:00:29.126
+We build up to it from a Bloom
+
+12
+00:00:29.195 --> 00:00:30.916
+filter and an xor filter
+
+13
+00:00:30.916 --> 00:00:32.500
+then look at the task.
+
+14
+00:00:33.080 --> 00:00:35.213
+A filter answers one question
+
+15
+00:00:35.213 --> 00:00:36.920
+is this key in the set?
+
+16
+00:00:37.270 --> 00:00:38.990
+It may say yes for a key
+
+17
+00:00:39.062 --> 00:00:40.710
+that is not in the set.
+
+18
+00:00:41.060 --> 00:00:42.645
+That is a false positive
+
+19
+00:00:42.645 --> 00:00:45.245
+and it happens with a small probability
+
+20
+00:00:45.245 --> 00:00:46.260
+called epsilon.
+
+21
+00:00:46.610 --> 00:00:49.330
+But it never says no for a stored key.
+
+22
+00:00:49.680 --> 00:00:52.487
+A filter sits in front of something slow
+
+23
+00:00:52.487 --> 00:00:53.376
+like a disk
+
+24
+00:00:53.376 --> 00:00:56.320
+so most lookups of absent keys stop early.
+
+25
+00:00:56.900 --> 00:00:58.807
+A filter stores much less than
+
+26
+00:00:58.870 --> 00:01:01.540
+the keys themselves, but there is a floor.
+
+27
+00:01:01.890 --> 00:01:04.214
+Any filter with false-positive rate
+
+28
+00:01:04.280 --> 00:01:06.737
+epsilon needs at least log two of one
+
+29
+00:01:06.804 --> 00:01:08.530
+over epsilon bits per key.
+
+30
+00:01:08.880 --> 00:01:11.271
+For one in two hundred fifty-six
+
+31
+00:01:11.271 --> 00:01:12.720
+that is eight bits.
+
+32
+00:01:13.300 --> 00:01:15.955
+The oldest answer is the Bloom filter
+
+33
+00:01:15.955 --> 00:01:18.820
+from nineteen seventy: an array of bits.
+
+34
+00:01:19.170 --> 00:01:20.230
+To add a key
+
+35
+00:01:20.230 --> 00:01:23.330
+hash it k times and set those k bits.
+
+36
+00:01:23.680 --> 00:01:24.898
+To look a key up
+
+37
+00:01:24.898 --> 00:01:27.120
+check that all k bits are set.
+
+38
+00:01:27.470 --> 00:01:29.790
+A stored key always passes.
+
+39
+00:01:30.140 --> 00:01:32.923
+An absent key passes only if other keys
+
+40
+00:01:32.994 --> 00:01:35.420
+happened to set all k of its bits.
+
+41
+00:01:35.770 --> 00:01:37.750
+Our model stores one thousand
+
+42
+00:01:37.818 --> 00:01:39.661
+keys in eight bits per key
+
+43
+00:01:39.661 --> 00:01:40.890
+with five hashes.
+
+44
+00:01:41.240 --> 00:01:43.625
+Of one hundred thousand absent keys
+
+45
+00:01:43.625 --> 00:01:46.142
+it accepted two thousand sixty-three
+
+46
+00:01:46.142 --> 00:01:47.400
+about two percent.
+
+47
+00:01:47.980 --> 00:01:49.517
+Pause here and predict.
+
+48
+00:01:49.517 --> 00:01:51.188
+With eight bits per key
+
+49
+00:01:51.188 --> 00:01:53.260
+would more hashes always help?
+
+50
+00:01:56.810 --> 00:01:57.024
+No.
+
+51
+00:01:57.024 --> 00:01:59.096
+More hashes check more bits
+
+52
+00:01:59.096 --> 00:02:01.167
+but they also set more bits
+
+53
+00:02:01.167 --> 00:02:02.810
+so the array fills up.
+
+54
+00:02:03.160 --> 00:02:05.747
+The best k is about zero point six
+
+55
+00:02:05.823 --> 00:02:08.411
+nine times the bits per key: here
+
+56
+00:02:08.411 --> 00:02:09.400
+five or six.
+
+57
+00:02:10.480 --> 00:02:12.530
+Two percent is five times the one
+
+58
+00:02:12.592 --> 00:02:14.767
+in two hundred fifty-six that eight
+
+59
+00:02:14.829 --> 00:02:16.320
+bits allow in principle.
+
+60
+00:02:16.670 --> 00:02:19.014
+The best Bloom filter needs forty-four
+
+61
+00:02:19.076 --> 00:02:20.804
+percent more than the floor
+
+62
+00:02:20.804 --> 00:02:23.025
+eleven point five two bits per key
+
+63
+00:02:23.025 --> 00:02:23.950
+against eight.
+
+64
+00:02:24.300 --> 00:02:25.431
+With xor filters
+
+65
+00:02:25.431 --> 00:02:28.159
+the extra falls to twenty-three percent
+
+66
+00:02:28.159 --> 00:02:31.020
+and with binary fuse filters, to thirteen.
+
+67
+00:02:31.370 --> 00:02:33.412
+They also read exactly three
+
+68
+00:02:33.485 --> 00:02:36.330
+slots per lookup, not k scattered bits.
+
+69
+00:02:36.910 --> 00:02:37.870
+To sum up.
+
+70
+00:02:38.220 --> 00:02:40.589
+A filter never misses a stored key
+
+71
+00:02:40.589 --> 00:02:43.500
+and accepts an absent one at rate epsilon.
+
+72
+00:02:43.850 --> 00:02:45.574
+The floor is log two of one
+
+73
+00:02:45.638 --> 00:02:47.298
+over epsilon bits per key
+
+74
+00:02:47.362 --> 00:02:49.596
+and a Bloom filter needs forty-four
+
+75
+00:02:49.660 --> 00:02:50.490
+percent more.
+
+76
+00:02:50.840 --> 00:02:53.799
+As an exercise, try three hashes and eight
+
+77
+00:02:53.868 --> 00:02:55.726
+and compare with zero point
+
+78
+00:02:55.795 --> 00:02:57.240
+six nine times eight.
+
+79
+00:02:57.590 --> 00:02:59.670
+Next, the xor filter.

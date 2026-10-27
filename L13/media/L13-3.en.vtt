@@ -1,0 +1,497 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.801
+MuJoCo Playground, from RSS 2025
+
+2
+00:00:02.877 --> 00:00:04.923
+trains robot controllers in
+
+3
+00:00:04.999 --> 00:00:06.818
+a GPU physics simulator
+
+4
+00:00:06.894 --> 00:00:09.167
+running thousands of simulated
+
+5
+00:00:09.243 --> 00:00:10.380
+robots at once.
+
+6
+00:00:10.730 --> 00:00:13.116
+One example teaches a four-legged robot
+
+7
+00:00:13.177 --> 00:00:14.890
+to follow joystick commands.
+
+8
+00:00:15.240 --> 00:00:17.646
+The policy reads the robot's own sensors
+
+9
+00:00:17.706 --> 00:00:19.269
+and the commanded forward
+
+10
+00:00:19.269 --> 00:00:21.013
+sideways and turning speeds
+
+11
+00:00:21.073 --> 00:00:22.577
+and outputs target angles
+
+12
+00:00:22.637 --> 00:00:23.960
+for its twelve joints.
+
+13
+00:00:24.310 --> 00:00:26.953
+It is trained by reinforcement learning
+
+14
+00:00:26.953 --> 00:00:27.614
+with PPO
+
+15
+00:00:27.614 --> 00:00:30.390
+for two hundred million simulation steps.
+
+16
+00:00:30.970 --> 00:00:33.526
+The reward pays, fifty times a second
+
+17
+00:00:33.526 --> 00:00:35.275
+for tracking the command
+
+18
+00:00:35.275 --> 00:00:36.890
+and charges for effort.
+
+19
+00:00:37.240 --> 00:00:39.448
+Tracking a speed is worth one
+
+20
+00:00:39.448 --> 00:00:40.920
+and turning a half.
+
+21
+00:00:41.270 --> 00:00:44.243
+An action-rate penalty keeps motion smooth
+
+22
+00:00:44.243 --> 00:00:46.870
+and an energy penalty keeps it cheap.
+
+23
+00:00:47.220 --> 00:00:49.940
+Our toy is a walker with two legs.
+
+24
+00:00:50.290 --> 00:00:52.442
+The average push sets its speed
+
+25
+00:00:52.442 --> 00:00:54.930
+and the difference sets its turning.
+
+26
+00:00:55.280 --> 00:00:57.840
+The right leg is twenty percent weaker.
+
+27
+00:00:58.190 --> 00:01:00.150
+A walker that tracks perfectly
+
+28
+00:01:00.215 --> 00:01:02.110
+at no cost would earn thirty.
+
+29
+00:01:02.460 --> 00:01:04.335
+Standing still earns fourteen
+
+30
+00:01:04.399 --> 00:01:07.179
+point one nine, and a hand-made policy that
+
+31
+00:01:07.243 --> 00:01:08.601
+ignores the weak leg
+
+32
+00:01:08.601 --> 00:01:10.540
+twenty-six point three three.
+
+33
+00:01:11.120 --> 00:01:13.099
+Random search shows the same
+
+34
+00:01:13.169 --> 00:01:15.360
+learning loop as PPO, in small.
+
+35
+00:01:15.710 --> 00:01:18.125
+Try small random changes to the weights
+
+36
+00:01:18.125 --> 00:01:19.333
+in both directions
+
+37
+00:01:19.393 --> 00:01:21.023
+and move toward the changes
+
+38
+00:01:21.084 --> 00:01:22.110
+that earned more.
+
+39
+00:01:22.460 --> 00:01:24.031
+After four iterations
+
+40
+00:01:24.031 --> 00:01:26.460
+the walking robot earns nineteen.
+
+41
+00:01:26.810 --> 00:01:28.025
+After thirty-two
+
+42
+00:01:28.025 --> 00:01:30.170
+twenty-nine point three nine.
+
+43
+00:01:30.520 --> 00:01:32.895
+The learned weights feed the speed command
+
+44
+00:01:32.952 --> 00:01:35.327
+to the right leg at one point two five and
+
+45
+00:01:35.383 --> 00:01:37.476
+to the left at zero point nine eight
+
+46
+00:01:37.532 --> 00:01:39.172
+close to the ratio that makes
+
+47
+00:01:39.229 --> 00:01:40.360
+up for the weak leg.
+
+48
+00:01:40.940 --> 00:01:43.500
+In this task, nothing is removed.
+
+49
+00:01:43.850 --> 00:01:46.348
+The authors' training recipe is the bar
+
+50
+00:01:46.348 --> 00:01:48.034
+two hundred million steps
+
+51
+00:01:48.097 --> 00:01:51.094
+which take about four hundred forty-five to four
+
+52
+00:01:51.157 --> 00:01:53.530
+hundred sixty-five seconds on one GPU.
+
+53
+00:01:53.880 --> 00:01:56.422
+The agent writes its own training procedure
+
+54
+00:01:56.480 --> 00:01:58.387
+which must return a policy within
+
+55
+00:01:58.444 --> 00:02:00.120
+seven hundred twenty seconds.
+
+56
+00:02:00.470 --> 00:02:03.291
+The judge trains five seeds on each side
+
+57
+00:02:03.362 --> 00:02:06.042
+and tests every policy on flat ground
+
+58
+00:02:06.042 --> 00:02:08.510
+with pushes, and on rough terrain
+
+59
+00:02:08.510 --> 00:02:11.190
+fifteen workloads, five metrics each.
+
+60
+00:02:11.540 --> 00:02:14.180
+The score uses only the mean reward.
+
+61
+00:02:14.530 --> 00:02:16.834
+The reference earns close to thirty
+
+62
+00:02:16.834 --> 00:02:18.690
+so it scores close to fifty.
+
+63
+00:02:19.040 --> 00:02:22.096
+To pass, a policy must be strictly better
+
+64
+00:02:22.171 --> 00:02:23.662
+on all five metrics
+
+65
+00:02:23.662 --> 00:02:25.600
+in all fifteen workloads.
+
+66
+00:02:25.950 --> 00:02:28.674
+Even the reference, run against itself
+
+67
+00:02:28.674 --> 00:02:30.350
+did not meet that rule.
+
+68
+00:02:30.930 --> 00:02:33.490
+The reference stops with four minutes left.
+
+69
+00:02:33.840 --> 00:02:35.955
+A procedure can train in short chunks
+
+70
+00:02:36.011 --> 00:02:38.181
+and stop when the next would not finish
+
+71
+00:02:38.237 --> 00:02:40.240
+a safety margin before the deadline.
+
+72
+00:02:40.590 --> 00:02:42.257
+With our assumed timings
+
+73
+00:02:42.257 --> 00:02:44.990
+that is three hundred ten million steps.
+
+74
+00:02:45.340 --> 00:02:46.749
+On our walking robot
+
+75
+00:02:46.816 --> 00:02:48.895
+thirty-two iterations against a
+
+76
+00:02:48.962 --> 00:02:50.773
+twenty-iteration reference
+
+77
+00:02:50.773 --> 00:02:51.980
+on six workloads.
+
+78
+00:02:52.330 --> 00:02:54.970
+It earns more reward in all six.
+
+79
+00:02:58.520 --> 00:03:01.240
+Pause and predict: does it pass?
+
+80
+00:03:01.590 --> 00:03:02.390
+No.
+
+81
+00:03:02.740 --> 00:03:05.220
+It tracks better by pushing harder.
+
+82
+00:03:05.570 --> 00:03:08.328
+It uses more energy in all six workloads
+
+83
+00:03:08.396 --> 00:03:10.346
+and its actions change faster
+
+84
+00:03:10.414 --> 00:03:11.490
+in five of them.
+
+85
+00:03:12.570 --> 00:03:14.714
+GPT-6 Astra had the best score
+
+86
+00:03:14.714 --> 00:03:17.619
+fifty point six, against forty-nine point
+
+87
+00:03:17.688 --> 00:03:19.210
+six for the reference.
+
+88
+00:03:19.560 --> 00:03:22.135
+Claude Opus 5.5 wrote its own training loop
+
+89
+00:03:22.193 --> 00:03:24.183
+lowered the learning rate over the
+
+90
+00:03:24.241 --> 00:03:26.172
+last sixty percent of the budget
+
+91
+00:03:26.172 --> 00:03:28.278
+and used nearly the whole deadline
+
+92
+00:03:28.278 --> 00:03:29.507
+in its own estimate
+
+93
+00:03:29.566 --> 00:03:31.848
+about three hundred sixty million steps
+
+94
+00:03:31.906 --> 00:03:33.720
+instead of two hundred million.
+
+95
+00:03:34.070 --> 00:03:36.710
+It earned more reward and tracked better.
+
+96
+00:03:37.060 --> 00:03:38.843
+But its action-rate penalty was
+
+97
+00:03:38.901 --> 00:03:40.626
+five point oh six thousandths
+
+98
+00:03:40.684 --> 00:03:42.927
+against four point nine six thousandths
+
+99
+00:03:42.985 --> 00:03:44.020
+for the reference.
+
+100
+00:03:44.370 --> 00:03:46.606
+GPT-6 Astra tied the reference
+
+101
+00:03:46.681 --> 00:03:48.396
+at four point nine six
+
+102
+00:03:48.396 --> 00:03:50.930
+and a tie is not strictly better.
+
+103
+00:03:51.280 --> 00:03:52.720
+No model passed.
+
+104
+00:03:53.300 --> 00:03:55.245
+That ends the Robotics lecture
+
+105
+00:03:55.245 --> 00:03:56.500
+with three lessons.
+
+106
+00:03:56.850 --> 00:03:58.492
+Average the right thing
+
+107
+00:03:58.492 --> 00:04:01.570
+a denoising sampler keeps both good actions.
+
+108
+00:04:01.920 --> 00:04:03.219
+Calls are the cost
+
+109
+00:04:03.288 --> 00:04:05.134
+five well-placed calls come
+
+110
+00:04:05.202 --> 00:04:06.501
+close to a hundred
+
+111
+00:04:06.570 --> 00:04:08.279
+but close is exactly what
+
+112
+00:04:08.347 --> 00:04:09.920
+the pass rule punishes.
+
+113
+00:04:10.270 --> 00:04:12.775
+And every metric, every workload
+
+114
+00:04:12.775 --> 00:04:13.914
+in both tasks
+
+115
+00:04:13.914 --> 00:04:16.419
+runs beat the reference's score
+
+116
+00:04:16.419 --> 00:04:17.710
+and none passed.
+
+117
+00:04:18.060 --> 00:04:18.976
+As an exercise
+
+118
+00:04:19.037 --> 00:04:20.806
+give our walker a one percent
+
+119
+00:04:20.868 --> 00:04:22.088
+tolerance on energy
+
+120
+00:04:22.088 --> 00:04:23.980
+and see whether it passes now.
+
+121
+00:04:24.330 --> 00:04:26.663
+This is also the end of the course
+
+122
+00:04:26.663 --> 00:04:29.197
+forty-eight tasks in thirteen fields
+
+123
+00:04:29.197 --> 00:04:31.930
+each built from a real paper's own code.
+
+124
+00:04:32.280 --> 00:04:33.560
+Thank you for watching.

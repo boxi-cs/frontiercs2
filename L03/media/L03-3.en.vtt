@@ -1,0 +1,365 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.260
+A GPU runs threads in thread blocks.
+
+2
+00:00:03.610 --> 00:00:06.410
+A block runs on one streaming multiprocessor
+
+3
+00:00:06.410 --> 00:00:09.210
+and its threads come in warps of thirty-two.
+
+4
+00:00:09.560 --> 00:00:11.691
+Many workloads need a great number
+
+5
+00:00:11.753 --> 00:00:13.320
+of small matrix products.
+
+6
+00:00:13.670 --> 00:00:14.925
+KAMI, from SC 2025
+
+7
+00:00:14.991 --> 00:00:17.368
+brings communication-avoiding matrix
+
+8
+00:00:17.434 --> 00:00:19.745
+multiplication into a single block
+
+9
+00:00:19.811 --> 00:00:21.660
+the warps exchange as little
+
+10
+00:00:21.726 --> 00:00:22.848
+data as possible
+
+11
+00:00:22.914 --> 00:00:25.226
+and compute on the double-precision
+
+12
+00:00:25.292 --> 00:00:26.150
+tensor cores.
+
+13
+00:00:26.730 --> 00:00:28.829
+Each block computes C equals
+
+14
+00:00:28.903 --> 00:00:31.677
+A times B transposed, plus half of C
+
+15
+00:00:31.677 --> 00:00:33.850
+with eight bytes per number.
+
+16
+00:00:34.200 --> 00:00:35.800
+Pause and predict.
+
+17
+00:00:36.150 --> 00:00:38.875
+The smallest public shape does twelve thousand
+
+18
+00:00:38.934 --> 00:00:41.067
+two hundred eighty-eight operations
+
+19
+00:00:41.126 --> 00:00:42.666
+and moves ten thousand two
+
+20
+00:00:42.725 --> 00:00:43.910
+hundred forty bytes.
+
+21
+00:00:44.260 --> 00:00:47.327
+An H100 needs about twenty operations per
+
+22
+00:00:47.402 --> 00:00:50.020
+byte to keep its tensor cores busy.
+
+23
+00:00:50.370 --> 00:00:51.890
+What limits this block?
+
+24
+00:00:55.470 --> 00:00:56.270
+Memory.
+
+25
+00:00:56.620 --> 00:00:58.510
+The block does only one point
+
+26
+00:00:58.576 --> 00:01:00.140
+two operations per byte.
+
+27
+00:01:00.490 --> 00:01:02.627
+Times the bandwidth of three point
+
+28
+00:01:02.690 --> 00:01:04.576
+three five terabytes a second
+
+29
+00:01:04.576 --> 00:01:07.090
+that bounds it at about four teraflops
+
+30
+00:01:07.090 --> 00:01:09.290
+far below the peak of sixty-seven.
+
+31
+00:01:09.640 --> 00:01:12.018
+All four public shapes do between one
+
+32
+00:01:12.082 --> 00:01:13.946
+and five operations per byte
+
+33
+00:01:14.011 --> 00:01:15.617
+so the kernel's first job
+
+34
+00:01:15.682 --> 00:01:17.160
+is to keep memory busy.
+
+35
+00:01:17.740 --> 00:01:18.712
+Inside a block
+
+36
+00:01:18.777 --> 00:01:20.981
+the tensor cores work on fragments
+
+37
+00:01:21.045 --> 00:01:22.860
+of sixteen by eight outputs.
+
+38
+00:01:23.210 --> 00:01:26.010
+Say the warps form a grid over C.
+
+39
+00:01:26.360 --> 00:01:28.669
+Each warp reads its own strip of
+
+40
+00:01:28.741 --> 00:01:30.906
+A and of B from shared memory
+
+41
+00:01:30.906 --> 00:01:33.720
+so more warps also read more in total.
+
+42
+00:01:34.070 --> 00:01:35.468
+On the largest shape
+
+43
+00:01:35.468 --> 00:01:38.063
+eight warps read least as four by two
+
+44
+00:01:38.130 --> 00:01:40.326
+thirty-two thousand seven hundred
+
+45
+00:01:40.392 --> 00:01:41.590
+sixty-eight loads.
+
+46
+00:01:41.940 --> 00:01:43.371
+KAMI makes choices like
+
+47
+00:01:43.433 --> 00:01:44.740
+this at compile time.
+
+48
+00:01:45.320 --> 00:01:48.280
+The task removes KAMI's kernel.
+
+49
+00:01:48.630 --> 00:01:50.156
+Every output is checked
+
+50
+00:01:50.223 --> 00:01:51.616
+against a CPU result
+
+51
+00:01:51.616 --> 00:01:54.470
+and the final run adds four hidden shapes.
+
+52
+00:01:54.820 --> 00:01:56.711
+The candidate and the reference
+
+53
+00:01:56.772 --> 00:01:59.272
+run six times each, in alternating order
+
+54
+00:01:59.333 --> 00:02:00.979
+because a launch's position
+
+55
+00:02:01.040 --> 00:02:02.260
+can change its time.
+
+56
+00:02:02.610 --> 00:02:03.332
+In our toy
+
+57
+00:02:03.397 --> 00:02:06.087
+balanced orders recover the true speed-up
+
+58
+00:02:06.153 --> 00:02:07.793
+of one point two exactly
+
+59
+00:02:07.859 --> 00:02:10.024
+while a lopsided two-to-one order
+
+60
+00:02:10.090 --> 00:02:11.730
+gives one point one five.
+
+61
+00:02:12.080 --> 00:02:14.056
+A pass needs all eight shapes
+
+62
+00:02:14.124 --> 00:02:15.760
+above a noise threshold.
+
+63
+00:02:16.340 --> 00:02:18.820
+Seven of sixteen models passed.
+
+64
+00:02:19.170 --> 00:02:21.920
+Claude Opus 5.5 and Gemini 4 Argon
+
+65
+00:02:21.920 --> 00:02:25.141
+running in Pi, both scored twenty-three
+
+66
+00:02:25.141 --> 00:02:27.970
+against eighteen for the reference.
+
+67
+00:02:28.320 --> 00:02:30.800
+Opus built its kernel around memory.
+
+68
+00:02:31.150 --> 00:02:33.558
+It streams A and B into shared memory
+
+69
+00:02:33.623 --> 00:02:35.250
+with asynchronous copies
+
+70
+00:02:35.315 --> 00:02:37.137
+and loads the old C straight
+
+71
+00:02:37.202 --> 00:02:39.870
+into its registers, so the reads overlap.
+
+72
+00:02:40.220 --> 00:02:41.994
+Its own idea was to hand out
+
+73
+00:02:42.058 --> 00:02:43.452
+the slices in reverse
+
+74
+00:02:43.515 --> 00:02:45.099
+so the first blocks start
+
+75
+00:02:45.163 --> 00:02:46.620
+on data still in cache.
+
+76
+00:02:46.970 --> 00:02:49.370
+But a good score is not a pass.
+
+77
+00:02:49.720 --> 00:02:52.309
+Muse Wonder 1.0 scored twenty-one
+
+78
+00:02:52.387 --> 00:02:54.192
+point seven and failed
+
+79
+00:02:54.270 --> 00:02:56.153
+while GPT-6.1 Sol scored
+
+80
+00:02:56.231 --> 00:02:57.800
+the same and passed.
+
+81
+00:02:58.380 --> 00:03:00.930
+So: small double-precision products
+
+82
+00:03:01.003 --> 00:03:02.460
+are bound by memory.
+
+83
+00:03:02.810 --> 00:03:04.684
+The grid of warps decides the
+
+84
+00:03:04.749 --> 00:03:06.170
+shared-memory traffic.
+
+85
+00:03:06.520 --> 00:03:08.677
+And a balanced launch order cancels
+
+86
+00:03:08.739 --> 00:03:10.280
+a steady position effect.
+
+87
+00:03:10.630 --> 00:03:11.605
+As an exercise
+
+88
+00:03:11.670 --> 00:03:13.750
+compute the intensity of a block
+
+89
+00:03:13.815 --> 00:03:15.830
+of two hundred fifty-six cubed.
+
+90
+00:03:16.180 --> 00:03:19.038
+Next, sparse matrix multiplication
+
+91
+00:03:19.038 --> 00:03:20.100
+in clusters.

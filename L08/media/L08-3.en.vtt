@@ -1,0 +1,301 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:01.625
+SCOPE, from 2024
+
+2
+00:00:01.703 --> 00:00:04.352
+counts small patterns around every
+
+3
+00:00:04.430 --> 00:00:06.300
+vertex of a large graph.
+
+4
+00:00:06.650 --> 00:00:08.698
+Take our graph of forty vertices
+
+5
+00:00:08.762 --> 00:00:10.490
+and a hundred twenty edges.
+
+6
+00:00:10.840 --> 00:00:11.806
+At vertex one
+
+7
+00:00:11.875 --> 00:00:14.292
+there are seventy-eight wedges with
+
+8
+00:00:14.361 --> 00:00:16.086
+the vertex at the center
+
+9
+00:00:16.086 --> 00:00:17.467
+fourteen triangles
+
+10
+00:00:17.467 --> 00:00:19.400
+and fifty-five four-cycles.
+
+11
+00:00:19.980 --> 00:00:22.780
+Counting copies one by one is slow.
+
+12
+00:00:23.130 --> 00:00:23.612
+Instead
+
+13
+00:00:23.612 --> 00:00:26.081
+two shared tables serve the whole batch
+
+14
+00:00:26.081 --> 00:00:28.730
+the degrees and the common-neighbor counts.
+
+15
+00:00:29.080 --> 00:00:31.199
+Wedges centered at a vertex are
+
+16
+00:00:31.268 --> 00:00:32.840
+pairs of its neighbors.
+
+17
+00:00:33.190 --> 00:00:35.782
+Triangles at a vertex come from the neighbors
+
+18
+00:00:35.840 --> 00:00:37.510
+it shares with each neighbor.
+
+19
+00:00:37.860 --> 00:00:40.365
+And a wedge end is a walk of two steps
+
+20
+00:00:40.365 --> 00:00:42.420
+minus the walks that come back.
+
+21
+00:00:42.770 --> 00:00:45.564
+On our graph, each formula matches brute
+
+22
+00:00:45.633 --> 00:00:47.170
+force at every vertex.
+
+23
+00:00:47.750 --> 00:00:50.310
+The task removes SCOPE's batch mode.
+
+24
+00:00:50.660 --> 00:00:53.722
+Each submission counts twenty-four five-vertex
+
+25
+00:00:53.789 --> 00:00:55.852
+patterns and four smaller ones
+
+26
+00:00:55.852 --> 00:00:57.317
+on three real graphs
+
+27
+00:00:57.317 --> 00:00:59.380
+and every count must be exact.
+
+28
+00:00:59.730 --> 00:01:02.388
+Claude Opus 5.5 wrote each count as a
+
+29
+00:01:02.459 --> 00:01:04.901
+signed sum of homomorphism counts
+
+30
+00:01:04.901 --> 00:01:07.343
+maps that need not be one-to-one
+
+31
+00:01:07.343 --> 00:01:09.570
+which are far easier to count.
+
+32
+00:01:09.920 --> 00:01:12.240
+Five of sixteen models passed.
+
+33
+00:01:12.590 --> 00:01:14.629
+The reference takes three point
+
+34
+00:01:14.695 --> 00:01:16.537
+five nine seconds per batch
+
+35
+00:01:16.537 --> 00:01:18.839
+and Gemini 4 Argon, running in Pi
+
+36
+00:01:18.839 --> 00:01:21.470
+takes zero point one two three seconds.
+
+37
+00:01:22.050 --> 00:01:23.878
+ScaleGPM, also from 2024
+
+38
+00:01:23.951 --> 00:01:26.072
+estimates pattern counts with
+
+39
+00:01:26.145 --> 00:01:27.900
+two approximate engines
+
+40
+00:01:27.973 --> 00:01:29.801
+neighborhood sampling and
+
+41
+00:01:29.874 --> 00:01:31.410
+graph sparsification.
+
+42
+00:01:31.760 --> 00:01:33.627
+Which is faster depends on the
+
+43
+00:01:33.689 --> 00:01:35.120
+graph and the settings.
+
+44
+00:01:35.470 --> 00:01:37.223
+The agent writes the function
+
+45
+00:01:37.283 --> 00:01:38.190
+that picks one.
+
+46
+00:01:38.540 --> 00:01:41.446
+The score weighs each pick by its regret
+
+47
+00:01:41.446 --> 00:01:44.140
+its runtime over the faster engine's.
+
+48
+00:01:44.490 --> 00:01:46.257
+On twelve made-up settings
+
+49
+00:01:46.323 --> 00:01:48.155
+two selectors are each right
+
+50
+00:01:48.221 --> 00:01:49.530
+ten times in twelve.
+
+51
+00:01:49.880 --> 00:01:51.975
+One is wrong on two close calls
+
+52
+00:01:51.975 --> 00:01:54.200
+and scores ninety-one point five.
+
+53
+00:01:54.550 --> 00:01:56.871
+The other is wrong on two wide gaps
+
+54
+00:01:56.871 --> 00:01:58.870
+and scores eighteen point two.
+
+55
+00:01:59.450 --> 00:02:01.966
+Claude Opus 5.5 predicted each engine's
+
+56
+00:02:02.030 --> 00:02:03.707
+time with its own formula
+
+57
+00:02:03.772 --> 00:02:06.223
+fitted to its own timings on generated
+
+58
+00:02:06.287 --> 00:02:07.513
+small-world graphs
+
+59
+00:02:07.513 --> 00:02:09.770
+and picked the smaller prediction.
+
+60
+00:02:10.120 --> 00:02:11.022
+Its own idea
+
+61
+00:02:11.022 --> 00:02:13.936
+it read locality from the triangle count
+
+62
+00:02:13.936 --> 00:02:16.920
+because local neighbor lists merge faster.
+
+63
+00:02:17.270 --> 00:02:19.222
+Seven of sixteen models passed
+
+64
+00:02:19.222 --> 00:02:20.985
+and Opus scored ninety-two
+
+65
+00:02:21.048 --> 00:02:22.559
+against eighty-six point
+
+66
+00:02:22.622 --> 00:02:24.070
+nine for the reference.
+
+67
+00:02:24.650 --> 00:02:24.846
+So
+
+68
+00:02:24.846 --> 00:02:27.591
+count from tables the whole batch shares
+
+69
+00:02:27.591 --> 00:02:30.010
+and turn hard counts into easy ones.
+
+70
+00:02:30.360 --> 00:02:32.783
+And when a pick is scored by regret
+
+71
+00:02:32.783 --> 00:02:34.600
+the wide gaps matter most.
+
+72
+00:02:34.950 --> 00:02:37.921
+As an exercise, derive the wedge-end formula
+
+73
+00:02:37.989 --> 00:02:39.271
+from homomorphisms
+
+74
+00:02:39.271 --> 00:02:42.310
+and say which maps the minus degree removes.
+
+75
+00:02:42.660 --> 00:02:46.100
+Next, checkpoints, branches and versions.

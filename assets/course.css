@@ -1,0 +1,335 @@
+/* FrontierCS 2 course: benchmark-grade components, flat cards, tabular metrics, and
+   lecture navigation. Loaded after style.css on every page. */
+
+.card { border-radius: 10px; }
+.btn { border-radius: 999px; }
+.btn.primary { color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #062e6f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #062e6f; } }
+.cbtn.on { color: var(--paper); }
+h1, h2, h3 { letter-spacing: -0.02em; font-weight: 600; }
+.hero h1 { font-weight: 600; }
+
+/* Labels: a small blue square and the text, like the domain label on a task page. */
+.pill {
+  background: none; border: 0; padding: 0; border-radius: 0;
+  font: 600 13px var(--sans); color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.pill::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--teal); flex: none; }
+
+.brand-mark { border-radius: 6px; background: var(--teal); color: var(--paper); font: 700 12px var(--mono); }
+.chapcard .num, .steps b, .takeaways .card b, article h2 .sec { color: var(--teal); }
+.chap-hero .abstract { border-left-color: var(--teal); }
+.tag {
+  border-radius: 999px;
+  background: var(--teal-soft);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 11.5px;
+  padding: 2px 9px;
+}
+article th { font-size: 11.5px; color: var(--stone); }
+article th, article td { border-width: 0 0 1px; }
+footer p { margin: 4px 0; }
+
+/* Pass / fail chips in result tables. */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font: 600 11.5px var(--sans); padding: 2px 9px; border-radius: 999px;
+  white-space: nowrap;
+}
+.chip.pass {
+  background: var(--green-soft); color: var(--green);
+  border: 1px solid color-mix(in srgb, var(--green) 25%, transparent);
+}
+.chip.fail {
+  background: var(--red-soft); color: var(--red);
+  border: 1px solid color-mix(in srgb, var(--red) 25%, transparent);
+}
+
+.cbtn.on:hover:not(:disabled) { color: var(--paper); filter: brightness(1.08); }
+
+/* Smooth hyperlink for author credit across hero bylines, lecture headers, and footers */
+.author-link {
+  position: relative;
+  display: inline-block;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1.5px solid color-mix(in srgb, var(--teal) 32%, transparent);
+  padding-bottom: 0.5px;
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease;
+}
+.author-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.5px;
+  height: 1.5px;
+  background: var(--teal);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.author-link:hover {
+  color: var(--teal);
+  text-decoration: none;
+}
+.author-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Hero meta pills on lecture landing page */
+.hero-stats {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);
+  font: 500 12.5px var(--mono); color: var(--stone);
+}
+.hero-stats span { display: inline-flex; align-items: center; gap: 5px; }
+.hero-stats span + span::before { content: "·"; color: var(--line-strong); margin-right: 6px; }
+.hero-stats b { color: var(--ink); font-weight: 600; }
+
+/* Left-aligned editorial section header bar */
+.sec-bar {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 8px 16px; margin: 48px 0 18px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.sec-bar h2 { margin: 0; font-size: 22px; letter-spacing: -0.02em; }
+.sec-bar span { font: 500 12.5px var(--mono); color: var(--stone); }
+
+/* Numbered badge inside .why cards */
+.why-num {
+  display: inline-block; font: 600 11px var(--mono); color: var(--teal);
+  background: var(--teal-soft); padding: 1px 6px; border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+/* Chapter cards on lecture landing page */
+.chapcard-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.chapcard-top .sec-count {
+  font: 500 11px var(--mono); color: var(--stone);
+}
+
+/* TOC hero card ("The lecture at a glance") */
+.toc-list { display: flex; flex-direction: column; }
+.toc-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 8px; text-decoration: none; color: var(--ink);
+  border-bottom: 1px solid var(--line); border-radius: 6px;
+  font-size: 14px; transition: background 0.12s, color 0.12s;
+}
+.toc-row:last-child { border-bottom: 0; }
+.toc-row:hover { background: var(--paper-2); color: var(--teal); }
+.toc-row.active { background: var(--teal-soft); color: var(--teal); font-weight: 600; }
+.toc-row .mono { color: var(--teal); font-size: 12px; flex: none; }
+.toc-row small { margin-left: auto; font: 500 11px var(--mono); color: var(--stone); }
+
+/* Mobile chapter TOC (shown when sticky sidebar hides below 900px) */
+.mobile-toc {
+  display: none;
+  margin: 0 0 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-2);
+  padding: 10px 14px;
+}
+.mobile-toc summary {
+  cursor: pointer; font: 600 12.5px var(--mono); color: var(--ink-2);
+  text-transform: uppercase; letter-spacing: 0.05em; user-select: none;
+}
+.mobile-toc nav {
+  display: grid; gap: 4px; margin-top: 10px; padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.mobile-toc nav a {
+  text-decoration: none; color: var(--ink-2); font-size: 13.5px;
+  padding: 4px 6px; border-radius: 4px;
+}
+.mobile-toc nav a:hover { background: var(--card-2); color: var(--teal); }
+
+/* Copy button on standalone Python blocks */
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  font: 500 11px var(--mono); color: var(--stone);
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 5px; padding: 2px 8px; cursor: pointer;
+  opacity: 0; transition: opacity 0.15s, border-color 0.15s, color 0.15s;
+}
+pre.code:hover .copy-btn, .copy-btn:focus { opacity: 1; }
+.copy-btn:hover { border-color: var(--teal); color: var(--teal); }
+.copy-btn.copied { opacity: 1; color: var(--green); border-color: var(--green); background: var(--green-soft); }
+
+/* Video section & media card */
+.vcap-badge {
+  font: 600 11px var(--mono); color: var(--teal); background: var(--teal-soft);
+  padding: 2px 8px; border-radius: 999px; flex: none;
+}
+.vcap-text { color: var(--ink-2); font-size: 12.5px; }
+
+/* Field cover banner on lecture landing page */
+.cover {
+  position: relative;
+  height: 112px;
+  margin-top: 28px;
+  border-radius: 10px;
+  background: var(--c, var(--teal));
+  overflow: hidden;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cover .field-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.28), transparent 55%);
+}
+.cover-chip {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  background: #fff;
+  color: var(--c, var(--teal));
+  border-radius: 999px;
+  padding: 3px 11px;
+  font: 600 13.5px/1.35 var(--sans);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+}
+.cover-chip b {
+  font: 600 11.5px var(--mono);
+  opacity: 0.78;
+}
+.cover-note {
+  position: relative;
+  z-index: 1;
+  font: 500 12px var(--mono);
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.hero {
+  border-bottom: 0;
+  padding-bottom: 12px;
+}
+.hero.has-cover {
+  padding-top: 24px;
+}
+
+/* Previous / next lecture links on a lecture's home. */
+.lecnav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 28px; margin-top: 10px; }
+.lecnav a { font-weight: 600; text-decoration: none; }
+
+/* Shared by several lectures: long inline code wraps on phones; a simple colour legend. */
+p code, li code, td code { overflow-wrap: anywhere; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0; font-size: 12px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+@media (max-width: 900px) {
+  .mobile-toc { display: block; }
+}
+@media (max-width: 600px) {
+  .copy-btn { opacity: 0.85; }
+}
+
+/* ---------- Field identity: each lecture's colour and drawing (FIELD_COLOR, fieldArt in course.js) ---------- */
+:root[style*="--field"] .brand-mark { background: var(--field); color: #fff; }
+.cover {
+  position: relative; overflow: hidden;
+  height: 180px; margin-top: 28px; border-radius: 14px;
+  background-color: var(--c);
+  background-image: radial-gradient(rgba(255, 255, 255, .16) 1.2px, transparent 1.5px);
+  background-size: 18px 18px;
+}
+/* The whole drawing at its own 2:1 shape on the right, fading into the dot texture. */
+.cover .field-art {
+  position: absolute; top: 0; left: auto; right: 4%; height: 100%; width: auto; aspect-ratio: 2 / 1;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%); mask-image: linear-gradient(to right, transparent, #000 22%);
+}
+.cover::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, rgba(0, 0, 0, .28), transparent 45%); }
+.cover-chip {
+  position: absolute; z-index: 1; left: 18px; top: 16px;
+  display: inline-flex; align-items: baseline; gap: 8px;
+  background: #fff; color: var(--c); border-radius: 999px; padding: 4px 13px;
+  font: 600 15px/1.3 var(--sans); box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
+}
+.cover-chip b { font: 600 12px var(--mono); opacity: .75; }
+.cover-note {
+  position: absolute; z-index: 1; left: 20px; bottom: 14px;
+  font: 500 12px var(--mono); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+}
+.hero.has-cover { padding-top: 32px; }
+.hero.has-cover h1 { margin-top: 0; }
+.pill.with-art::before { display: none; }
+.pill-art {
+  position: relative; display: inline-block; flex: none; overflow: hidden;
+  width: 44px; height: 24px; border-radius: 5px; background: var(--c);
+}
+.pill-art .field-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ---------- Reading: larger text, a narrower column, quieter section labels ---------- */
+.chap-body { gap: 56px; }
+article { max-width: 720px; }
+article section { margin-bottom: 52px; }
+article section + section { padding-top: 44px; border-top: 1px solid var(--line); }
+article section > p, article section > ul > li, article section > ol > li { font-size: 17px; line-height: 1.75; }
+article section > p { margin: 0 0 18px; }
+article h2 { font-size: 28px; line-height: 1.2; margin: 0 0 18px; }
+article h2 .sec {
+  display: block; width: fit-content; margin: 0 0 8px; padding: 0; background: none;
+  font: 500 13px var(--mono); color: var(--stone); letter-spacing: 0;
+}
+article h3 { font-size: 20px; margin: 32px 0 10px; }
+.chap-hero .abstract { font-size: 16px; line-height: 1.65; }
+.toc a { font-size: 13.5px; }
+
+/* Interactive models read as figures: a quiet panel instead of another bordered card. */
+article .demo { background: var(--paper-2); border-color: transparent; border-radius: 12px; }
+
+@media (max-width: 600px) {
+  .cover { height: 120px; margin-top: 16px; border-radius: 10px; }
+  .cover .field-art { right: 0; }
+  .cover-chip { left: 12px; top: 12px; font-size: 13.5px; padding: 3px 10px; }
+  .cover-note { left: 13px; bottom: 10px; font-size: 11px; }
+  article section > p, article section > ul > li, article section > ol > li { font-size: 16.5px; line-height: 1.7; }
+  article h2 { font-size: 23px; }
+}
+
+/* ---------- Motion (course.js turns it on per drawing; off for reduced motion) ----------
+   Motion only adds to what is already drawn: nothing starts hidden and waits for an animation. */
+.field-art .flow { opacity: 0; transition: opacity .6s ease; }
+.field-art.live .flow { opacity: 1; }
+.field-art.live .tw { animation: fa-tw 2.8s ease-in-out infinite; animation-delay: calc(var(--k, 0) * -.4s); transform-box: fill-box; transform-origin: center; }
+@keyframes fa-tw { 50% { opacity: .35; transform: scale(1.35); } }
+
+/* A band of light crosses the lecture cover once, and again on hover. */
+.cover::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, .22) 46%, rgba(255, 255, 255, .05) 54%, transparent 70%);
+  transform: translateX(-100%); animation: cover-sweep 2.2s .35s cubic-bezier(.4, 0, .2, 1) both;
+}
+.cover:hover::before { animation: cover-sweep-again 1.6s cubic-bezier(.4, 0, .2, 1); }
+@keyframes cover-sweep { to { transform: translateX(100%); } }
+@keyframes cover-sweep-again { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .field-art .flow { display: none; }
+  .cover::before { display: none; }
+}

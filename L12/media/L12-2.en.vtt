@@ -1,0 +1,381 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.081
+Symbolic repair tools apply
+
+2
+00:00:02.147 --> 00:00:04.654
+fixed rewrite rules: they are precise
+
+3
+00:00:04.720 --> 00:00:06.501
+but they fail on shapes the
+
+4
+00:00:06.567 --> 00:00:07.820
+rules do not cover.
+
+5
+00:00:08.170 --> 00:00:10.633
+A language model can rewrite any regex
+
+6
+00:00:10.696 --> 00:00:12.591
+but it often breaks the syntax
+
+7
+00:00:12.654 --> 00:00:14.170
+or changes the language.
+
+8
+00:00:14.520 --> 00:00:19.480
+LRR, from EACL 2026, combines the two.
+
+9
+00:00:19.830 --> 00:00:21.868
+A symbolic tool, RegexScalpel
+
+10
+00:00:21.868 --> 00:00:23.566
+finds the part at fault
+
+11
+00:00:23.634 --> 00:00:25.332
+and the instructions tell
+
+12
+00:00:25.400 --> 00:00:27.030
+the model to rewrite it.
+
+13
+00:00:27.380 --> 00:00:29.273
+The paper reports a repair rate
+
+14
+00:00:29.334 --> 00:00:31.533
+fifteen point four percentage points
+
+15
+00:00:31.594 --> 00:00:33.060
+above the previous best.
+
+16
+00:00:33.640 --> 00:00:35.816
+In the task, the model is fixed
+
+17
+00:00:35.816 --> 00:00:37.176
+Qwen three eight B
+
+18
+00:00:37.244 --> 00:00:39.760
+with greedy decoding and at most five
+
+19
+00:00:39.828 --> 00:00:41.800
+hundred twelve output tokens.
+
+20
+00:00:42.150 --> 00:00:43.964
+The agent controls only the
+
+21
+00:00:44.032 --> 00:00:45.510
+words the model reads.
+
+22
+00:00:45.860 --> 00:00:48.246
+The prompt receives the regex and the
+
+23
+00:00:48.310 --> 00:00:50.180
+parts RegexScalpel localized.
+
+24
+00:00:50.530 --> 00:00:52.492
+The task removes the function that
+
+25
+00:00:52.550 --> 00:00:53.992
+renders one part as text
+
+26
+00:00:54.050 --> 00:00:56.070
+and leaves the two prompt templates
+
+27
+00:00:56.127 --> 00:00:57.570
+for the agent to rewrite.
+
+28
+00:00:58.150 --> 00:01:00.470
+Here is our version of that function.
+
+29
+00:01:00.820 --> 00:01:02.194
+When it knows a rewrite
+
+30
+00:01:02.251 --> 00:01:03.911
+it checks that the rewrite is
+
+31
+00:01:03.969 --> 00:01:05.572
+safe and keeps the language
+
+32
+00:01:05.572 --> 00:01:07.060
+and offers it ready-made.
+
+33
+00:01:07.410 --> 00:01:10.139
+For a-plus, repeated, it says
+
+34
+00:01:10.139 --> 00:01:12.050
+replace with a-plus.
+
+35
+00:01:12.400 --> 00:01:14.765
+Otherwise it names the shape of the problem
+
+36
+00:01:14.820 --> 00:01:16.800
+and leaves the rewrite to the model.
+
+37
+00:01:17.150 --> 00:01:18.551
+The last part here
+
+38
+00:01:18.551 --> 00:01:21.280
+a-plus then an optional b, repeated
+
+39
+00:01:21.280 --> 00:01:24.451
+is ambiguous, but no simple rule fixes it
+
+40
+00:01:24.451 --> 00:01:26.590
+that case goes to the model.
+
+41
+00:01:27.170 --> 00:01:29.010
+How is a repair judged?
+
+42
+00:01:29.360 --> 00:01:31.784
+There are one hundred vulnerable regexes
+
+43
+00:01:31.845 --> 00:01:33.360
+from the Polyglot corpus.
+
+44
+00:01:33.710 --> 00:01:35.934
+A repair is credited when it compiles
+
+45
+00:01:35.934 --> 00:01:37.866
+the attack tool finds no attack
+
+46
+00:01:37.925 --> 00:01:39.798
+and it still shares some strings
+
+47
+00:01:39.856 --> 00:01:40.910
+with the original.
+
+48
+00:01:41.260 --> 00:01:42.820
+Then the two languages are
+
+49
+00:01:42.880 --> 00:01:44.020
+compared both ways
+
+50
+00:01:44.020 --> 00:01:46.300
+with one hundred random strings each.
+
+51
+00:01:46.650 --> 00:01:48.750
+Kept is the share of the original's
+
+52
+00:01:48.810 --> 00:01:50.730
+strings that the repair matches.
+
+53
+00:01:51.080 --> 00:01:53.259
+Admitted is the share of the repair's
+
+54
+00:01:53.318 --> 00:01:55.320
+strings that the original matches.
+
+55
+00:01:55.670 --> 00:01:57.150
+A credited repair scores
+
+56
+00:01:57.212 --> 00:01:58.630
+the smaller of the two.
+
+57
+00:01:59.210 --> 00:02:00.477
+Pause and predict.
+
+58
+00:02:00.547 --> 00:02:02.236
+The widened repair keeps
+
+59
+00:02:02.306 --> 00:02:03.854
+every original string
+
+60
+00:02:03.854 --> 00:02:06.810
+but admits only thirty-four in a hundred.
+
+61
+00:02:07.160 --> 00:02:08.440
+What does it score?
+
+62
+00:02:11.990 --> 00:02:13.750
+Zero point three four.
+
+63
+00:02:14.100 --> 00:02:16.046
+The mean of the two rates would
+
+64
+00:02:16.109 --> 00:02:17.616
+be zero point six seven
+
+65
+00:02:17.616 --> 00:02:19.060
+and hide the widening.
+
+66
+00:02:19.410 --> 00:02:21.531
+A repair that is too narrow keeps
+
+67
+00:02:21.595 --> 00:02:23.330
+just thirteen in a hundred.
+
+68
+00:02:24.410 --> 00:02:27.336
+To pass, a run must beat the human reference
+
+69
+00:02:27.403 --> 00:02:29.730
+on every workload, on eight counts
+
+70
+00:02:29.730 --> 00:02:32.656
+how much it repairs, how little it changes
+
+71
+00:02:32.656 --> 00:02:35.050
+and how well it keeps the language.
+
+72
+00:02:35.400 --> 00:02:36.840
+No model passed.
+
+73
+00:02:37.190 --> 00:02:39.315
+Twelve of sixteen scored above the
+
+74
+00:02:39.378 --> 00:02:41.190
+reference's nine point seven.
+
+75
+00:02:41.540 --> 00:02:43.457
+DeepSeek V4.1 Flash one oh
+
+76
+00:02:43.530 --> 00:02:46.184
+one seven scored best, seventy-four
+
+77
+00:02:46.184 --> 00:02:48.838
+and repaired three regexes in four
+
+78
+00:02:48.838 --> 00:02:51.860
+but its regexes grew by half on average.
+
+79
+00:02:52.210 --> 00:02:54.296
+GPT-6.1 Terra stayed closest
+
+80
+00:02:54.370 --> 00:02:56.232
+to the original language
+
+81
+00:02:56.232 --> 00:02:58.690
+but repaired only forty percent.
+
+82
+00:02:59.040 --> 00:03:02.480
+Claude Opus 5.5 scored twenty-nine.
+
+83
+00:03:03.060 --> 00:03:05.561
+So: localize with a symbolic tool
+
+84
+00:03:05.561 --> 00:03:07.620
+and rewrite with the model.
+
+85
+00:03:07.970 --> 00:03:09.931
+The score takes the smaller
+
+86
+00:03:10.004 --> 00:03:11.529
+of kept and admitted
+
+87
+00:03:11.529 --> 00:03:13.490
+so widening costs in full.
+
+88
+00:03:13.840 --> 00:03:15.322
+And repairing more pulls
+
+89
+00:03:15.384 --> 00:03:16.742
+against changing less
+
+90
+00:03:16.742 --> 00:03:19.520
+the best score came with the largest growth.
+
+91
+00:03:19.870 --> 00:03:20.942
+As an exercise
+
+92
+00:03:20.942 --> 00:03:23.586
+add a rule for neighbouring repeats
+
+93
+00:03:23.586 --> 00:03:25.230
+such as a-star a-star.
+
+94
+00:03:25.580 --> 00:03:26.943
+Next comes Progent
+
+95
+00:03:26.943 --> 00:03:29.740
+which guards an agent that uses tools.

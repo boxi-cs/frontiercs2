@@ -1,0 +1,333 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:04.540
+DBSCAN finds clusters as dense regions.
+
+2
+00:00:04.890 --> 00:00:06.842
+A point is core if at least a
+
+3
+00:00:06.910 --> 00:00:09.738
+minimum number of points, itself included
+
+4
+00:00:09.738 --> 00:00:11.690
+lie within distance epsilon.
+
+5
+00:00:12.040 --> 00:00:13.747
+A chain of core points
+
+6
+00:00:13.747 --> 00:00:15.750
+each step at most epsilon
+
+7
+00:00:15.750 --> 00:00:17.160
+forms one cluster.
+
+8
+00:00:17.510 --> 00:00:20.632
+A point that is not core but lies within epsilon
+
+9
+00:00:20.697 --> 00:00:22.909
+of a core point is a border point
+
+10
+00:00:22.909 --> 00:00:24.470
+and the rest are noise.
+
+11
+00:00:24.820 --> 00:00:26.125
+Done naively
+
+12
+00:00:26.125 --> 00:00:29.940
+DBSCAN compares every pair of points.
+
+13
+00:00:30.290 --> 00:00:33.939
+Parallel DBSCAN, from SIGMOD 2020, is exact
+
+14
+00:00:33.939 --> 00:00:37.090
+and work-efficient in two dimensions.
+
+15
+00:00:37.670 --> 00:00:39.871
+Our toy has eighty points in three
+
+16
+00:00:39.935 --> 00:00:41.489
+clusters and some noise
+
+17
+00:00:41.554 --> 00:00:43.301
+with epsilon zero point six
+
+18
+00:00:43.366 --> 00:00:44.790
+and a minimum of four.
+
+19
+00:00:45.140 --> 00:00:47.563
+The plain algorithm finds sixty core
+
+20
+00:00:47.630 --> 00:00:49.380
+points and three clusters.
+
+21
+00:00:49.730 --> 00:00:52.234
+It needs six thousand four hundred distance
+
+22
+00:00:52.292 --> 00:00:54.039
+tests to find the core points
+
+23
+00:00:54.098 --> 00:00:56.544
+and one thousand three hundred eighty-five
+
+24
+00:00:56.602 --> 00:00:57.650
+more to link them.
+
+25
+00:00:58.230 --> 00:01:00.636
+The paper puts the points in cells
+
+26
+00:01:00.707 --> 00:01:03.750
+of side epsilon over root d, here root two.
+
+27
+00:01:04.100 --> 00:01:06.441
+A cell's diagonal is then epsilon
+
+28
+00:01:06.441 --> 00:01:09.540
+so any two points in one cell are neighbors.
+
+29
+00:01:09.890 --> 00:01:12.054
+The task removed the next step
+
+30
+00:01:12.054 --> 00:01:13.730
+linking the core cells.
+
+31
+00:01:14.080 --> 00:01:16.189
+Two core cells join when some core
+
+32
+00:01:16.251 --> 00:01:18.299
+point of one is within epsilon of
+
+33
+00:01:18.361 --> 00:01:20.160
+some core point of the other.
+
+34
+00:01:20.510 --> 00:01:22.894
+Our version checks nearby core cells
+
+35
+00:01:22.894 --> 00:01:24.892
+stops at the first close pair
+
+36
+00:01:24.892 --> 00:01:27.470
+and keeps the clusters in a union-find.
+
+37
+00:01:27.820 --> 00:01:29.715
+One hundred eighty-nine tests
+
+38
+00:01:29.715 --> 00:01:32.304
+instead of thirteen hundred eighty-five
+
+39
+00:01:32.304 --> 00:01:33.820
+link the same clusters.
+
+40
+00:01:34.400 --> 00:01:36.209
+The agent returns a cluster
+
+41
+00:01:36.276 --> 00:01:37.884
+id for every core point
+
+42
+00:01:37.884 --> 00:01:39.760
+and minus one for the rest.
+
+43
+00:01:40.110 --> 00:01:42.062
+Each submission clusters twelve
+
+44
+00:01:42.125 --> 00:01:43.888
+point sets on eight threads
+
+45
+00:01:43.888 --> 00:01:45.903
+and must match an exact oracle
+
+46
+00:01:45.903 --> 00:01:46.910
+point by point.
+
+47
+00:01:47.260 --> 00:01:49.895
+To pass, it must be strictly faster than
+
+48
+00:01:49.961 --> 00:01:51.740
+the reference on every set.
+
+49
+00:01:52.090 --> 00:01:54.790
+The score compares the geometric-mean time of
+
+50
+00:01:54.850 --> 00:01:57.250
+the small sets with twenty milliseconds
+
+51
+00:01:57.250 --> 00:01:59.290
+twenty milliseconds scores fifty.
+
+52
+00:01:59.870 --> 00:02:02.270
+Six of sixteen models passed.
+
+53
+00:02:02.620 --> 00:02:05.982
+The two best scores failed: Gemini 4 Argon
+
+54
+00:02:05.982 --> 00:02:07.234
+in Antigravity
+
+55
+00:02:07.312 --> 00:02:10.205
+and GLM 5.3 were each faster than the
+
+56
+00:02:10.283 --> 00:02:13.020
+reference on eleven of twelve sets.
+
+57
+00:02:13.370 --> 00:02:16.090
+Claude Opus 5.5 did pass.
+
+58
+00:02:16.440 --> 00:02:18.482
+It used a lock-free union-find
+
+59
+00:02:18.482 --> 00:02:20.920
+and checked the nearest cells first.
+
+60
+00:02:21.270 --> 00:02:22.650
+Its own idea was a trie
+
+61
+00:02:22.710 --> 00:02:24.030
+over cell coordinates
+
+62
+00:02:24.090 --> 00:02:26.550
+which skips whole groups of cells already
+
+63
+00:02:26.610 --> 00:02:28.470
+in the querying cell's cluster.
+
+64
+00:02:29.050 --> 00:02:30.410
+Now a puzzle.
+
+65
+00:02:30.760 --> 00:02:33.125
+GLM 5.3 Flash scored sixty-eight
+
+66
+00:02:33.199 --> 00:02:34.086
+point eight
+
+67
+00:02:34.160 --> 00:02:36.599
+below the reference's seventy-one
+
+68
+00:02:36.673 --> 00:02:37.560
+point seven.
+
+69
+00:02:37.910 --> 00:02:40.550
+Pause and predict: did it pass?
+
+70
+00:02:44.100 --> 00:02:44.980
+It did.
+
+71
+00:02:45.330 --> 00:02:47.907
+The reference is timed again in every run
+
+72
+00:02:47.969 --> 00:02:50.116
+and in that run it took fifty-three
+
+73
+00:02:50.177 --> 00:02:51.650
+point four milliseconds.
+
+74
+00:02:52.000 --> 00:02:56.400
+GLM 5.3 Flash was faster on all twelve sets.
+
+75
+00:02:57.480 --> 00:02:59.967
+So: cells of side epsilon over root
+
+76
+00:03:00.038 --> 00:03:02.028
+d spare most distance tests
+
+77
+00:03:02.099 --> 00:03:04.373
+a union-find over the core cells
+
+78
+00:03:04.444 --> 00:03:06.220
+gives the exact clusters
+
+79
+00:03:06.220 --> 00:03:08.920
+and a pass is decided in its own run.
+
+80
+00:03:09.270 --> 00:03:10.287
+As an exercise
+
+81
+00:03:10.287 --> 00:03:12.523
+double epsilon to one point two
+
+82
+00:03:12.523 --> 00:03:14.150
+and count the clusters.
+
+83
+00:03:14.500 --> 00:03:16.100
+Next, Hygra.

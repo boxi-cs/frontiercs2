@@ -1,0 +1,321 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.641
+Maximum inner-product search must find
+
+2
+00:00:02.702 --> 00:00:04.920
+the stored vectors whose dot product
+
+3
+00:00:04.982 --> 00:00:06.460
+with a query is largest.
+
+4
+00:00:06.810 --> 00:00:10.298
+FARGO, from 2023, splits the vectors into
+
+5
+00:00:10.383 --> 00:00:12.170
+partitions by length.
+
+6
+00:00:12.520 --> 00:00:14.397
+It hashes each partition into
+
+7
+00:00:14.462 --> 00:00:16.274
+several tables of sign bits
+
+8
+00:00:16.274 --> 00:00:18.280
+one bit per random projection.
+
+9
+00:00:18.630 --> 00:00:21.216
+A vector at a small angle to the query
+
+10
+00:00:21.284 --> 00:00:23.190
+agrees with it on most bits.
+
+11
+00:00:23.770 --> 00:00:25.525
+The query's own bucket in
+
+12
+00:00:25.595 --> 00:00:27.210
+each table comes first.
+
+13
+00:00:27.560 --> 00:00:29.547
+Flipping a bit costs the query's
+
+14
+00:00:29.609 --> 00:00:31.535
+squared projection on that bit
+
+15
+00:00:31.597 --> 00:00:34.392
+so every bucket gets a quantization distance
+
+16
+00:00:34.392 --> 00:00:37.000
+the sum of the costs of its flipped bits.
+
+17
+00:00:37.350 --> 00:00:40.038
+FARGO probes the buckets of all the tables
+
+18
+00:00:40.102 --> 00:00:42.470
+in one global order of that distance.
+
+19
+00:00:42.820 --> 00:00:45.761
+In our model, with four tables of six bits
+
+20
+00:00:45.761 --> 00:00:48.087
+the four home buckets come first
+
+21
+00:00:48.087 --> 00:00:49.318
+at distance zero
+
+22
+00:00:49.318 --> 00:00:51.780
+and then the cheapest single flips.
+
+23
+00:00:52.360 --> 00:00:54.200
+When should a partition stop?
+
+24
+00:00:54.550 --> 00:00:57.279
+An unseen vector matters only if it beats
+
+25
+00:00:57.345 --> 00:00:59.674
+the k-th best inner product so far
+
+26
+00:00:59.674 --> 00:01:02.070
+divided by the approximation ratio.
+
+27
+00:01:02.420 --> 00:01:04.826
+If the partition's largest possible
+
+28
+00:01:04.894 --> 00:01:07.300
+inner product cannot, stop at once.
+
+29
+00:01:07.650 --> 00:01:08.279
+Otherwise
+
+30
+00:01:08.341 --> 00:01:11.359
+stop once the chance that some table still hides
+
+31
+00:01:11.421 --> 00:01:13.810
+such a vector falls below ten percent.
+
+32
+00:01:14.160 --> 00:01:14.960
+In our model
+
+33
+00:01:15.022 --> 00:01:17.175
+a fixed budget of fifty vectors per
+
+34
+00:01:17.237 --> 00:01:19.575
+partition finds eighty-four point five
+
+35
+00:01:19.637 --> 00:01:21.360
+percent of the true top ten.
+
+36
+00:01:21.710 --> 00:01:22.924
+The adaptive rule
+
+37
+00:01:22.924 --> 00:01:24.744
+at a ratio of point eight
+
+38
+00:01:24.744 --> 00:01:27.710
+finds ninety-seven percent, with less work.
+
+39
+00:01:28.290 --> 00:01:30.210
+FARGO gives two tasks.
+
+40
+00:01:30.560 --> 00:01:32.538
+In the first, Query Stopping
+
+41
+00:01:32.538 --> 00:01:34.720
+the agent writes the stop rule.
+
+42
+00:01:35.070 --> 00:01:36.350
+Pause and predict
+
+43
+00:01:36.350 --> 00:01:39.550
+will the runs with the top scores also pass?
+
+44
+00:01:40.630 --> 00:01:41.830
+They did not.
+
+45
+00:01:42.180 --> 00:01:43.599
+The two top scores
+
+46
+00:01:43.599 --> 00:01:45.540
+from GLM 5.3 and Kimi K3
+
+47
+00:01:45.540 --> 00:01:47.183
+stopped much earlier
+
+48
+00:01:47.183 --> 00:01:49.273
+three to five times faster
+
+49
+00:01:49.348 --> 00:01:52.409
+at a cost in recall that the score allows
+
+50
+00:01:52.484 --> 00:01:54.500
+and the pass rule does not.
+
+51
+00:01:54.850 --> 00:01:56.130
+Both failed.
+
+52
+00:01:56.480 --> 00:01:58.367
+Five of sixteen passed
+
+53
+00:01:58.367 --> 00:02:00.665
+among them Claude Opus 5.5
+
+54
+00:02:00.665 --> 00:02:02.880
+at eighty-one point eight.
+
+55
+00:02:03.230 --> 00:02:04.065
+Its own idea
+
+56
+00:02:04.129 --> 00:02:06.314
+once the results reach the largest
+
+57
+00:02:06.378 --> 00:02:08.498
+inner product a partition allows
+
+58
+00:02:08.562 --> 00:02:10.618
+that partition and every shorter
+
+59
+00:02:10.682 --> 00:02:11.710
+one are settled.
+
+60
+00:02:12.290 --> 00:02:14.348
+In the second task, Query Core
+
+61
+00:02:14.348 --> 00:02:16.671
+the agent writes the whole search
+
+62
+00:02:16.671 --> 00:02:18.530
+but the stop rule is fixed.
+
+63
+00:02:18.880 --> 00:02:20.503
+Every scored run reached
+
+64
+00:02:20.571 --> 00:02:22.126
+the same rounded means
+
+65
+00:02:22.126 --> 00:02:24.560
+so the task became a race on speed.
+
+66
+00:02:24.910 --> 00:02:26.914
+Claude Opus 5.5 answered in six
+
+67
+00:02:26.979 --> 00:02:28.790
+point six four milliseconds
+
+68
+00:02:28.854 --> 00:02:30.729
+against nine point four eight
+
+69
+00:02:30.794 --> 00:02:31.958
+for the reference
+
+70
+00:02:31.958 --> 00:02:34.350
+and twelve of sixteen models passed.
+
+71
+00:02:34.930 --> 00:02:37.917
+So: probe the buckets in one global order
+
+72
+00:02:37.988 --> 00:02:39.766
+and stop once more probes
+
+73
+00:02:39.837 --> 00:02:41.330
+are unlikely to help.
+
+74
+00:02:41.680 --> 00:02:43.443
+And read the pass rule before
+
+75
+00:02:43.504 --> 00:02:44.720
+you chase the score.
+
+76
+00:02:45.070 --> 00:02:46.032
+As an exercise
+
+77
+00:02:46.096 --> 00:02:48.469
+raise the threshold to thirty percent
+
+78
+00:02:48.534 --> 00:02:50.201
+at a ratio of point eight
+
+79
+00:02:50.201 --> 00:02:52.510
+and see how recall and work change.
+
+80
+00:02:52.860 --> 00:02:55.180
+Next, patterns in graphs.

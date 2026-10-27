@@ -1,0 +1,321 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.567
+A real processor runs instructions
+
+2
+00:00:02.633 --> 00:00:03.500
+out of order.
+
+3
+00:00:03.850 --> 00:00:06.687
+The task gives the predictor two callbacks
+
+4
+00:00:06.687 --> 00:00:07.676
+decode notify
+
+5
+00:00:07.676 --> 00:00:10.249
+when an instruction claims a register
+
+6
+00:00:10.249 --> 00:00:11.569
+and execute notify
+
+7
+00:00:11.569 --> 00:00:14.010
+when it runs and the value is known.
+
+8
+00:00:14.360 --> 00:00:16.120
+Follow register three.
+
+9
+00:00:16.470 --> 00:00:19.430
+Instructions ten and twelve both claim it.
+
+10
+00:00:19.780 --> 00:00:22.300
+Twelve runs first and writes five
+
+11
+00:00:22.300 --> 00:00:24.820
+so prediction thirteen uses five.
+
+12
+00:00:25.170 --> 00:00:27.890
+Then ten runs late and writes nine.
+
+13
+00:00:28.240 --> 00:00:29.787
+That value is stale
+
+14
+00:00:29.787 --> 00:00:32.880
+so prediction fourteen still uses five.
+
+15
+00:00:33.230 --> 00:00:35.510
+Once fifteen claims the register
+
+16
+00:00:35.510 --> 00:00:37.790
+nothing is usable until it runs.
+
+17
+00:00:38.140 --> 00:00:40.780
+Only the newest claimant's value counts.
+
+18
+00:00:41.360 --> 00:00:42.936
+The task keeps TAGE
+
+19
+00:00:42.936 --> 00:00:45.063
+the rest of the corrector
+
+20
+00:00:45.063 --> 00:00:46.560
+and the simulator.
+
+21
+00:00:46.910 --> 00:00:49.367
+It removes the register-value component
+
+22
+00:00:49.429 --> 00:00:51.763
+and the agent writes it in nine marked
+
+23
+00:00:51.824 --> 00:00:53.790
+regions of one C plus plus file.
+
+24
+00:00:54.140 --> 00:00:55.637
+Which registers to use
+
+25
+00:00:55.637 --> 00:00:57.458
+and how big the tables are
+
+26
+00:00:57.458 --> 00:00:59.020
+are the agent's choice.
+
+27
+00:00:59.370 --> 00:01:01.686
+The whole predictor must fit a hundred
+
+28
+00:01:01.747 --> 00:01:03.271
+and ninety-two kibibytes
+
+29
+00:01:03.271 --> 00:01:05.770
+and the reference uses almost every bit.
+
+30
+00:01:06.350 --> 00:01:09.462
+Each submission runs a simulator over the
+
+31
+00:01:09.538 --> 00:01:12.270
+hundred and five traces of CBP 2025.
+
+32
+00:01:12.620 --> 00:01:14.789
+The score combines mispredictions
+
+33
+00:01:14.854 --> 00:01:16.300
+and wrong-path cycles.
+
+34
+00:01:16.650 --> 00:01:18.677
+The paper's own averages give the
+
+35
+00:01:18.738 --> 00:01:20.703
+reference thirty-one point five
+
+36
+00:01:20.764 --> 00:01:23.405
+and five percent fewer of both errors would
+
+37
+00:01:23.466 --> 00:01:25.370
+give only thirty-two point six.
+
+38
+00:01:25.950 --> 00:01:28.110
+The pass rule is much harder.
+
+39
+00:01:28.460 --> 00:01:30.287
+A predictor must make strictly
+
+40
+00:01:30.348 --> 00:01:31.627
+fewer mispredictions
+
+41
+00:01:31.627 --> 00:01:33.941
+and strictly fewer wrong-path cycles
+
+42
+00:01:33.941 --> 00:01:35.159
+than the reference
+
+43
+00:01:35.159 --> 00:01:37.900
+on every one of the hundred and five traces.
+
+44
+00:01:38.250 --> 00:01:40.330
+A tie anywhere fails.
+
+45
+00:01:40.680 --> 00:01:43.879
+And the task warns that noise alone moves a trace's
+
+46
+00:01:43.942 --> 00:01:46.200
+mispredictions by about one percent.
+
+47
+00:01:46.780 --> 00:01:48.380
+Pause and predict.
+
+48
+00:01:48.730 --> 00:01:50.543
+A new predictor is two percent
+
+49
+00:01:50.604 --> 00:01:51.692
+better on average
+
+50
+00:01:51.692 --> 00:01:54.170
+with one percent of noise on each trace.
+
+51
+00:01:54.520 --> 00:01:56.249
+What is its chance of winning
+
+52
+00:01:56.308 --> 00:01:57.560
+all hundred and five?
+
+53
+00:02:01.110 --> 00:02:03.670
+In our model, about nine percent.
+
+54
+00:02:04.020 --> 00:02:07.300
+At one percent better, it is almost zero.
+
+55
+00:02:07.650 --> 00:02:09.434
+It takes about three percent
+
+56
+00:02:09.497 --> 00:02:11.090
+better to be fairly safe.
+
+57
+00:02:12.170 --> 00:02:13.281
+No model passed
+
+58
+00:02:13.281 --> 00:02:15.850
+and none scored above the reference.
+
+59
+00:02:16.200 --> 00:02:18.167
+Claude Opus 5.5 came closest
+
+60
+00:02:18.167 --> 00:02:19.998
+at thirty-one point three
+
+61
+00:02:20.066 --> 00:02:22.915
+and all sixteen runs scored between thirty
+
+62
+00:02:22.983 --> 00:02:25.560
+point nine and thirty-one point three.
+
+63
+00:02:25.910 --> 00:02:27.993
+Opus tracked the newest producer
+
+64
+00:02:28.058 --> 00:02:29.750
+of thirty-three registers.
+
+65
+00:02:30.100 --> 00:02:31.302
+At each prediction
+
+66
+00:02:31.365 --> 00:02:33.262
+it took the six registers with
+
+67
+00:02:33.326 --> 00:02:34.780
+the most recent values
+
+68
+00:02:34.780 --> 00:02:36.678
+and looked each one up twice
+
+69
+00:02:36.678 --> 00:02:39.334
+by its exact value and by a coarse class
+
+70
+00:02:39.334 --> 00:02:42.180
+so that nearby values share what they learn.
+
+71
+00:02:42.760 --> 00:02:43.005
+So
+
+72
+00:02:43.005 --> 00:02:46.520
+use a value only from its newest producer.
+
+73
+00:02:46.870 --> 00:02:49.082
+A pass needs a win on every trace
+
+74
+00:02:49.082 --> 00:02:51.750
+with about one percent of noise on each.
+
+75
+00:02:52.100 --> 00:02:54.429
+And rebuilding the paper is not enough
+
+76
+00:02:54.489 --> 00:02:56.221
+the reference seems to be the
+
+77
+00:02:56.280 --> 00:02:57.594
+paper's own component
+
+78
+00:02:57.654 --> 00:02:59.445
+and a good rebuild lands about
+
+79
+00:02:59.505 --> 00:03:00.580
+one percent worse.
+
+80
+00:03:00.930 --> 00:03:02.450
+Next, KAMI.

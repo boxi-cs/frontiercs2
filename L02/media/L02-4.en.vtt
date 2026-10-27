@@ -1,0 +1,285 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.738
+A bipartite graph has two sides
+
+2
+00:00:02.738 --> 00:00:05.024
+and every edge joins the two
+
+3
+00:00:05.024 --> 00:00:08.300
+users and products, or authors and papers.
+
+4
+00:00:08.650 --> 00:00:11.425
+A butterfly is two vertices on each side
+
+5
+00:00:11.425 --> 00:00:13.185
+joined by all four edges
+
+6
+00:00:13.253 --> 00:00:15.013
+the smallest dense pattern
+
+7
+00:00:15.081 --> 00:00:16.570
+such a graph can have.
+
+8
+00:00:16.920 --> 00:00:19.800
+ParButterfly, a framework from 2020
+
+9
+00:00:19.800 --> 00:00:22.360
+counts butterflies in parallel.
+
+10
+00:00:22.940 --> 00:00:25.265
+A wedge is a path of two edges
+
+11
+00:00:25.265 --> 00:00:27.740
+with both ends on the same side.
+
+12
+00:00:28.090 --> 00:00:30.340
+Two vertices that share c neighbors
+
+13
+00:00:30.405 --> 00:00:32.012
+are the ends of c wedges
+
+14
+00:00:32.077 --> 00:00:33.813
+and any two of those wedges
+
+15
+00:00:33.877 --> 00:00:34.970
+form a butterfly.
+
+16
+00:00:35.320 --> 00:00:39.025
+So they share c times c minus one, over two
+
+17
+00:00:39.025 --> 00:00:40.120
+butterflies.
+
+18
+00:00:40.470 --> 00:00:42.438
+Counting comes down to collecting
+
+19
+00:00:42.498 --> 00:00:43.750
+wedges by their ends.
+
+20
+00:00:44.330 --> 00:00:46.724
+The framework first ranks the vertices
+
+21
+00:00:46.785 --> 00:00:49.118
+and keeps only the wedges whose center
+
+22
+00:00:49.179 --> 00:00:51.450
+and far end rank after the first end.
+
+23
+00:00:51.800 --> 00:00:54.600
+So each butterfly is counted once.
+
+24
+00:00:54.950 --> 00:00:57.670
+The order decides how many wedges there are.
+
+25
+00:00:58.020 --> 00:01:01.140
+Side order ranks one whole side first.
+
+26
+00:01:01.490 --> 00:01:04.078
+Degree order ranks the hubs first
+
+27
+00:01:04.078 --> 00:01:06.210
+so hubs are seldom centers.
+
+28
+00:01:06.790 --> 00:01:10.264
+Pause and predict: on a graph with big hubs
+
+29
+00:01:10.264 --> 00:01:12.790
+which order needs fewer wedges?
+
+30
+00:01:16.340 --> 00:01:19.105
+Our two graphs have forty vertices on each
+
+31
+00:01:19.170 --> 00:01:21.540
+side and three hundred twenty edges.
+
+32
+00:01:21.890 --> 00:01:23.230
+On the uniform graph
+
+33
+00:01:23.294 --> 00:01:25.271
+the best side order needs fewer
+
+34
+00:01:25.335 --> 00:01:26.930
+wedges than degree order.
+
+35
+00:01:27.280 --> 00:01:28.560
+On the skewed graph
+
+36
+00:01:28.560 --> 00:01:31.440
+degree order needs forty-four percent fewer.
+
+37
+00:01:31.790 --> 00:01:34.224
+The paper's rule takes degree order when
+
+38
+00:01:34.285 --> 00:01:36.110
+it saves at least ten percent.
+
+39
+00:01:37.190 --> 00:01:39.375
+The task removes the routine that
+
+40
+00:01:39.441 --> 00:01:41.030
+returns the exact total.
+
+41
+00:01:41.380 --> 00:01:43.012
+Only the count is checked
+
+42
+00:01:43.012 --> 00:01:45.460
+so the agent may choose its own order.
+
+43
+00:01:45.810 --> 00:01:48.449
+On eight graphs of about two million edges
+
+44
+00:01:48.449 --> 00:01:51.026
+on four threads, the count must be exact
+
+45
+00:01:51.087 --> 00:01:53.235
+and the code more than five percent
+
+46
+00:01:53.296 --> 00:01:55.321
+faster than the authors' parallel
+
+47
+00:01:55.383 --> 00:01:56.610
+code on every graph.
+
+48
+00:01:57.190 --> 00:01:59.694
+With an FDI of minus eleven point two
+
+49
+00:01:59.694 --> 00:02:02.526
+this is the easiest task of the benchmark
+
+50
+00:02:02.526 --> 00:02:05.030
+and fifteen of sixteen models passed.
+
+51
+00:02:05.380 --> 00:02:07.646
+The best runs counted about six times
+
+52
+00:02:07.708 --> 00:02:09.300
+faster than the reference.
+
+53
+00:02:09.650 --> 00:02:12.897
+Claude Opus 5.5 chose a strategy per graph
+
+54
+00:02:12.897 --> 00:02:15.012
+the side with fewer wedges
+
+55
+00:02:15.012 --> 00:02:16.598
+or on skewed graphs
+
+56
+00:02:16.598 --> 00:02:19.090
+a degree order if it is cheaper.
+
+57
+00:02:19.670 --> 00:02:21.524
+That ends the HPC lecture
+
+58
+00:02:21.524 --> 00:02:22.950
+with three lessons.
+
+59
+00:02:23.300 --> 00:02:25.150
+Work first, then threads
+
+60
+00:02:25.224 --> 00:02:27.444
+each paper cuts the total work
+
+61
+00:02:27.518 --> 00:02:29.220
+before it adds threads.
+
+62
+00:02:29.570 --> 00:02:31.090
+Every workload counts
+
+63
+00:02:31.159 --> 00:02:34.614
+the best scores on RegionsSort and Parallel DBSCAN
+
+64
+00:02:34.683 --> 00:02:37.170
+each failed on one of twelve inputs.
+
+65
+00:02:37.520 --> 00:02:40.240
+And a pass is decided in its own run.
+
+66
+00:02:40.590 --> 00:02:41.592
+As an exercise
+
+67
+00:02:41.659 --> 00:02:44.465
+count the wedges a single vertex of degree
+
+68
+00:02:44.532 --> 00:02:46.670
+forty would produce as a center.
+
+69
+00:02:47.020 --> 00:02:48.718
+The interactive notes have
+
+70
+00:02:48.783 --> 00:02:50.220
+every program we used.
+
+71
+00:02:50.570 --> 00:02:53.850
+Next time: Lecture 3, architecture.

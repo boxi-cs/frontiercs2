@@ -1,0 +1,397 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.307
+Sparse matrix multiply is a core step of graph
+
+2
+00:00:03.372 --> 00:00:05.660
+analytics and scientific computing.
+
+3
+00:00:06.010 --> 00:00:08.510
+The usual method, Gustavson's
+
+4
+00:00:08.510 --> 00:00:10.010
+works row by row.
+
+5
+00:00:10.360 --> 00:00:12.502
+For each stored entry of A
+
+6
+00:00:12.502 --> 00:00:15.993
+in row i and column k, it reads row k of B
+
+7
+00:00:15.993 --> 00:00:16.865
+scales it
+
+8
+00:00:16.865 --> 00:00:19.880
+and adds it into row i of the result.
+
+9
+00:00:20.230 --> 00:00:22.252
+Each stored entry costs one
+
+10
+00:00:22.327 --> 00:00:23.750
+read of a row of B.
+
+11
+00:00:24.330 --> 00:00:27.414
+The paper behind this task, from SC 2025
+
+12
+00:00:27.414 --> 00:00:30.724
+groups neighboring rows of A into clusters
+
+13
+00:00:30.799 --> 00:00:32.680
+and reads each needed row
+
+14
+00:00:32.755 --> 00:00:34.410
+of B once per cluster.
+
+15
+00:00:34.760 --> 00:00:36.789
+To make those rows share columns
+
+16
+00:00:36.850 --> 00:00:38.940
+it first reorders the rows so that
+
+17
+00:00:39.002 --> 00:00:40.600
+similar rows sit together.
+
+18
+00:00:40.950 --> 00:00:43.245
+Its best scheme is one point three
+
+19
+00:00:43.313 --> 00:00:45.270
+nine times faster on average.
+
+20
+00:00:45.620 --> 00:00:47.724
+The task uses the simplest one
+
+21
+00:00:47.724 --> 00:00:50.575
+fixed clusters of eight consecutive rows
+
+22
+00:00:50.575 --> 00:00:52.340
+after a fixed reordering.
+
+23
+00:00:52.920 --> 00:00:54.582
+Here is a matrix of our own
+
+24
+00:00:54.641 --> 00:00:56.125
+the five-point stencil of
+
+25
+00:00:56.185 --> 00:00:57.550
+an eight by eight grid
+
+26
+00:00:57.609 --> 00:00:59.330
+with two hundred eighty-eight
+
+27
+00:00:59.390 --> 00:01:00.280
+stored entries.
+
+28
+00:01:00.630 --> 00:01:01.400
+Row by row
+
+29
+00:01:01.400 --> 00:01:04.550
+that is two hundred eighty-eight reads of B.
+
+30
+00:01:04.900 --> 00:01:06.801
+Eight at a time in grid order
+
+31
+00:01:06.801 --> 00:01:08.765
+it is one hundred seventy-six
+
+32
+00:01:08.765 --> 00:01:11.300
+because neighboring rows share columns.
+
+33
+00:01:11.650 --> 00:01:13.526
+Shuffled rows share fewer
+
+34
+00:01:13.526 --> 00:01:15.330
+two hundred twenty-nine.
+
+35
+00:01:15.680 --> 00:01:18.595
+A simple reordering wins it back and more
+
+36
+00:01:18.595 --> 00:01:20.400
+at one hundred sixty-six.
+
+37
+00:01:20.750 --> 00:01:22.883
+In the task, the order is given
+
+38
+00:01:22.950 --> 00:01:24.750
+the agent writes the format
+
+39
+00:01:24.817 --> 00:01:25.950
+and the multiply.
+
+40
+00:01:26.530 --> 00:01:28.514
+For each group of eight rows
+
+41
+00:01:28.582 --> 00:01:30.429
+the format keeps one sorted
+
+42
+00:01:30.498 --> 00:01:31.797
+list of column ids
+
+43
+00:01:31.797 --> 00:01:33.576
+with eight values per id
+
+44
+00:01:33.576 --> 00:01:35.970
+and zero where a row has no entry.
+
+45
+00:01:36.320 --> 00:01:38.758
+The multiply reads each row of B once
+
+46
+00:01:38.822 --> 00:01:41.132
+and updates all eight lanes of every
+
+47
+00:01:41.196 --> 00:01:42.800
+output column it reaches.
+
+48
+00:01:43.150 --> 00:01:45.720
+One warning: the task fixes the order
+
+49
+00:01:45.789 --> 00:01:47.387
+and rules of additions
+
+50
+00:01:47.387 --> 00:01:49.054
+so an ordinary product
+
+51
+00:01:49.054 --> 00:01:52.110
+correct as mathematics, can fail the check.
+
+52
+00:01:52.690 --> 00:01:54.879
+Each submission multiplies whole
+
+53
+00:01:54.947 --> 00:01:56.589
+matrices from mechanics
+
+54
+00:01:56.589 --> 00:01:59.530
+stencils and graphs, on sixty CPU threads
+
+55
+00:01:59.530 --> 00:02:01.650
+timed from loading to the end.
+
+56
+00:02:02.000 --> 00:02:03.699
+To pass, on every matrix
+
+57
+00:02:03.767 --> 00:02:06.417
+the time must be below zero point eight
+
+58
+00:02:06.485 --> 00:02:08.320
+five times the reference's.
+
+59
+00:02:08.900 --> 00:02:10.500
+Pause and predict.
+
+60
+00:02:10.850 --> 00:02:13.481
+A submission is exactly one point one
+
+61
+00:02:13.552 --> 00:02:15.970
+five times faster on every matrix.
+
+62
+00:02:16.320 --> 00:02:17.440
+Does it pass?
+
+63
+00:02:20.990 --> 00:02:21.260
+No.
+
+64
+00:02:21.260 --> 00:02:23.555
+Its time is about zero point eight
+
+65
+00:02:23.623 --> 00:02:25.310
+seven of the reference's.
+
+66
+00:02:25.660 --> 00:02:27.380
+It needs a speed-up above
+
+67
+00:02:27.449 --> 00:02:29.100
+one point one seven six.
+
+68
+00:02:29.450 --> 00:02:31.283
+And a run three times faster
+
+69
+00:02:31.348 --> 00:02:32.526
+on seven matrices
+
+70
+00:02:32.526 --> 00:02:35.406
+but only one point one times on the eighth
+
+71
+00:02:35.406 --> 00:02:38.090
+scores seventy-two point six, and fails.
+
+72
+00:02:39.170 --> 00:02:41.292
+Twelve of sixteen models passed
+
+73
+00:02:41.292 --> 00:02:44.210
+the third-easiest of the forty-eight tasks.
+
+74
+00:02:44.560 --> 00:02:47.806
+Claude Opus 5.5 scored sixty-six point nine
+
+75
+00:02:47.806 --> 00:02:50.240
+against fifty for the reference.
+
+76
+00:02:50.590 --> 00:02:52.707
+It counts the output columns first
+
+77
+00:02:52.768 --> 00:02:55.066
+adds each product into all eight lanes
+
+78
+00:02:55.127 --> 00:02:56.820
+with one vector instruction
+
+79
+00:02:56.820 --> 00:02:58.393
+in the reference's order
+
+80
+00:02:58.393 --> 00:03:00.510
+and runs the heavy clusters first.
+
+81
+00:03:00.860 --> 00:03:03.075
+Kimi K3 scored fifty-six point
+
+82
+00:03:03.149 --> 00:03:06.251
+seven and still failed: faster on average
+
+83
+00:03:06.251 --> 00:03:09.500
+but not by fifteen percent on every matrix.
+
+84
+00:03:10.080 --> 00:03:12.167
+That ends the Architecture lecture
+
+85
+00:03:12.167 --> 00:03:13.360
+with three lessons.
+
+86
+00:03:13.710 --> 00:03:16.270
+Find the bottleneck first
+
+87
+00:03:16.270 --> 00:03:18.436
+KAMI waits on memory
+
+88
+00:03:18.436 --> 00:03:21.390
+and SpGEMM on the reads of B.
+
+89
+00:03:21.740 --> 00:03:23.686
+A margin changes the target
+
+90
+00:03:23.755 --> 00:03:26.466
+fifteen percent faster means a speed-up
+
+91
+00:03:26.535 --> 00:03:28.620
+above one point one seven six.
+
+92
+00:03:28.970 --> 00:03:31.850
+And a tuned reference is hard to beat
+
+93
+00:03:31.926 --> 00:03:34.200
+all sixteen RUNLTS runs stayed
+
+94
+00:03:34.275 --> 00:03:36.170
+within two percent of it.
+
+95
+00:03:36.520 --> 00:03:37.699
+As an exercise
+
+96
+00:03:37.699 --> 00:03:41.000
+try clusters of four and of sixteen rows.
+
+97
+00:03:41.350 --> 00:03:43.274
+The interactive notes run every
+
+98
+00:03:43.336 --> 00:03:44.950
+toy model in your browser.
+
+99
+00:03:45.300 --> 00:03:48.500
+Next time: Lecture 4, Network.

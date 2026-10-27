@@ -1,0 +1,305 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.783
+People who write many related programs
+
+2
+00:00:02.848 --> 00:00:04.220
+factor out functions.
+
+3
+00:00:04.570 --> 00:00:07.082
+Library learning does this automatically
+
+4
+00:00:07.082 --> 00:00:08.797
+given a corpus of programs
+
+5
+00:00:08.797 --> 00:00:11.370
+find the functions that make it smallest.
+
+6
+00:00:11.720 --> 00:00:13.674
+BABBLE, from POPL 2023
+
+7
+00:00:13.674 --> 00:00:16.902
+finds candidates by anti-unification
+
+8
+00:00:16.902 --> 00:00:19.960
+and keeps the corpus in an e-graph.
+
+9
+00:00:20.540 --> 00:00:22.192
+Our corpus is four turtle
+
+10
+00:00:22.258 --> 00:00:23.580
+drawings of our own.
+
+11
+00:00:23.930 --> 00:00:27.370
+Two are polygons, a square and a triangle.
+
+12
+00:00:27.720 --> 00:00:29.396
+The other two each draw
+
+13
+00:00:29.469 --> 00:00:31.000
+a polygon and a line.
+
+14
+00:00:31.350 --> 00:00:33.270
+They have thirty-four nodes.
+
+15
+00:00:33.620 --> 00:00:34.656
+In the e-graph
+
+16
+00:00:34.725 --> 00:00:36.729
+shared fragments such as move
+
+17
+00:00:36.798 --> 00:00:39.700
+ten are stored once: twenty-eight classes.
+
+18
+00:00:40.280 --> 00:00:42.204
+To anti-unify two fragments
+
+19
+00:00:42.273 --> 00:00:44.128
+line them up and put a hole
+
+20
+00:00:44.197 --> 00:00:45.640
+wherever they differ.
+
+21
+00:00:45.990 --> 00:00:47.914
+The result is the most specific
+
+22
+00:00:47.976 --> 00:00:49.590
+pattern that matches both.
+
+23
+00:00:49.940 --> 00:00:53.686
+The two polygons give: repeat x times
+
+24
+00:00:53.686 --> 00:00:55.460
+move ten, turn y.
+
+25
+00:00:55.810 --> 00:00:58.690
+That is a polygon function with two holes.
+
+26
+00:00:59.040 --> 00:01:00.697
+The other two shapes differ
+
+27
+00:01:00.759 --> 00:01:03.459
+right at the top, so their pattern is just a
+
+28
+00:01:03.521 --> 00:01:06.160
+sequence of two holes: too general to help.
+
+29
+00:01:06.740 --> 00:01:09.220
+Every pair of classes gives a candidate.
+
+30
+00:01:09.570 --> 00:01:11.884
+Keeping those with at most two holes
+
+31
+00:01:11.884 --> 00:01:13.009
+the task's limit
+
+32
+00:01:13.009 --> 00:01:15.010
+and some structure leaves nine.
+
+33
+00:01:15.360 --> 00:01:17.710
+A candidate's cost is the corpus size
+
+34
+00:01:17.773 --> 00:01:19.869
+after every match becomes a call
+
+35
+00:01:19.869 --> 00:01:21.520
+plus the function itself.
+
+36
+00:01:21.870 --> 00:01:24.261
+The polygon pattern costs thirty-three
+
+37
+00:01:24.261 --> 00:01:26.590
+because it matches only two programs.
+
+38
+00:01:27.170 --> 00:01:28.770
+Pause and predict.
+
+39
+00:01:29.120 --> 00:01:30.560
+Which function wins?
+
+40
+00:01:34.110 --> 00:01:37.950
+The smaller one: move x, then turn y.
+
+41
+00:01:38.300 --> 00:01:40.363
+It is one side of any polygon
+
+42
+00:01:40.363 --> 00:01:42.700
+and it matches all four programs.
+
+43
+00:01:43.050 --> 00:01:45.023
+The cost falls from thirty-four
+
+44
+00:01:45.086 --> 00:01:45.977
+to thirty-one
+
+45
+00:01:45.977 --> 00:01:48.650
+a reduction of eight point eight percent.
+
+46
+00:01:49.730 --> 00:01:50.829
+For some domains
+
+47
+00:01:50.893 --> 00:01:52.768
+the real BABBLE runs equality
+
+48
+00:01:52.833 --> 00:01:55.547
+saturation first, and it finds patterns by
+
+49
+00:01:55.612 --> 00:01:56.969
+crossing the e-graph
+
+50
+00:01:56.969 --> 00:01:59.490
+seen as a tree automaton, with itself.
+
+51
+00:01:59.840 --> 00:02:02.320
+The task removes that candidate step.
+
+52
+00:02:02.670 --> 00:02:04.647
+There are ten graded corpora
+
+53
+00:02:04.647 --> 00:02:06.829
+from lists and physics to text
+
+54
+00:02:06.829 --> 00:02:08.670
+drawings and block towers.
+
+55
+00:02:09.020 --> 00:02:11.557
+To pass, a run must compress at least
+
+56
+00:02:11.626 --> 00:02:13.340
+as well as the reference
+
+57
+00:02:13.340 --> 00:02:16.220
+and run strictly faster, on every corpus.
+
+58
+00:02:16.800 --> 00:02:18.922
+One model passed: Claude Opus 5.5
+
+59
+00:02:18.984 --> 00:02:21.668
+with a ratio of one point two eight against
+
+60
+00:02:21.730 --> 00:02:23.977
+the reference's one point two seven
+
+61
+00:02:24.039 --> 00:02:26.473
+in two hundred fifty-seven milliseconds
+
+62
+00:02:26.536 --> 00:02:28.720
+against nine hundred seventy-three.
+
+63
+00:02:29.070 --> 00:02:32.172
+The best score, nineteen point four
+
+64
+00:02:32.172 --> 00:02:34.670
+went to DeepSeek V4.1 Flash.
+
+65
+00:02:35.020 --> 00:02:36.887
+But its compression fell short
+
+66
+00:02:36.949 --> 00:02:38.691
+on three of the ten corpora
+
+67
+00:02:38.691 --> 00:02:41.180
+and it was slower on six, so it failed.
+
+68
+00:02:41.760 --> 00:02:41.984
+So
+
+69
+00:02:41.984 --> 00:02:45.120
+put a hole wherever two fragments differ.
+
+70
+00:02:45.470 --> 00:02:47.574
+A function's value is the corpus
+
+71
+00:02:47.640 --> 00:02:50.270
+size after rewriting, plus the function.
+
+72
+00:02:50.620 --> 00:02:52.538
+And a run must compress as
+
+73
+00:02:52.611 --> 00:02:55.340
+well and run faster, on every corpus.
+
+74
+00:02:55.690 --> 00:02:58.108
+As an exercise, allow three holes
+
+75
+00:02:58.108 --> 00:03:00.170
+and see which function wins.
+
+76
+00:03:00.520 --> 00:03:02.200
+Next, Polygon.

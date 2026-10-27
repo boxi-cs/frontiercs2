@@ -1,0 +1,301 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.084
+Welcome to Lecture 7 of the
+
+2
+00:00:02.150 --> 00:00:04.860
+FrontierCS 2 course, on machine learning.
+
+3
+00:00:05.210 --> 00:00:07.765
+FrontierCS 2 takes a research paper
+
+4
+00:00:07.836 --> 00:00:09.610
+removes its key idea from
+
+5
+00:00:09.681 --> 00:00:11.242
+the authors' own code
+
+6
+00:00:11.242 --> 00:00:14.010
+and asks an AI agent to write it back.
+
+7
+00:00:14.360 --> 00:00:16.188
+This field has nine tasks
+
+8
+00:00:16.188 --> 00:00:19.000
+and we visit all of them in four parts.
+
+9
+00:00:19.350 --> 00:00:21.367
+We start with the hardest task
+
+10
+00:00:21.435 --> 00:00:23.990
+in the whole benchmark: KV Compaction.
+
+11
+00:00:24.570 --> 00:00:26.933
+A language model that reads a long
+
+12
+00:00:27.003 --> 00:00:29.992
+document keeps a KV cache: for every token
+
+13
+00:00:29.992 --> 00:00:33.050
+in every layer and head, a key and a value.
+
+14
+00:00:33.400 --> 00:00:35.720
+The cache grows with the document.
+
+15
+00:00:36.070 --> 00:00:39.037
+Attention Matching, from ICML 2026
+
+16
+00:00:39.037 --> 00:00:41.664
+shrinks it one head at a time
+
+17
+00:00:41.664 --> 00:00:43.190
+with no training.
+
+18
+00:00:43.540 --> 00:00:46.220
+Our toy head has forty-eight article keys
+
+19
+00:00:46.220 --> 00:00:48.900
+plus four template keys that always stay.
+
+20
+00:00:49.250 --> 00:00:51.352
+We measure a small cache by its
+
+21
+00:00:51.420 --> 00:00:53.250
+output gap on test queries.
+
+22
+00:00:53.830 --> 00:00:55.590
+It works in three steps.
+
+23
+00:00:55.940 --> 00:00:58.391
+First, keep the keys that draw the most
+
+24
+00:00:58.454 --> 00:01:00.340
+attention from sample queries.
+
+25
+00:01:00.690 --> 00:01:03.098
+Keeping six of forty-eight this way
+
+26
+00:01:03.098 --> 00:01:05.773
+the gap falls from zero point nine six
+
+27
+00:01:05.773 --> 00:01:07.178
+for a random choice
+
+28
+00:01:07.178 --> 00:01:08.850
+to zero point two eight.
+
+29
+00:01:09.200 --> 00:01:11.618
+Second, give each kept key a bias
+
+30
+00:01:11.689 --> 00:01:14.533
+so that together they draw the attention
+
+31
+00:01:14.604 --> 00:01:17.520
+of the whole article: zero point two two.
+
+32
+00:01:17.870 --> 00:01:20.786
+Third, fit their values by least squares
+
+33
+00:01:20.786 --> 00:01:22.777
+so that the output matches
+
+34
+00:01:22.777 --> 00:01:24.270
+zero point one four.
+
+35
+00:01:24.850 --> 00:01:27.326
+The real task compacts the cache of a Qwen
+
+36
+00:01:27.385 --> 00:01:29.448
+model with four billion parameters
+
+37
+00:01:29.507 --> 00:01:31.511
+which then answers multiple-choice
+
+38
+00:01:31.570 --> 00:01:33.574
+questions on long stories from the
+
+39
+00:01:33.633 --> 00:01:34.930
+compacted cache alone.
+
+40
+00:01:35.280 --> 00:01:36.720
+The cache may keep up to
+
+41
+00:01:36.780 --> 00:01:38.160
+a tenth of the article.
+
+42
+00:01:38.510 --> 00:01:39.031
+To pass
+
+43
+00:01:39.096 --> 00:01:41.896
+every article must stay within one question
+
+44
+00:01:41.961 --> 00:01:44.110
+of the reference's correct count.
+
+45
+00:01:44.460 --> 00:01:45.945
+And at the full budget
+
+46
+00:01:45.945 --> 00:01:48.528
+the compaction must be strictly faster
+
+47
+00:01:48.528 --> 00:01:49.820
+with no more bytes.
+
+48
+00:01:50.400 --> 00:01:51.706
+Pause and predict.
+
+49
+00:01:51.779 --> 00:01:54.610
+Claude Opus 5.5 was about a hundred and
+
+50
+00:01:54.682 --> 00:01:57.440
+eight times faster than the reference.
+
+51
+00:01:57.790 --> 00:02:00.002
+On average it answered thirteen point
+
+52
+00:02:00.062 --> 00:02:01.616
+two questions per article
+
+53
+00:02:01.616 --> 00:02:03.230
+against twelve point nine.
+
+54
+00:02:03.580 --> 00:02:04.540
+Did it pass?
+
+55
+00:02:08.090 --> 00:02:08.890
+No.
+
+56
+00:02:09.240 --> 00:02:11.400
+It fell more than one question short
+
+57
+00:02:11.460 --> 00:02:13.560
+on two of the twenty-four articles.
+
+58
+00:02:13.910 --> 00:02:16.870
+A pass is decided article by article.
+
+59
+00:02:17.950 --> 00:02:20.750
+Opus's run was pure key selection.
+
+60
+00:02:21.100 --> 00:02:23.257
+It scored each key by its attention
+
+61
+00:02:23.318 --> 00:02:25.229
+from the article's own queries
+
+62
+00:02:25.229 --> 00:02:28.002
+spread the kept tokens over the whole story
+
+63
+00:02:28.002 --> 00:02:30.220
+and gave each layer its own budget.
+
+64
+00:02:30.570 --> 00:02:32.347
+It kept about three times the
+
+65
+00:02:32.408 --> 00:02:33.879
+target's article tokens
+
+66
+00:02:33.879 --> 00:02:36.330
+still below the reference's cache size.
+
+67
+00:02:36.680 --> 00:02:38.582
+Four of sixteen models scored
+
+68
+00:02:38.648 --> 00:02:39.960
+above the reference.
+
+69
+00:02:40.310 --> 00:02:41.430
+None passed.
+
+70
+00:02:42.010 --> 00:02:44.680
+So: keep the keys that draw attention
+
+71
+00:02:44.680 --> 00:02:47.210
+and fit biases and values to match.
+
+72
+00:02:47.560 --> 00:02:48.610
+And in judging
+
+73
+00:02:48.610 --> 00:02:50.920
+every article counts on its own.
+
+74
+00:02:51.270 --> 00:02:53.226
+Next: building the batches for
+
+75
+00:02:53.291 --> 00:02:54.790
+reinforcement learning.

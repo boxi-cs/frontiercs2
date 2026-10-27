@@ -1,0 +1,337 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.323
+Welcome to Lecture 12 of the
+
+2
+00:00:02.395 --> 00:00:04.780
+FrontierCS 2 course, on security.
+
+3
+00:00:05.130 --> 00:00:07.638
+FrontierCS 2 takes a research paper
+
+4
+00:00:07.708 --> 00:00:09.450
+removes its key idea from
+
+5
+00:00:09.520 --> 00:00:11.053
+the authors' own code
+
+6
+00:00:11.053 --> 00:00:13.770
+and asks an AI agent to write it back.
+
+7
+00:00:14.120 --> 00:00:16.600
+This lecture covers two such tasks.
+
+8
+00:00:16.950 --> 00:00:19.472
+LRR repairs regular expressions
+
+9
+00:00:19.553 --> 00:00:21.750
+that an attacker can stall.
+
+10
+00:00:22.100 --> 00:00:24.955
+Progent stops a tool-using agent from obeying
+
+11
+00:00:25.019 --> 00:00:27.620
+instructions hidden in the data it reads.
+
+12
+00:00:28.200 --> 00:00:30.498
+A regular expression, or regex
+
+13
+00:00:30.498 --> 00:00:33.240
+checks an input in one line of code.
+
+14
+00:00:33.590 --> 00:00:36.380
+Most regex engines, Python's among them
+
+15
+00:00:36.380 --> 00:00:37.984
+match by backtracking
+
+16
+00:00:37.984 --> 00:00:39.588
+when one choice fails
+
+17
+00:00:39.588 --> 00:00:41.750
+they go back and try the next.
+
+18
+00:00:42.100 --> 00:00:44.025
+For some patterns and some inputs
+
+19
+00:00:44.081 --> 00:00:46.402
+the number of choices grows exponentially
+
+20
+00:00:46.458 --> 00:00:48.100
+with the length of the input.
+
+21
+00:00:48.450 --> 00:00:50.242
+Then a few dozen characters
+
+22
+00:00:50.309 --> 00:00:51.570
+can stall a server.
+
+23
+00:00:51.920 --> 00:00:54.749
+This attack is called regular expression
+
+24
+00:00:54.820 --> 00:00:56.800
+denial of service, or ReDoS.
+
+25
+00:00:57.380 --> 00:00:59.552
+To see it, we wrote a small matcher
+
+26
+00:00:59.614 --> 00:01:00.980
+that counts its steps.
+
+27
+00:01:01.330 --> 00:01:04.370
+Take two patterns for one or more letters a.
+
+28
+00:01:04.720 --> 00:01:06.800
+The first is a-plus.
+
+29
+00:01:07.150 --> 00:01:09.224
+The second puts a-plus in a group
+
+30
+00:01:09.287 --> 00:01:10.670
+and repeats the group.
+
+31
+00:01:11.020 --> 00:01:13.140
+Feed each one n letters a
+
+32
+00:01:13.140 --> 00:01:15.260
+then an exclamation mark.
+
+33
+00:01:15.610 --> 00:01:16.707
+At four letters
+
+34
+00:01:16.776 --> 00:01:19.176
+the nested pattern takes sixty-four
+
+35
+00:01:19.244 --> 00:01:21.850
+steps to fail, and the simple one six.
+
+36
+00:01:22.200 --> 00:01:22.843
+At eight
+
+37
+00:01:22.843 --> 00:01:25.560
+one thousand twenty-four against ten.
+
+38
+00:01:25.910 --> 00:01:28.670
+At sixteen, two hundred sixty-two thousand
+
+39
+00:01:28.736 --> 00:01:31.430
+one hundred forty-four, against eighteen.
+
+40
+00:01:32.010 --> 00:01:33.610
+Pause and predict.
+
+41
+00:01:33.960 --> 00:01:36.760
+About how many steps at seventeen letters?
+
+42
+00:01:40.310 --> 00:01:41.550
+About twice as many
+
+43
+00:01:41.612 --> 00:01:43.658
+five hundred twenty-four thousand
+
+44
+00:01:43.720 --> 00:01:45.270
+two hundred eighty-eight.
+
+45
+00:01:45.620 --> 00:01:48.180
+Every extra letter doubles the work.
+
+46
+00:01:49.260 --> 00:01:50.780
+Why does it explode?
+
+47
+00:01:51.130 --> 00:01:52.770
+The exclamation mark makes
+
+48
+00:01:52.833 --> 00:01:54.032
+every attempt fail
+
+49
+00:01:54.095 --> 00:01:56.745
+so the matcher must try every way to match
+
+50
+00:01:56.808 --> 00:01:58.890
+the letters before it can say no.
+
+51
+00:01:59.240 --> 00:02:01.729
+Three letters can be cut into
+
+52
+00:02:01.815 --> 00:02:04.475
+groups in four ways: all three
+
+53
+00:02:04.475 --> 00:02:07.564
+two then one, one then two, or one
+
+54
+00:02:07.564 --> 00:02:08.680
+one and one.
+
+55
+00:02:09.030 --> 00:02:10.826
+Eight letters can be cut in one
+
+56
+00:02:10.884 --> 00:02:12.390
+hundred twenty-eight ways.
+
+57
+00:02:12.740 --> 00:02:14.740
+The pattern is ambiguous
+
+58
+00:02:14.740 --> 00:02:16.980
+one string has many parses.
+
+59
+00:02:17.330 --> 00:02:19.725
+Ambiguity under a repeat is the
+
+60
+00:02:19.802 --> 00:02:21.810
+root of exponential ReDoS.
+
+61
+00:02:22.390 --> 00:02:25.088
+A repair must remove the ambiguity and
+
+62
+00:02:25.159 --> 00:02:27.430
+accept exactly the same strings.
+
+63
+00:02:27.780 --> 00:02:28.980
+We check both.
+
+64
+00:02:29.330 --> 00:02:31.465
+The nested pattern followed
+
+65
+00:02:31.544 --> 00:02:34.232
+by b becomes a-plus, then b: safe
+
+66
+00:02:34.232 --> 00:02:36.050
+and the same language.
+
+67
+00:02:36.400 --> 00:02:39.619
+But another repair, a group of a or b
+
+68
+00:02:39.619 --> 00:02:42.668
+repeated, then b, also accepts b-b
+
+69
+00:02:42.668 --> 00:02:45.040
+which the original rejects.
+
+70
+00:02:45.390 --> 00:02:47.150
+It widened the language.
+
+71
+00:02:47.500 --> 00:02:50.405
+For a password rule or an input filter
+
+72
+00:02:50.405 --> 00:02:51.820
+that is a new bug.
+
+73
+00:02:52.400 --> 00:02:55.177
+So: backtracking tries every way to read
+
+74
+00:02:55.246 --> 00:02:57.120
+the string before it fails.
+
+75
+00:02:57.470 --> 00:02:59.310
+Ambiguity under a repeat
+
+76
+00:02:59.387 --> 00:03:01.150
+means exponential time.
+
+77
+00:03:01.500 --> 00:03:04.060
+And a repair must keep the language.
+
+78
+00:03:04.410 --> 00:03:05.558
+As an exercise
+
+79
+00:03:05.558 --> 00:03:09.001
+count the steps of a-star a-star b at eight
+
+80
+00:03:09.001 --> 00:03:11.450
+sixteen and thirty-two letters.
+
+81
+00:03:11.800 --> 00:03:13.275
+It is ambiguous too
+
+82
+00:03:13.275 --> 00:03:15.560
+but it grows much more slowly.
+
+83
+00:03:15.910 --> 00:03:19.074
+Next, LRR: how a small language model
+
+84
+00:03:19.160 --> 00:03:20.870
+makes these repairs.

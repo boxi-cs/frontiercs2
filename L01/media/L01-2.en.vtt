@@ -1,0 +1,317 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.278
+An AI agent calls a model in many turns
+
+2
+00:00:03.278 --> 00:00:05.660
+with a tool call between turns.
+
+3
+00:00:06.010 --> 00:00:08.188
+vLLM keeps a request's KV cache
+
+4
+00:00:08.258 --> 00:00:10.225
+only while the request runs
+
+5
+00:00:10.296 --> 00:00:12.544
+so after the tool call the whole
+
+6
+00:00:12.614 --> 00:00:14.722
+context may be computed again
+
+7
+00:00:14.722 --> 00:00:16.970
+and other conversations cut in.
+
+8
+00:00:17.320 --> 00:00:19.629
+Continuum holds a conversation's cache
+
+9
+00:00:19.689 --> 00:00:21.937
+for a time-to-live after a tool call
+
+10
+00:00:21.937 --> 00:00:24.549
+and serves whole conversations first come
+
+11
+00:00:24.549 --> 00:00:25.400
+first served.
+
+12
+00:00:25.980 --> 00:00:28.220
+Here is a small server of our own.
+
+13
+00:00:28.570 --> 00:00:30.309
+It computes prompts at four
+
+14
+00:00:30.373 --> 00:00:31.983
+thousand tokens a second
+
+15
+00:00:31.983 --> 00:00:34.108
+spends one second on each reply
+
+16
+00:00:34.108 --> 00:00:36.490
+and caches fourteen thousand tokens.
+
+17
+00:00:36.840 --> 00:00:38.497
+Six conversations arrive in
+
+18
+00:00:38.559 --> 00:00:39.909
+the first six seconds
+
+19
+00:00:39.909 --> 00:00:41.812
+each with three or four turns
+
+20
+00:00:41.812 --> 00:00:43.960
+and a tool pause after each reply.
+
+21
+00:00:44.540 --> 00:00:47.460
+vLLM serves requests as they become ready
+
+22
+00:00:47.460 --> 00:00:50.380
+and evicts the least recently used cache.
+
+23
+00:00:50.730 --> 00:00:52.749
+Its mean conversation latency is
+
+24
+00:00:52.812 --> 00:00:54.768
+thirty-three point one seconds
+
+25
+00:00:54.831 --> 00:00:57.102
+and it recomputes fifty-one thousand
+
+26
+00:00:57.165 --> 00:00:58.490
+seven hundred tokens.
+
+27
+00:00:58.840 --> 00:01:01.360
+Serving the oldest conversation first lowers
+
+28
+00:01:01.418 --> 00:01:03.480
+the mean to twenty-eight point four.
+
+29
+00:01:03.830 --> 00:01:05.990
+Add a time-to-live of eight seconds
+
+30
+00:01:06.050 --> 00:01:08.150
+and recomputation falls to eighteen
+
+31
+00:01:08.210 --> 00:01:09.890
+thousand two hundred tokens
+
+32
+00:01:09.890 --> 00:01:12.230
+and the mean to twenty-four point one.
+
+33
+00:01:12.580 --> 00:01:14.839
+But a held cache is memory other
+
+34
+00:01:14.909 --> 00:01:16.321
+requests cannot use
+
+35
+00:01:16.321 --> 00:01:18.580
+so the time-to-live needs care.
+
+36
+00:01:19.160 --> 00:01:22.014
+The real task starts from unmodified
+
+37
+00:01:22.094 --> 00:01:23.759
+vLLM on one H100 GPU
+
+38
+00:01:23.838 --> 00:01:26.058
+and the agent may change how
+
+39
+00:01:26.137 --> 00:01:28.040
+it schedules and caches.
+
+40
+00:01:28.390 --> 00:01:30.323
+A run serves forty-eight coding
+
+41
+00:01:30.386 --> 00:01:32.880
+conversations and one hundred fifty-five
+
+42
+00:01:32.942 --> 00:01:34.065
+tool-calling ones
+
+43
+00:01:34.065 --> 00:01:36.310
+each at a public and a hidden load.
+
+44
+00:01:36.660 --> 00:01:38.473
+To pass, in all four groups
+
+45
+00:01:38.538 --> 00:01:40.610
+it must beat the human reference
+
+46
+00:01:40.675 --> 00:01:42.618
+on the geometric mean latency
+
+47
+00:01:42.618 --> 00:01:44.043
+and at the ninetieth
+
+48
+00:01:44.043 --> 00:01:46.828
+ninety-fifth and ninety-ninth percentiles
+
+49
+00:01:46.828 --> 00:01:48.900
+and solve nearly as many tasks.
+
+50
+00:01:49.480 --> 00:01:53.080
+The score compares with plain vLLM instead.
+
+51
+00:01:53.430 --> 00:01:55.651
+Each workload's speed-up becomes
+
+52
+00:01:55.720 --> 00:01:58.149
+a latency score: zero at one times
+
+53
+00:01:58.149 --> 00:01:59.538
+fifty at ten times
+
+54
+00:01:59.607 --> 00:02:01.620
+and sixty-six point six seven
+
+55
+00:02:01.689 --> 00:02:03.910
+at a hundred times, with no cap.
+
+56
+00:02:04.260 --> 00:02:07.220
+The four FlashLib tasks use the same score.
+
+57
+00:02:07.800 --> 00:02:10.667
+No model passed, though ten of sixteen beat
+
+58
+00:02:10.733 --> 00:02:12.200
+the reference's score.
+
+59
+00:02:12.550 --> 00:02:15.990
+Claude Opus 5.5 rebuilt Continuum.
+
+60
+00:02:16.340 --> 00:02:18.574
+It groups requests into conversations
+
+61
+00:02:18.634 --> 00:02:21.231
+by their prompts, and sets the time-to-live
+
+62
+00:02:21.291 --> 00:02:22.740
+from recent tool pauses.
+
+63
+00:02:23.090 --> 00:02:25.415
+Yet its ninety-ninth percentile was four
+
+64
+00:02:25.473 --> 00:02:27.624
+thousand nine hundred ninety seconds
+
+65
+00:02:27.682 --> 00:02:29.251
+against the reference's one
+
+66
+00:02:29.309 --> 00:02:30.530
+hundred eighty-three.
+
+67
+00:02:30.880 --> 00:02:33.280
+The task page does not say why.
+
+68
+00:02:33.630 --> 00:02:36.281
+But with forty-eight coding conversations
+
+69
+00:02:36.281 --> 00:02:38.554
+that percentile is the slowest one
+
+70
+00:02:38.617 --> 00:02:40.511
+so a single stuck conversation
+
+71
+00:02:40.574 --> 00:02:41.710
+is enough to fail.
+
+72
+00:02:42.290 --> 00:02:44.805
+So: hold the cache across a tool call
+
+73
+00:02:44.805 --> 00:02:47.585
+serve conversations rather than requests
+
+74
+00:02:47.585 --> 00:02:50.431
+and a pass needs the mean and three tails
+
+75
+00:02:50.431 --> 00:02:51.490
+in four groups.
+
+76
+00:02:51.840 --> 00:02:53.886
+As an exercise, double our cache
+
+77
+00:02:53.948 --> 00:02:55.994
+and see how much the time-to-live
+
+78
+00:02:56.056 --> 00:02:56.800
+still helps.
+
+79
+00:02:57.150 --> 00:02:58.910
+Next, FlashLib.

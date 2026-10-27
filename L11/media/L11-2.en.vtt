@@ -1,0 +1,433 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.631
+Homomorphic encryption lets a server
+
+2
+00:00:02.696 --> 00:00:04.380
+compute on encrypted data.
+
+3
+00:00:04.730 --> 00:00:06.754
+CKKS computes on encrypted
+
+4
+00:00:06.832 --> 00:00:08.311
+vectors of numbers
+
+5
+00:00:08.311 --> 00:00:10.490
+thousands of slots at once.
+
+6
+00:00:10.840 --> 00:00:12.804
+Its results are approximate
+
+7
+00:00:12.804 --> 00:00:15.400
+every operation adds a little noise.
+
+8
+00:00:15.750 --> 00:00:17.965
+So how many correct bits survive
+
+9
+00:00:18.035 --> 00:00:19.350
+a long computation?
+
+10
+00:00:19.700 --> 00:00:23.300
+A paper from 2025 answers with an estimator.
+
+11
+00:00:23.650 --> 00:00:25.086
+It runs the computation
+
+12
+00:00:25.149 --> 00:00:26.523
+again on clear values
+
+13
+00:00:26.523 --> 00:00:28.709
+adding modeled noise at each step
+
+14
+00:00:28.709 --> 00:00:30.770
+instead of running it encrypted.
+
+15
+00:00:31.350 --> 00:00:33.270
+A slot's precision is minus
+
+16
+00:00:33.341 --> 00:00:35.190
+log base two of its error.
+
+17
+00:00:35.540 --> 00:00:38.354
+An error of two to the minus sixteen means
+
+18
+00:00:38.421 --> 00:00:40.900
+sixteen correct bits after the point.
+
+19
+00:00:41.250 --> 00:00:43.255
+The task asks for two numbers
+
+20
+00:00:43.324 --> 00:00:45.744
+over all slots: the mean precision
+
+21
+00:00:45.744 --> 00:00:46.850
+and its spread.
+
+22
+00:00:47.430 --> 00:00:50.065
+Our toy works like a fixed-point CKKS
+
+23
+00:00:50.065 --> 00:00:52.630
+with two thousand forty-eight slots.
+
+24
+00:00:52.980 --> 00:00:55.569
+A value x is stored as x times a scale
+
+25
+00:00:55.569 --> 00:00:58.092
+delta, which is two to the twentieth
+
+26
+00:00:58.159 --> 00:01:00.947
+plus a little Gaussian noise with standard
+
+27
+00:01:01.014 --> 00:01:02.740
+deviation three point two.
+
+28
+00:01:03.090 --> 00:01:05.521
+Squaring multiplies two noisy values
+
+29
+00:01:05.521 --> 00:01:08.479
+divides by delta, which is called rescaling
+
+30
+00:01:08.479 --> 00:01:10.450
+and adds a little more noise.
+
+31
+00:01:11.030 --> 00:01:12.550
+Pause and predict.
+
+32
+00:01:13.100 --> 00:01:15.660
+Squaring doubles the relative error.
+
+33
+00:01:16.010 --> 00:01:17.953
+How many bits of precision should
+
+34
+00:01:18.012 --> 00:01:19.130
+each squaring cost?
+
+35
+00:01:22.480 --> 00:01:23.120
+One.
+
+36
+00:01:23.470 --> 00:01:26.110
+Doubling an error removes one bit.
+
+37
+00:01:27.190 --> 00:01:30.310
+With no squaring, nineteen point three bits.
+
+38
+00:01:30.660 --> 00:01:32.273
+Then eighteen point two
+
+39
+00:01:32.273 --> 00:01:33.818
+seventeen point three
+
+40
+00:01:33.818 --> 00:01:35.498
+and sixteen point three
+
+41
+00:01:35.498 --> 00:01:37.380
+about one bit per squaring.
+
+42
+00:01:37.730 --> 00:01:39.780
+The spread grows in the last rows
+
+43
+00:01:39.780 --> 00:01:41.889
+from about one point six to three
+
+44
+00:01:41.950 --> 00:01:44.120
+because the values themselves spread
+
+45
+00:01:44.180 --> 00:01:46.290
+out while the error stays absolute.
+
+46
+00:01:46.640 --> 00:01:48.169
+Our estimator lands close
+
+47
+00:01:48.227 --> 00:01:49.991
+because it runs the same model
+
+48
+00:01:50.050 --> 00:01:51.520
+with other noise samples.
+
+49
+00:01:52.100 --> 00:01:52.896
+In the task
+
+50
+00:01:52.962 --> 00:01:55.350
+the actual precision comes from real
+
+51
+00:01:55.416 --> 00:01:57.140
+encrypted runs in Lattigo.
+
+52
+00:01:57.490 --> 00:01:59.081
+The task removes seven of
+
+53
+00:01:59.144 --> 00:02:00.671
+the estimator's kernels
+
+54
+00:02:00.735 --> 00:02:02.516
+the noise of operations such
+
+55
+00:02:02.580 --> 00:02:03.725
+as multiplication
+
+56
+00:02:03.725 --> 00:02:05.570
+rescaling and key switching.
+
+57
+00:02:05.920 --> 00:02:08.988
+Each submission predicts nine encrypted computations
+
+58
+00:02:09.047 --> 00:02:10.640
+under twenty-nine settings.
+
+59
+00:02:10.990 --> 00:02:11.504
+To pass
+
+60
+00:02:11.568 --> 00:02:14.459
+on every setting it must predict the mean and
+
+61
+00:02:14.523 --> 00:02:17.221
+the spread as well as the human reference
+
+62
+00:02:17.221 --> 00:02:19.790
+within a band for run-to-run variation.
+
+63
+00:02:20.140 --> 00:02:22.700
+And its estimator must run faster.
+
+64
+00:02:23.280 --> 00:02:25.920
+The score depends only on accuracy.
+
+65
+00:02:26.270 --> 00:02:27.955
+Average the errors on the
+
+66
+00:02:28.023 --> 00:02:30.449
+mean and on the spread, call that E
+
+67
+00:02:30.517 --> 00:02:32.404
+and the score is one hundred
+
+68
+00:02:32.472 --> 00:02:33.550
+over one plus E.
+
+69
+00:02:33.900 --> 00:02:36.271
+The reference misses by zero point zero
+
+70
+00:02:36.332 --> 00:02:38.399
+three eight nine bits on the mean
+
+71
+00:02:38.460 --> 00:02:40.284
+and zero point zero four three
+
+72
+00:02:40.345 --> 00:02:41.500
+five on the spread.
+
+73
+00:02:41.850 --> 00:02:43.690
+That gives ninety-six.
+
+74
+00:02:44.270 --> 00:02:46.750
+Eleven of sixteen models passed.
+
+75
+00:02:47.100 --> 00:02:49.646
+Claude Opus 5.5 scored ninety-seven
+
+76
+00:02:49.718 --> 00:02:50.446
+point one
+
+77
+00:02:50.518 --> 00:02:53.791
+with errors of zero point zero two eight five
+
+78
+00:02:53.864 --> 00:02:56.700
+and zero point zero three two two bits.
+
+79
+00:02:57.050 --> 00:02:59.539
+And it ran in one hundred two milliseconds
+
+80
+00:02:59.596 --> 00:03:01.390
+against four hundred eighty-six
+
+81
+00:03:01.448 --> 00:03:02.490
+for the reference.
+
+82
+00:03:02.840 --> 00:03:05.090
+It used ordinary double precision
+
+83
+00:03:05.090 --> 00:03:07.406
+split the noise into terms on one
+
+84
+00:03:07.406 --> 00:03:09.987
+on the secret key s, and on s squared
+
+85
+00:03:10.053 --> 00:03:12.170
+and skipped key-switching digits
+
+86
+00:03:12.237 --> 00:03:13.560
+too small to matter.
+
+87
+00:03:14.140 --> 00:03:15.689
+Its own idea was to carry
+
+88
+00:03:15.751 --> 00:03:17.176
+sixteen noise replicas
+
+89
+00:03:17.176 --> 00:03:19.530
+each with its own sampled secret key
+
+90
+00:03:19.592 --> 00:03:22.380
+and keep the one whose statistics lie closest
+
+91
+00:03:22.442 --> 00:03:24.300
+to the average of all sixteen.
+
+92
+00:03:24.650 --> 00:03:26.425
+Then one unlucky sample does
+
+93
+00:03:26.489 --> 00:03:28.010
+not skew the prediction.
+
+94
+00:03:28.360 --> 00:03:31.214
+In one draw of our toy, at three squarings
+
+95
+00:03:31.280 --> 00:03:33.139
+a single replica misses by a
+
+96
+00:03:33.205 --> 00:03:34.931
+tenth of a bit on average
+
+97
+00:03:34.931 --> 00:03:37.320
+and by a quarter of a bit at worst.
+
+98
+00:03:37.670 --> 00:03:39.504
+The one nearest the average
+
+99
+00:03:39.572 --> 00:03:41.270
+misses by six hundredths.
+
+100
+00:03:41.850 --> 00:03:45.116
+So: precision is minus log two of the error
+
+101
+00:03:45.116 --> 00:03:48.010
+and each squaring costs about one bit.
+
+102
+00:03:48.360 --> 00:03:50.269
+And here a pass needs both
+
+103
+00:03:50.340 --> 00:03:52.319
+as accurate as the reference
+
+104
+00:03:52.390 --> 00:03:54.440
+on every setting, and faster.
+
+105
+00:03:54.790 --> 00:03:55.741
+As an exercise
+
+106
+00:03:55.741 --> 00:03:58.592
+run the toy with twice the encryption noise
+
+107
+00:03:58.592 --> 00:04:01.190
+and see by how much the precision falls.
+
+108
+00:04:01.540 --> 00:04:03.620
+Next, QuarterPIR.

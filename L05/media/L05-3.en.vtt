@@ -1,0 +1,317 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.384
+The binary fuse filter changes
+
+2
+00:00:02.454 --> 00:00:03.496
+only one thing
+
+3
+00:00:03.496 --> 00:00:05.580
+where a key's three slots go.
+
+4
+00:00:05.930 --> 00:00:08.895
+The table is cut into many equal segments
+
+5
+00:00:08.895 --> 00:00:10.730
+each a power of two long.
+
+6
+00:00:11.080 --> 00:00:13.499
+A key picks a starting segment at random
+
+7
+00:00:13.558 --> 00:00:15.386
+and its three slots lie in that
+
+8
+00:00:15.445 --> 00:00:16.920
+segment and the next two.
+
+9
+00:00:17.270 --> 00:00:19.533
+This layout comes from the fuse graphs
+
+10
+00:00:19.593 --> 00:00:21.320
+of Dietzfelbinger and Walzer
+
+11
+00:00:21.320 --> 00:00:22.630
+from twenty nineteen.
+
+12
+00:00:23.210 --> 00:00:25.238
+The library's public header sets the
+
+13
+00:00:25.294 --> 00:00:27.322
+segment length and the slots per key
+
+14
+00:00:27.378 --> 00:00:28.730
+from the number of keys.
+
+15
+00:00:29.080 --> 00:00:31.044
+Ten thousand keys get segments
+
+16
+00:00:31.109 --> 00:00:32.745
+of two hundred fifty-six
+
+17
+00:00:32.745 --> 00:00:35.560
+and one point two five four slots per key.
+
+18
+00:00:35.910 --> 00:00:37.929
+Two hundred thousand keys get
+
+19
+00:00:37.999 --> 00:00:39.670
+one point one six seven.
+
+20
+00:00:40.020 --> 00:00:42.103
+A million keys get segments of eight
+
+21
+00:00:42.161 --> 00:00:44.013
+thousand one hundred ninety-two
+
+22
+00:00:44.013 --> 00:00:45.460
+and one point one three.
+
+23
+00:00:46.040 --> 00:00:47.160
+Is that enough?
+
+24
+00:00:47.510 --> 00:00:49.209
+At two hundred thousand keys
+
+25
+00:00:49.267 --> 00:00:51.669
+the header gives two hundred thirty-three
+
+26
+00:00:51.727 --> 00:00:54.070
+thousand four hundred seventy-two slots.
+
+27
+00:00:54.420 --> 00:00:56.100
+We tried three seeds.
+
+28
+00:00:56.450 --> 00:00:58.039
+An xor filter of that size
+
+29
+00:00:58.101 --> 00:00:59.384
+got stuck every time
+
+30
+00:00:59.446 --> 00:01:01.341
+while the same keys in the fuse
+
+31
+00:01:01.402 --> 00:01:02.930
+layout peeled every time.
+
+32
+00:01:03.510 --> 00:01:04.779
+Pause and predict.
+
+33
+00:01:04.849 --> 00:01:07.034
+Ten thousand keys get one point
+
+34
+00:01:07.104 --> 00:01:09.078
+two five four slots per key
+
+35
+00:01:09.148 --> 00:01:10.910
+more than an xor filter's
+
+36
+00:01:10.981 --> 00:01:12.390
+one point two three.
+
+37
+00:01:12.940 --> 00:01:15.180
+Why would a small filter need more?
+
+38
+00:01:18.730 --> 00:01:20.689
+The fuse layout's advantage grows
+
+39
+00:01:20.748 --> 00:01:22.410
+with the number of segments.
+
+40
+00:01:22.760 --> 00:01:24.833
+A small table has few of them
+
+41
+00:01:24.833 --> 00:01:27.320
+so the header adds a safety margin.
+
+42
+00:01:27.670 --> 00:01:28.992
+At a million keys
+
+43
+00:01:28.992 --> 00:01:32.150
+slots per key fall to one point one three.
+
+44
+00:01:33.230 --> 00:01:35.150
+Why is it called a fuse?
+
+45
+00:01:35.500 --> 00:01:37.219
+The first segment can only
+
+46
+00:01:37.285 --> 00:01:38.872
+hold a key's first slot
+
+47
+00:01:38.872 --> 00:01:41.318
+and the last segment only its third
+
+48
+00:01:41.318 --> 00:01:43.500
+so the two ends are thinly used.
+
+49
+00:01:43.850 --> 00:01:45.229
+Peeling starts there
+
+50
+00:01:45.294 --> 00:01:47.395
+and each removed key frees slots
+
+51
+00:01:47.460 --> 00:01:48.970
+one segment further in
+
+52
+00:01:48.970 --> 00:01:51.530
+like a fuse burning toward the middle.
+
+53
+00:01:51.880 --> 00:01:53.598
+Here are two thousand keys
+
+54
+00:01:53.664 --> 00:01:54.920
+in eleven segments.
+
+55
+00:01:55.270 --> 00:01:57.881
+Each bar shows when its segment was peeled
+
+56
+00:01:57.881 --> 00:02:00.310
+on average, as a percentage of the run.
+
+57
+00:02:00.660 --> 00:02:02.522
+The end segments finish first
+
+58
+00:02:02.522 --> 00:02:04.321
+at thirteen and six percent
+
+59
+00:02:04.383 --> 00:02:06.059
+and the segments toward the
+
+60
+00:02:06.121 --> 00:02:07.300
+middle finish last.
+
+61
+00:02:07.880 --> 00:02:10.092
+A key's three slots are close together
+
+62
+00:02:10.149 --> 00:02:11.738
+so the work stays in a small
+
+63
+00:02:11.794 --> 00:02:14.120
+part of the table, which helps the cache.
+
+64
+00:02:14.470 --> 00:02:17.021
+The paper reports construction more than
+
+65
+00:02:17.085 --> 00:02:19.190
+twice as fast as for xor filters.
+
+66
+00:02:19.540 --> 00:02:22.900
+So it needs fewer slots, and builds faster.
+
+67
+00:02:23.480 --> 00:02:24.440
+To sum up.
+
+68
+00:02:24.790 --> 00:02:26.627
+The three slots lie in three
+
+69
+00:02:26.692 --> 00:02:28.070
+consecutive segments.
+
+70
+00:02:28.420 --> 00:02:30.275
+The thin ends peel first
+
+71
+00:02:30.275 --> 00:02:32.500
+and the peeling burns inward.
+
+72
+00:02:32.850 --> 00:02:34.002
+At a million keys
+
+73
+00:02:34.066 --> 00:02:35.730
+the filter needs one point
+
+74
+00:02:35.794 --> 00:02:37.330
+one three slots per key.
+
+75
+00:02:37.680 --> 00:02:38.684
+As an exercise
+
+76
+00:02:38.751 --> 00:02:41.160
+try one point one zero slots per key
+
+77
+00:02:41.227 --> 00:02:43.168
+at two hundred thousand keys
+
+78
+00:02:43.168 --> 00:02:44.640
+and see what happens.
+
+79
+00:02:44.990 --> 00:02:48.270
+Next, the task, and what the agents wrote.

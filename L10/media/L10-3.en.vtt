@@ -1,0 +1,449 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.465
+The task keeps all of CREST except
+
+2
+00:00:02.529 --> 00:00:03.929
+its search strategies
+
+3
+00:00:03.929 --> 00:00:06.540
+and the agent writes one strategy class.
+
+4
+00:00:06.890 --> 00:00:08.790
+The strategy drives the session
+
+5
+00:00:08.851 --> 00:00:09.770
+through a host.
+
+6
+00:00:10.120 --> 00:00:13.000
+Restart runs fresh random inputs.
+
+7
+00:00:13.350 --> 00:00:15.232
+Negate flips one constraint
+
+8
+00:00:15.302 --> 00:00:18.230
+of an earlier run, solves, and runs again.
+
+9
+00:00:18.580 --> 00:00:21.804
+An infeasible request costs no iteration
+
+10
+00:00:21.804 --> 00:00:23.220
+only solver time.
+
+11
+00:00:23.570 --> 00:00:26.273
+The strategy sees the paths of branch ids
+
+12
+00:00:26.273 --> 00:00:29.170
+and the program's static control-flow graph.
+
+13
+00:00:29.520 --> 00:00:31.534
+It never sees the constraints
+
+14
+00:00:31.534 --> 00:00:33.280
+the inputs or the solver.
+
+15
+00:00:33.630 --> 00:00:36.532
+And branch ids are relabelled in every run
+
+16
+00:00:36.600 --> 00:00:38.355
+so nothing can be tuned to
+
+17
+00:00:38.422 --> 00:00:40.110
+one program's branch ids.
+
+18
+00:00:40.690 --> 00:00:42.485
+Each run is one session of
+
+19
+00:00:42.554 --> 00:00:44.280
+four thousand iterations
+
+20
+00:00:44.280 --> 00:00:45.730
+on a real C program.
+
+21
+00:00:46.080 --> 00:00:47.813
+The agent develops on GNU
+
+22
+00:00:47.883 --> 00:00:49.200
+grep two point two.
+
+23
+00:00:49.550 --> 00:00:51.623
+The final programs are hidden
+
+24
+00:00:51.623 --> 00:00:53.695
+but the task page names them
+
+25
+00:00:53.695 --> 00:00:55.215
+Vim five point seven
+
+26
+00:00:55.215 --> 00:00:57.150
+and sed three point oh two.
+
+27
+00:00:57.500 --> 00:01:00.208
+Two things are measured: branches covered
+
+28
+00:01:00.208 --> 00:01:01.562
+and search overhead
+
+29
+00:01:01.627 --> 00:01:03.883
+the time spent in the strategy plus
+
+30
+00:01:03.948 --> 00:01:06.140
+the solver time its requests cost.
+
+31
+00:01:06.720 --> 00:01:08.725
+The score compares coverage with
+
+32
+00:01:08.788 --> 00:01:10.480
+bounded depth-first search.
+
+33
+00:01:10.830 --> 00:01:12.919
+Take the strategy's mean coverage
+
+34
+00:01:12.982 --> 00:01:15.703
+over thirty seeds, subtract the baseline's
+
+35
+00:01:15.767 --> 00:01:17.412
+and divide by the branches
+
+36
+00:01:17.476 --> 00:01:19.691
+the baseline left, as a percentage
+
+37
+00:01:19.691 --> 00:01:20.830
+never below zero.
+
+38
+00:01:21.180 --> 00:01:23.759
+On grep, the baseline covers one thousand
+
+39
+00:01:23.822 --> 00:01:25.960
+fifty-seven of three thousand nine
+
+40
+00:01:26.023 --> 00:01:27.784
+hundred eighty-two branches
+
+41
+00:01:27.847 --> 00:01:29.545
+so covering fifteen hundred
+
+42
+00:01:29.608 --> 00:01:31.180
+scores fifteen point one.
+
+43
+00:01:31.530 --> 00:01:33.181
+The score ignores overhead
+
+44
+00:01:33.181 --> 00:01:35.198
+and stays far below one hundred
+
+45
+00:01:35.259 --> 00:01:37.216
+because much of a program cannot
+
+46
+00:01:37.277 --> 00:01:39.050
+be reached within the budget.
+
+47
+00:01:39.630 --> 00:01:42.647
+To pass, the candidate races the reference
+
+48
+00:01:42.647 --> 00:01:45.243
+the paper's own CFG-directed search
+
+49
+00:01:45.243 --> 00:01:48.190
+on the same thirty seeds of each program.
+
+50
+00:01:48.540 --> 00:01:51.137
+On every program, it must have more coverage
+
+51
+00:01:51.196 --> 00:01:52.258
+and less overhead
+
+52
+00:01:52.317 --> 00:01:54.206
+each by more than three standard
+
+53
+00:01:54.265 --> 00:01:55.740
+errors of the difference.
+
+54
+00:01:56.090 --> 00:01:58.482
+That margin is about zero point seven
+
+55
+00:01:58.547 --> 00:02:00.810
+seven times the spread of one seed.
+
+56
+00:02:01.390 --> 00:02:02.830
+No model passed.
+
+57
+00:02:03.180 --> 00:02:05.531
+Three of sixteen scored above the human
+
+58
+00:02:05.591 --> 00:02:07.580
+reference's thirteen point three.
+
+59
+00:02:07.930 --> 00:02:11.183
+The best score was sixteen point two
+
+60
+00:02:11.183 --> 00:02:15.052
+by GPT-6.1 Terra, then Claude Opus 5.5 with
+
+61
+00:02:15.140 --> 00:02:16.810
+fifteen point five.
+
+62
+00:02:17.160 --> 00:02:20.155
+Five runs cleared three of their four rules
+
+63
+00:02:20.155 --> 00:02:21.720
+none cleared all four.
+
+64
+00:02:22.300 --> 00:02:24.561
+The two best runs each missed
+
+65
+00:02:24.639 --> 00:02:27.135
+one overhead rule: Terra on sed
+
+66
+00:02:27.135 --> 00:02:28.460
+and Opus on Vim.
+
+67
+00:02:28.810 --> 00:02:31.323
+GPT-6.1 Terra covered one thousand
+
+68
+00:02:31.397 --> 00:02:34.057
+two hundred thirty more Vim branches
+
+69
+00:02:34.131 --> 00:02:35.535
+than the reference
+
+70
+00:02:35.535 --> 00:02:37.530
+and was faster on Vim too.
+
+71
+00:02:37.880 --> 00:02:40.311
+But on sed it spent about one point six
+
+72
+00:02:40.373 --> 00:02:42.368
+seconds more than the reference
+
+73
+00:02:42.368 --> 00:02:43.240
+so it failed.
+
+74
+00:02:43.590 --> 00:02:46.550
+Claude Opus 5.5 cleared both coverage
+
+75
+00:02:46.630 --> 00:02:48.870
+rules and was faster on sed.
+
+76
+00:02:49.220 --> 00:02:51.538
+On Vim it was twelve seconds faster
+
+77
+00:02:51.603 --> 00:02:53.148
+but it needed twenty-six
+
+78
+00:02:53.212 --> 00:02:54.500
+point three seconds.
+
+79
+00:02:55.080 --> 00:02:57.464
+The task page shows Opus's patch
+
+80
+00:02:57.536 --> 00:03:00.136
+a CFG-directed chain search of three
+
+81
+00:03:00.209 --> 00:03:02.520
+hundred eighty-five added lines.
+
+82
+00:03:02.870 --> 00:03:05.750
+Two of its ideas cut overhead directly.
+
+83
+00:03:06.100 --> 00:03:09.060
+Never ask twice: hash every path prefix
+
+84
+00:03:09.060 --> 00:03:12.020
+and never send the same negation again.
+
+85
+00:03:12.370 --> 00:03:14.930
+And skip targets that were never feasible.
+
+86
+00:03:15.280 --> 00:03:16.704
+Added to our toy search
+
+87
+00:03:16.704 --> 00:03:19.256
+the two ideas give slightly more coverage
+
+88
+00:03:19.315 --> 00:03:20.858
+twenty point seven against
+
+89
+00:03:20.917 --> 00:03:22.282
+twenty point five five
+
+90
+00:03:22.282 --> 00:03:24.240
+for a fifth of the solver calls.
+
+91
+00:03:24.820 --> 00:03:26.797
+Thirteen of sixteen runs cleared
+
+92
+00:03:26.858 --> 00:03:28.217
+the Vim overhead rule
+
+93
+00:03:28.217 --> 00:03:30.502
+but only three cleared Vim coverage
+
+94
+00:03:30.502 --> 00:03:33.220
+and those three each lost an overhead rule.
+
+95
+00:03:33.570 --> 00:03:35.477
+Muse Spark 1.3 had the lowest
+
+96
+00:03:35.543 --> 00:03:37.252
+overhead on both programs
+
+97
+00:03:37.318 --> 00:03:39.554
+but covered only five thousand six
+
+98
+00:03:39.619 --> 00:03:41.526
+hundred seventy Vim branches
+
+99
+00:03:41.526 --> 00:03:43.170
+far below the reference.
+
+100
+00:03:43.520 --> 00:03:45.708
+A strategy that spends less time
+
+101
+00:03:45.777 --> 00:03:47.760
+searching usually finds less.
+
+102
+00:03:48.340 --> 00:03:51.140
+That ends this lecture, with three lessons.
+
+103
+00:03:51.490 --> 00:03:54.147
+Paths explode, but branches do not
+
+104
+00:03:54.223 --> 00:03:57.108
+a good strategy hunts for new branches
+
+105
+00:03:57.184 --> 00:03:58.930
+and ignores most paths.
+
+106
+00:03:59.280 --> 00:04:01.442
+Static structure guides the search
+
+107
+00:04:01.504 --> 00:04:03.605
+the control-flow graph tells which
+
+108
+00:04:03.667 --> 00:04:05.520
+flip could lead somewhere new.
+
+109
+00:04:05.870 --> 00:04:08.179
+And two measurements pull apart
+
+110
+00:04:08.179 --> 00:04:11.137
+more coverage usually costs more search
+
+111
+00:04:11.137 --> 00:04:13.950
+and no run won both, on both programs.
+
+112
+00:04:14.300 --> 00:04:17.660
+Next time: Lecture 11, cryptography.

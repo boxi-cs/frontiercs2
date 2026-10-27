@@ -1,0 +1,325 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.314
+A hypergraph lets one edge, a hyperedge
+
+2
+00:00:03.314 --> 00:00:05.500
+join any number of vertices.
+
+3
+00:00:05.850 --> 00:00:07.938
+The k-core is what remains after
+
+4
+00:00:08.003 --> 00:00:10.091
+repeatedly removing every vertex
+
+5
+00:00:10.156 --> 00:00:11.918
+in fewer than k hyperedges
+
+6
+00:00:11.983 --> 00:00:13.680
+and with it each hyperedge
+
+7
+00:00:13.745 --> 00:00:15.050
+that loses a member.
+
+8
+00:00:15.400 --> 00:00:18.091
+A vertex's core number is the largest
+
+9
+00:00:18.164 --> 00:00:20.200
+k whose core still holds it.
+
+10
+00:00:20.550 --> 00:00:20.959
+Hygra
+
+11
+00:00:20.959 --> 00:00:23.894
+a parallel hypergraph framework from 2020
+
+12
+00:00:23.962 --> 00:00:26.282
+has a new work-efficient algorithm
+
+13
+00:00:26.350 --> 00:00:27.510
+for core numbers.
+
+14
+00:00:28.090 --> 00:00:30.413
+Our hypergraph has nine vertices
+
+15
+00:00:30.486 --> 00:00:32.010
+and eight hyperedges.
+
+16
+00:00:32.360 --> 00:00:35.197
+Vertices zero to three form a tight group
+
+17
+00:00:35.266 --> 00:00:37.480
+of four three-vertex hyperedges.
+
+18
+00:00:37.830 --> 00:00:40.950
+Four, five and six form a looser one.
+
+19
+00:00:41.300 --> 00:00:43.870
+Vertex seven hangs on one hyperedge
+
+20
+00:00:43.870 --> 00:00:45.940
+and vertex eight is in none.
+
+21
+00:00:46.520 --> 00:00:49.640
+Peeling finds every core number in one pass.
+
+22
+00:00:49.990 --> 00:00:53.587
+At level k, remove every vertex whose live
+
+23
+00:00:53.673 --> 00:00:57.270
+degree is at most k; its core number is k.
+
+24
+00:00:57.620 --> 00:01:00.531
+Its hyperedges die, and their other members
+
+25
+00:01:00.599 --> 00:01:02.020
+lose one degree each.
+
+26
+00:01:02.370 --> 00:01:04.330
+Here it takes four rounds
+
+27
+00:01:04.330 --> 00:01:06.440
+vertex eight at level zero
+
+28
+00:01:06.440 --> 00:01:08.777
+seven at level one, then four
+
+29
+00:01:08.777 --> 00:01:11.490
+five and six together at level two.
+
+30
+00:01:11.840 --> 00:01:14.901
+Zero to three are left with degree three
+
+31
+00:01:14.901 --> 00:01:16.320
+core number three.
+
+32
+00:01:16.900 --> 00:01:19.630
+A simple parallel version rescans every
+
+33
+00:01:19.700 --> 00:01:21.940
+remaining vertex in every round.
+
+34
+00:01:22.290 --> 00:01:24.058
+The paper keeps the vertices
+
+35
+00:01:24.121 --> 00:01:25.446
+in buckets by degree
+
+36
+00:01:25.509 --> 00:01:28.098
+so a round touches only the vertices that
+
+37
+00:01:28.161 --> 00:01:30.370
+leave and those whose degree drops.
+
+38
+00:01:30.720 --> 00:01:32.349
+On a random hypergraph of
+
+39
+00:01:32.414 --> 00:01:33.847
+two thousand vertices
+
+40
+00:01:33.912 --> 00:01:35.606
+buckets make about fifteen
+
+41
+00:01:35.671 --> 00:01:37.169
+thousand vertex visits
+
+42
+00:01:37.169 --> 00:01:39.840
+and rescanning about sixty-one thousand.
+
+43
+00:01:40.420 --> 00:01:42.005
+The task removes the whole
+
+44
+00:01:42.066 --> 00:01:43.285
+core-number routine
+
+45
+00:01:43.285 --> 00:01:45.540
+and runs on four random hypergraphs.
+
+46
+00:01:45.890 --> 00:01:48.739
+The score is one hundred times e to the
+
+47
+00:01:48.812 --> 00:01:51.222
+minus t over zero point two five
+
+48
+00:01:51.222 --> 00:01:52.610
+with t in seconds.
+
+49
+00:01:52.960 --> 00:01:53.481
+To pass
+
+50
+00:01:53.546 --> 00:01:56.346
+a run must be at least three percent faster
+
+51
+00:01:56.411 --> 00:01:58.951
+than the reference on every hypergraph
+
+52
+00:01:58.951 --> 00:02:01.360
+twice: on eight threads, and on one.
+
+53
+00:02:01.710 --> 00:02:04.237
+The one-thread time is the total work
+
+54
+00:02:04.237 --> 00:02:07.230
+so the task checks work-efficiency directly.
+
+55
+00:02:07.810 --> 00:02:09.110
+Pause and predict
+
+56
+00:02:09.110 --> 00:02:12.071
+did the failing runs fail on one thread
+
+57
+00:02:12.071 --> 00:02:13.010
+or on eight?
+
+58
+00:02:16.560 --> 00:02:18.895
+All fourteen runs with a valid result
+
+59
+00:02:18.958 --> 00:02:21.040
+beat the reference on one thread.
+
+60
+00:02:21.390 --> 00:02:23.786
+All six failing runs with a valid
+
+61
+00:02:23.859 --> 00:02:26.110
+result failed on eight threads.
+
+62
+00:02:27.190 --> 00:02:29.471
+Eight of sixteen models passed
+
+63
+00:02:29.471 --> 00:02:32.119
+and Gemini 4 Argon, in Antigravity
+
+64
+00:02:32.119 --> 00:02:33.590
+had the best score.
+
+65
+00:02:33.940 --> 00:02:35.607
+Claude Opus 5.5 passed with
+
+66
+00:02:35.669 --> 00:02:37.090
+forty-nine point seven
+
+67
+00:02:37.090 --> 00:02:39.745
+below the reference's fifty-two point two
+
+68
+00:02:39.807 --> 00:02:42.153
+because the reference took one hundred
+
+69
+00:02:42.215 --> 00:02:44.500
+ninety-seven milliseconds in its run.
+
+70
+00:02:44.850 --> 00:02:47.936
+Opus runs each round in one of three ways
+
+71
+00:02:47.936 --> 00:02:49.332
+push, pull or fix
+
+72
+00:02:49.332 --> 00:02:52.050
+and a cost model picks the cheapest.
+
+73
+00:02:52.630 --> 00:02:52.839
+So
+
+74
+00:02:52.839 --> 00:02:55.967
+peeling gives every core number in one pass
+
+75
+00:02:55.967 --> 00:02:58.470
+and buckets make it work-efficient.
+
+76
+00:02:58.820 --> 00:03:01.062
+But work-efficient is not enough
+
+77
+00:03:01.062 --> 00:03:03.780
+the run must also win on eight threads.
+
+78
+00:03:04.130 --> 00:03:05.128
+As an exercise
+
+79
+00:03:05.128 --> 00:03:07.722
+add a hyperedge joining four and five
+
+80
+00:03:07.722 --> 00:03:10.050
+and see which core numbers change.
+
+81
+00:03:10.400 --> 00:03:12.400
+Next, ParButterfly.

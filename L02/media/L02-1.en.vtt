@@ -1,0 +1,397 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.050
+Welcome to Lecture 2 of the
+
+2
+00:00:02.115 --> 00:00:03.411
+FrontierCS 2 course
+
+3
+00:00:03.411 --> 00:00:05.420
+on high-performance computing.
+
+4
+00:00:05.770 --> 00:00:08.278
+FrontierCS 2 takes a research paper
+
+5
+00:00:08.348 --> 00:00:10.090
+removes its key idea from
+
+6
+00:00:10.160 --> 00:00:11.693
+the authors' own code
+
+7
+00:00:11.693 --> 00:00:14.410
+and asks an AI agent to write it back.
+
+8
+00:00:14.760 --> 00:00:16.759
+This lecture has four tasks
+
+9
+00:00:16.759 --> 00:00:19.400
+all from Julian Shun's group at MIT.
+
+10
+00:00:19.750 --> 00:00:21.792
+Their papers share one aim
+
+11
+00:00:21.792 --> 00:00:23.910
+work-efficient parallelism.
+
+12
+00:00:24.260 --> 00:00:25.909
+Do no more total work than
+
+13
+00:00:25.972 --> 00:00:27.494
+a good serial algorithm
+
+14
+00:00:27.494 --> 00:00:29.460
+then spread it over the cores.
+
+15
+00:00:29.810 --> 00:00:31.730
+We start with RegionsSort.
+
+16
+00:00:32.310 --> 00:00:34.322
+A radix sort puts every key in
+
+17
+00:00:34.389 --> 00:00:36.133
+a bucket by its top digit
+
+18
+00:00:36.133 --> 00:00:38.950
+then sorts each bucket by the next digit.
+
+19
+00:00:39.300 --> 00:00:41.210
+The fast parallel versions copy
+
+20
+00:00:41.272 --> 00:00:43.058
+the keys into a second array
+
+21
+00:00:43.058 --> 00:00:44.660
+which doubles the memory.
+
+22
+00:00:45.010 --> 00:00:47.387
+Regions Sort, from SPAA 2019
+
+23
+00:00:47.387 --> 00:00:48.699
+works in place
+
+24
+00:00:48.699 --> 00:00:51.567
+each key is swapped to its bucket
+
+25
+00:00:51.567 --> 00:00:55.010
+with as much work as a serial radix sort.
+
+26
+00:00:55.590 --> 00:00:58.207
+Here is a toy of our own: forty keys
+
+27
+00:00:58.207 --> 00:01:00.612
+four buckets by the top two bits
+
+28
+00:01:00.612 --> 00:01:02.310
+and four blocks of ten.
+
+29
+00:01:02.660 --> 00:01:03.099
+First
+
+30
+00:01:03.099 --> 00:01:06.025
+each block sorts its own keys by digit
+
+31
+00:01:06.025 --> 00:01:07.780
+all blocks in parallel.
+
+32
+00:01:08.130 --> 00:01:10.145
+Then counting gives each bucket
+
+33
+00:01:10.210 --> 00:01:12.290
+its final interval, its country.
+
+34
+00:01:12.640 --> 00:01:15.760
+Country zero is positions zero to eight.
+
+35
+00:01:16.110 --> 00:01:18.076
+It should hold only zeros
+
+36
+00:01:18.076 --> 00:01:20.345
+but it holds two ones, a two
+
+37
+00:01:20.345 --> 00:01:21.630
+and four threes.
+
+38
+00:01:22.210 --> 00:01:24.420
+Each misplaced run of keys becomes
+
+39
+00:01:24.485 --> 00:01:26.370
+an edge of the regions graph.
+
+40
+00:01:26.720 --> 00:01:30.367
+An edge from i to j with weight w says that
+
+41
+00:01:30.452 --> 00:01:33.760
+w keys in country i belong to bucket j.
+
+42
+00:01:34.110 --> 00:01:36.654
+Country zero holds seven foreign keys
+
+43
+00:01:36.721 --> 00:01:38.663
+and seven keys of bucket zero
+
+44
+00:01:38.730 --> 00:01:40.270
+sit in other countries.
+
+45
+00:01:40.620 --> 00:01:42.547
+Weight in equals weight out
+
+46
+00:01:42.547 --> 00:01:43.855
+for every country
+
+47
+00:01:43.855 --> 00:01:46.540
+that is the lemma the paper builds on.
+
+48
+00:01:47.120 --> 00:01:49.920
+The paper plans swaps along two-paths.
+
+49
+00:01:50.270 --> 00:01:52.357
+Take an edge from x to b
+
+50
+00:01:52.357 --> 00:01:54.110
+and one from b to y.
+
+51
+00:01:54.460 --> 00:01:57.115
+Swap equal parts of the two ranges
+
+52
+00:01:57.115 --> 00:01:58.860
+and b's keys are home.
+
+53
+00:01:59.210 --> 00:02:02.248
+The keys of y now sit in country x
+
+54
+00:02:02.248 --> 00:02:03.290
+a new edge.
+
+55
+00:02:03.640 --> 00:02:07.323
+If y is x, both sides land home at once
+
+56
+00:02:07.323 --> 00:02:08.520
+a two-cycle.
+
+57
+00:02:08.870 --> 00:02:11.154
+Our toy plans one bucket at a time
+
+58
+00:02:11.154 --> 00:02:14.026
+and a bucket's swaps touch disjoint ranges
+
+59
+00:02:14.026 --> 00:02:16.310
+so they run in one parallel round.
+
+60
+00:02:16.660 --> 00:02:18.794
+Ten swaps put all twenty-nine
+
+61
+00:02:18.868 --> 00:02:20.340
+misplaced keys home.
+
+62
+00:02:20.920 --> 00:02:22.818
+The task keeps the sorter and
+
+63
+00:02:22.884 --> 00:02:24.520
+removes the swap planner.
+
+64
+00:02:24.870 --> 00:02:26.752
+Each submission sorts twelve
+
+65
+00:02:26.819 --> 00:02:28.230
+arrays on four cores.
+
+66
+00:02:28.580 --> 00:02:31.243
+On every array, a pass needs a faster sort
+
+67
+00:02:31.307 --> 00:02:33.653
+than the reference, a faster planner
+
+68
+00:02:33.716 --> 00:02:35.428
+and extra memory of at most
+
+69
+00:02:35.491 --> 00:02:37.140
+five percent of the input.
+
+70
+00:02:37.490 --> 00:02:40.084
+The score comes from the speedup over
+
+71
+00:02:40.154 --> 00:02:42.607
+the serial sort of the C++ library
+
+72
+00:02:42.607 --> 00:02:44.850
+a tenfold speedup scores fifty.
+
+73
+00:02:45.430 --> 00:02:48.058
+All sixteen runs had a faster planner than
+
+74
+00:02:48.120 --> 00:02:50.310
+the reference on all twelve arrays.
+
+75
+00:02:50.660 --> 00:02:53.300
+Pause and predict: how many passed?
+
+76
+00:02:56.850 --> 00:02:57.890
+Only two.
+
+77
+00:02:58.240 --> 00:03:00.682
+The planner is a small part of a sort
+
+78
+00:03:00.682 --> 00:03:02.225
+about six milliseconds
+
+79
+00:03:02.225 --> 00:03:03.896
+summed over four workers
+
+80
+00:03:03.896 --> 00:03:05.760
+in a call of about nineteen.
+
+81
+00:03:06.840 --> 00:03:08.999
+Gemini 4 Argon, in Antigravity
+
+82
+00:03:08.999 --> 00:03:11.925
+had the best score, fifty-one point five
+
+83
+00:03:11.925 --> 00:03:14.920
+against fifty point two for the reference.
+
+84
+00:03:15.270 --> 00:03:18.192
+It was faster on eleven of twelve arrays
+
+85
+00:03:18.192 --> 00:03:19.190
+so it failed.
+
+86
+00:03:19.540 --> 00:03:21.219
+Claude Opus 5.5 planned
+
+87
+00:03:21.292 --> 00:03:24.138
+one bucket at a time, two-cycles first
+
+88
+00:03:24.211 --> 00:03:26.400
+and deferred the graph updates
+
+89
+00:03:26.473 --> 00:03:27.860
+to keep memory low.
+
+90
+00:03:28.210 --> 00:03:30.450
+It was faster on seven arrays.
+
+91
+00:03:31.030 --> 00:03:32.630
+Three things to take away.
+
+92
+00:03:32.980 --> 00:03:35.860
+Misplaced ranges form a regions graph.
+
+93
+00:03:36.210 --> 00:03:38.082
+A two-path gives one swap
+
+94
+00:03:38.082 --> 00:03:40.530
+and a bucket's swaps run at once.
+
+95
+00:03:40.880 --> 00:03:43.840
+And a faster part is not a faster whole.
+
+96
+00:03:44.190 --> 00:03:45.350
+As an exercise
+
+97
+00:03:45.350 --> 00:03:48.596
+plan the buckets in the order three, two
+
+98
+00:03:48.596 --> 00:03:51.070
+one, zero, and count the swaps.
+
+99
+00:03:51.420 --> 00:03:53.900
+Next, Parallel DBSCAN.

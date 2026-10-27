@@ -1,0 +1,469 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.351
+Welcome to Lecture 0 of the
+
+2
+00:00:02.427 --> 00:00:05.313
+FrontierCS 2 course, the introduction.
+
+3
+00:00:05.313 --> 00:00:06.300
+I'm Boxi Yu.
+
+4
+00:00:06.650 --> 00:00:09.510
+FrontierCS 2 asks whether AI agents can
+
+5
+00:00:09.583 --> 00:00:11.930
+do research in computer science.
+
+6
+00:00:12.280 --> 00:00:14.010
+Most coding benchmarks ask
+
+7
+00:00:14.076 --> 00:00:15.540
+an agent to fix a bug
+
+8
+00:00:15.606 --> 00:00:17.602
+or to pass a test that already
+
+9
+00:00:17.669 --> 00:00:18.600
+has an answer.
+
+10
+00:00:18.950 --> 00:00:21.237
+FrontierCS 2 asks for research.
+
+11
+00:00:21.311 --> 00:00:23.598
+Each task takes a paper and the
+
+12
+00:00:23.672 --> 00:00:25.590
+code its authors released.
+
+13
+00:00:25.940 --> 00:00:28.382
+It removes the paper's key contribution
+
+14
+00:00:28.382 --> 00:00:30.580
+and asks an agent to write it back.
+
+15
+00:00:30.930 --> 00:00:33.606
+To pass, the agent's version must beat the
+
+16
+00:00:33.669 --> 00:00:35.771
+authors' own code on every metric
+
+17
+00:00:35.835 --> 00:00:37.810
+of the task's hidden workloads.
+
+18
+00:00:38.390 --> 00:00:40.612
+The tasks come from thirteen fields
+
+19
+00:00:40.674 --> 00:00:42.711
+from machine-learning systems and
+
+20
+00:00:42.773 --> 00:00:45.366
+high-performance computing to cryptography
+
+21
+00:00:45.428 --> 00:00:46.230
+and robotics.
+
+22
+00:00:46.580 --> 00:00:48.657
+Machine learning and databases
+
+23
+00:00:48.726 --> 00:00:50.180
+have nine tasks each.
+
+24
+00:00:50.530 --> 00:00:52.969
+Theory, bioinformatics and software
+
+25
+00:00:53.038 --> 00:00:54.850
+engineering have one each.
+
+26
+00:00:55.200 --> 00:00:57.280
+That makes forty-eight tasks.
+
+27
+00:00:57.630 --> 00:01:00.741
+Sixteen models each run every task once
+
+28
+00:01:00.741 --> 00:01:03.230
+seven hundred sixty-eight runs.
+
+29
+00:01:03.580 --> 00:01:05.834
+A private set of more than one hundred
+
+30
+00:01:05.894 --> 00:01:07.496
+further tasks is kept back
+
+31
+00:01:07.496 --> 00:01:08.860
+to be announced later.
+
+32
+00:01:09.440 --> 00:01:12.842
+Each model runs in its own agent harness
+
+33
+00:01:12.842 --> 00:01:15.498
+Claude Opus 5.5 in Claude Code
+
+34
+00:01:15.498 --> 00:01:18.070
+the GPT-6 models in Codex CLI
+
+35
+00:01:18.070 --> 00:01:21.140
+and Gemini 4 Argon in two harnesses
+
+36
+00:01:21.140 --> 00:01:22.800
+Antigravity and Pi.
+
+37
+00:01:23.150 --> 00:01:25.195
+So a leaderboard row is a model
+
+38
+00:01:25.261 --> 00:01:26.910
+and its harness together.
+
+39
+00:01:27.260 --> 00:01:28.860
+Pause and predict.
+
+40
+00:01:29.210 --> 00:01:31.441
+Gemini 4 Argon appears twice
+
+41
+00:01:31.518 --> 00:01:33.749
+with pass rates of fifty-four
+
+42
+00:01:33.825 --> 00:01:35.210
+and forty percent.
+
+43
+00:01:35.760 --> 00:01:38.560
+How can the same model score so differently?
+
+44
+00:01:38.910 --> 00:01:41.390
+The harness is part of what is measured.
+
+45
+00:01:41.740 --> 00:01:43.222
+One example: under Pi
+
+46
+00:01:43.290 --> 00:01:45.782
+the provider's content filter refused
+
+47
+00:01:45.850 --> 00:01:47.938
+a request and Pi ended the run
+
+48
+00:01:47.938 --> 00:01:50.700
+in ten of its forty-eight runs under Pi.
+
+49
+00:01:51.050 --> 00:01:53.930
+Antigravity retries refused requests.
+
+50
+00:01:55.010 --> 00:01:58.130
+A task starts from a paper's own repository.
+
+51
+00:01:58.480 --> 00:02:00.051
+The builders delete the
+
+52
+00:02:00.119 --> 00:02:01.554
+paper's contribution
+
+53
+00:02:01.554 --> 00:02:03.193
+the queue logic in BBQ
+
+54
+00:02:03.193 --> 00:02:04.764
+the search in MetaOpt
+
+55
+00:02:04.764 --> 00:02:07.360
+the scheduling decision in Shockwave.
+
+56
+00:02:07.710 --> 00:02:09.460
+The rest of the code stays
+
+57
+00:02:09.525 --> 00:02:11.275
+so the agent works inside a
+
+58
+00:02:11.339 --> 00:02:12.830
+real research codebase.
+
+59
+00:02:13.180 --> 00:02:16.121
+The authors' code is the human reference
+
+60
+00:02:16.121 --> 00:02:17.340
+the bar to beat.
+
+61
+00:02:17.920 --> 00:02:21.040
+A run has a wall-clock budget of five hours.
+
+62
+00:02:21.390 --> 00:02:23.404
+The agent sees its repository
+
+63
+00:02:23.473 --> 00:02:25.070
+and the task statement.
+
+64
+00:02:25.420 --> 00:02:27.986
+For each patch it submits as a train call
+
+65
+00:02:28.047 --> 00:02:29.696
+it gets back a score on the
+
+66
+00:02:29.758 --> 00:02:32.140
+development workloads, and one message.
+
+67
+00:02:32.490 --> 00:02:33.340
+The evaluator
+
+68
+00:02:33.401 --> 00:02:35.709
+the hidden workloads and the reference
+
+69
+00:02:35.770 --> 00:02:36.984
+stay with the judge
+
+70
+00:02:37.045 --> 00:02:39.474
+and the hidden evaluation adds workloads
+
+71
+00:02:39.535 --> 00:02:40.810
+the agent never sees.
+
+72
+00:02:41.160 --> 00:02:41.820
+At the end
+
+73
+00:02:41.880 --> 00:02:43.980
+the agent picks one of its versions
+
+74
+00:02:44.040 --> 00:02:45.480
+as its final submission.
+
+75
+00:02:45.830 --> 00:02:47.492
+Only that version is scored
+
+76
+00:02:47.553 --> 00:02:49.030
+on the hidden workloads.
+
+77
+00:02:49.610 --> 00:02:52.170
+Choosing that version is part of the work.
+
+78
+00:02:52.520 --> 00:02:54.349
+Here is a toy run of our own
+
+79
+00:02:54.349 --> 00:02:55.800
+with five submissions.
+
+80
+00:02:56.150 --> 00:02:58.693
+The agent saw only the development scores
+
+81
+00:02:58.693 --> 00:03:01.236
+and the best one is forty-four point two
+
+82
+00:03:01.236 --> 00:03:02.870
+at minute two hundred ten.
+
+83
+00:03:03.220 --> 00:03:04.900
+Pause and predict.
+
+84
+00:03:05.450 --> 00:03:07.530
+Should the agent submit that version?
+
+85
+00:03:08.610 --> 00:03:09.951
+Now the hidden scores
+
+86
+00:03:09.951 --> 00:03:11.902
+which the judge measures later
+
+87
+00:03:11.902 --> 00:03:13.730
+against a reference of forty.
+
+88
+00:03:14.080 --> 00:03:16.355
+The best development version was tuned
+
+89
+00:03:16.415 --> 00:03:18.150
+to the development workloads
+
+90
+00:03:18.210 --> 00:03:19.707
+and on the hidden ones it
+
+91
+00:03:19.766 --> 00:03:22.400
+scores only thirty-six: below the reference.
+
+92
+00:03:22.750 --> 00:03:23.776
+The last version
+
+93
+00:03:23.776 --> 00:03:25.948
+at minute two hundred seventy-five
+
+94
+00:03:25.948 --> 00:03:27.698
+scored lower in development
+
+95
+00:03:27.698 --> 00:03:29.086
+forty-two point eight
+
+96
+00:03:29.146 --> 00:03:30.715
+but forty-one point six on
+
+97
+00:03:30.776 --> 00:03:33.310
+the hidden workloads: above the reference.
+
+98
+00:03:33.660 --> 00:03:34.401
+In this toy
+
+99
+00:03:34.463 --> 00:03:36.563
+the hidden score stands in for the
+
+100
+00:03:36.625 --> 00:03:38.540
+full check that decides a pass.
+
+101
+00:03:38.890 --> 00:03:41.746
+The benchmark reports what the agent chose
+
+102
+00:03:41.746 --> 00:03:42.410
+as it is.
+
+103
+00:03:42.760 --> 00:03:45.298
+An agent may end on a version that fails
+
+104
+00:03:45.298 --> 00:03:47.960
+although an earlier one would have passed.
+
+105
+00:03:48.540 --> 00:03:50.140
+So, three things.
+
+106
+00:03:50.490 --> 00:03:52.141
+A task is a paper with its
+
+107
+00:03:52.204 --> 00:03:53.791
+key contribution removed
+
+108
+00:03:53.791 --> 00:03:56.330
+and the authors' code is the reference.
+
+109
+00:03:56.680 --> 00:03:59.444
+During its run, the agent can see only the
+
+110
+00:03:59.510 --> 00:04:00.760
+development scores.
+
+111
+00:04:01.110 --> 00:04:03.830
+And only the version it picks is judged.
+
+112
+00:04:04.180 --> 00:04:06.587
+As an exercise: if you could see only the
+
+113
+00:04:06.646 --> 00:04:07.761
+development scores
+
+114
+00:04:07.761 --> 00:04:09.522
+which version would you pick
+
+115
+00:04:09.581 --> 00:04:11.518
+and what would make you trust the
+
+116
+00:04:11.577 --> 00:04:13.220
+last one more than the best?
+
+117
+00:04:13.570 --> 00:04:16.210
+Next: what counts as a pass.

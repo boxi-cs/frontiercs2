@@ -1,0 +1,365 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:01.660
+Back to e-graphs.
+
+2
+00:00:02.010 --> 00:00:03.491
+Matrix accelerators
+
+3
+00:00:03.491 --> 00:00:05.415
+such as a systolic array
+
+4
+00:00:05.415 --> 00:00:06.970
+run matrix products.
+
+5
+00:00:07.320 --> 00:00:09.082
+A convolution is not one
+
+6
+00:00:09.082 --> 00:00:11.337
+but it can be rewritten as one
+
+7
+00:00:11.337 --> 00:00:13.240
+a trick called im-two-col.
+
+8
+00:00:13.590 --> 00:00:15.450
+Glenside, from MAPS 2021
+
+9
+00:00:15.524 --> 00:00:18.202
+is a language in which such rewrites
+
+10
+00:00:18.276 --> 00:00:19.690
+are pure and local
+
+11
+00:00:19.690 --> 00:00:22.070
+so an e-graph can explore them.
+
+12
+00:00:22.650 --> 00:00:23.399
+In Glenside
+
+13
+00:00:23.399 --> 00:00:25.959
+a tensor is viewed as an access pattern
+
+14
+00:00:26.021 --> 00:00:27.706
+an outer shape that indexes
+
+15
+00:00:27.769 --> 00:00:29.142
+a collection of items
+
+16
+00:00:29.142 --> 00:00:30.890
+and the shape of each item.
+
+17
+00:00:31.240 --> 00:00:33.822
+A tensor of two by three by four
+
+18
+00:00:33.822 --> 00:00:35.935
+accessed at dimension one
+
+19
+00:00:35.935 --> 00:00:38.360
+is two items of three by four.
+
+20
+00:00:38.710 --> 00:00:41.090
+Windows makes one item per window
+
+21
+00:00:41.160 --> 00:00:43.120
+and a dot product multiplies
+
+22
+00:00:43.190 --> 00:00:44.870
+pairs of items and sums.
+
+23
+00:00:45.450 --> 00:00:47.468
+The rewrites and the accelerator
+
+24
+00:00:47.532 --> 00:00:49.298
+rule depend on these shapes
+
+25
+00:00:49.298 --> 00:00:52.010
+so the e-graph keeps them for every class.
+
+26
+00:00:52.360 --> 00:00:53.725
+That is an analysis
+
+27
+00:00:53.793 --> 00:00:55.500
+make builds a node's fact
+
+28
+00:00:55.568 --> 00:00:56.933
+from its children's
+
+29
+00:00:56.933 --> 00:00:59.800
+and merge joins the facts of two classes.
+
+30
+00:01:00.150 --> 00:01:02.770
+Here, a two by two kernel slides over
+
+31
+00:01:02.841 --> 00:01:04.470
+a three by three image.
+
+32
+00:01:04.820 --> 00:01:06.926
+The windows give four items
+
+33
+00:01:06.926 --> 00:01:09.860
+each two by two, one per output pixel.
+
+34
+00:01:10.440 --> 00:01:12.507
+Flatten each window into a row
+
+35
+00:01:12.507 --> 00:01:14.840
+and you get the im-two-col matrix.
+
+36
+00:01:15.190 --> 00:01:18.470
+Multiply it by the kernel, one, zero, zero
+
+37
+00:01:18.470 --> 00:01:21.750
+minus one, and every output is minus four.
+
+38
+00:01:22.100 --> 00:01:23.062
+In the e-graph
+
+39
+00:01:23.126 --> 00:01:25.115
+rewrites add equal forms of the
+
+40
+00:01:25.179 --> 00:01:27.425
+convolution until one has the shape
+
+41
+00:01:27.489 --> 00:01:28.900
+the accelerator wants.
+
+42
+00:01:29.250 --> 00:01:30.910
+Without correct shapes
+
+43
+00:01:30.910 --> 00:01:32.930
+no rewrite can fire safely.
+
+44
+00:01:33.510 --> 00:01:36.141
+The task removes Glenside's analysis
+
+45
+00:01:36.141 --> 00:01:38.630
+make and merge for every operator.
+
+46
+00:01:38.980 --> 00:01:40.889
+There are fourteen workloads
+
+47
+00:01:40.955 --> 00:01:42.600
+twelve small convolutions
+
+48
+00:01:42.666 --> 00:01:44.180
+and two concatenations.
+
+49
+00:01:44.530 --> 00:01:46.949
+A workload is discovered if the extracted
+
+50
+00:01:47.008 --> 00:01:49.249
+program uses the accelerator and gives
+
+51
+00:01:49.308 --> 00:01:50.370
+the right numbers.
+
+52
+00:01:50.720 --> 00:01:53.120
+To pass, a run must discover wherever
+
+53
+00:01:53.185 --> 00:01:54.417
+the reference does
+
+54
+00:01:54.482 --> 00:01:56.363
+with no more rewrite time and
+
+55
+00:01:56.428 --> 00:01:57.920
+no more e-graph growth.
+
+56
+00:01:58.500 --> 00:02:00.100
+Pause and predict.
+
+57
+00:02:00.450 --> 00:02:03.310
+The reference grows the e-graph by fifty-five
+
+58
+00:02:03.374 --> 00:02:05.090
+thousand two hundred nodes.
+
+59
+00:02:05.440 --> 00:02:07.600
+How many do the best runs add?
+
+60
+00:02:11.150 --> 00:02:12.430
+About eighteen.
+
+61
+00:02:13.510 --> 00:02:15.842
+Twelve of sixteen models passed
+
+62
+00:02:15.842 --> 00:02:17.590
+the most in this field.
+
+63
+00:02:17.940 --> 00:02:19.969
+Seven runs shared the best score
+
+64
+00:02:19.969 --> 00:02:22.612
+ninety-one, against eighty-two point eight
+
+65
+00:02:22.674 --> 00:02:23.780
+for the reference.
+
+66
+00:02:24.130 --> 00:02:26.311
+They added about eighteen nodes in about
+
+67
+00:02:26.365 --> 00:02:27.946
+one hundred ten microseconds
+
+68
+00:02:28.001 --> 00:02:29.964
+where the reference took one hundred
+
+69
+00:02:30.018 --> 00:02:31.490
+seventy-eight milliseconds.
+
+70
+00:02:31.840 --> 00:02:34.608
+Claude Opus 5.5 rebuilt the dot product
+
+71
+00:02:34.679 --> 00:02:36.382
+over flattened operands
+
+72
+00:02:36.453 --> 00:02:38.937
+so the accelerator rule saw a plain
+
+73
+00:02:39.008 --> 00:02:40.640
+matrix product at once.
+
+74
+00:02:40.990 --> 00:02:43.116
+Muse Spark 1.3 grew the e-graph
+
+75
+00:02:43.184 --> 00:02:44.899
+as much as the reference
+
+76
+00:02:44.899 --> 00:02:47.230
+but was slower on four workloads
+
+77
+00:02:47.230 --> 00:02:48.190
+so it failed.
+
+78
+00:02:48.770 --> 00:02:51.355
+That ends the Programming Languages lecture
+
+79
+00:02:51.355 --> 00:02:52.530
+with three lessons.
+
+80
+00:02:52.880 --> 00:02:55.189
+One data structure, three tasks
+
+81
+00:02:55.189 --> 00:02:58.363
+Egg maintains the e-graph, BABBLE mines it
+
+82
+00:02:58.363 --> 00:03:00.960
+and Glenside attaches shapes to it.
+
+83
+00:03:01.310 --> 00:03:04.114
+Every workload, every metric: in Egg
+
+84
+00:03:04.190 --> 00:03:06.767
+thirteen runs beat the reference's
+
+85
+00:03:06.843 --> 00:03:08.510
+score and none passed.
+
+86
+00:03:08.860 --> 00:03:12.060
+And write less, not faster: in Glenside
+
+87
+00:03:12.060 --> 00:03:14.940
+a direct rewrite beat a big search.
+
+88
+00:03:15.290 --> 00:03:16.381
+As an exercise
+
+89
+00:03:16.381 --> 00:03:19.654
+compute im-two-col for a four by four image
+
+90
+00:03:19.654 --> 00:03:20.890
+with stride two.
+
+91
+00:03:21.240 --> 00:03:25.000
+Next time: Lecture 10, software engineering.

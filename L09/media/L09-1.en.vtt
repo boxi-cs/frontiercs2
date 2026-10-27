@@ -1,0 +1,369 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.139
+Welcome to Lecture 9 of the
+
+2
+00:00:02.207 --> 00:00:03.569
+FrontierCS 2 course
+
+3
+00:00:03.569 --> 00:00:05.340
+on programming languages.
+
+4
+00:00:05.690 --> 00:00:08.090
+This lecture comes in four parts.
+
+5
+00:00:08.440 --> 00:00:10.651
+Each task takes a research paper
+
+6
+00:00:10.651 --> 00:00:13.667
+removes its key idea from the authors' code
+
+7
+00:00:13.667 --> 00:00:16.280
+and asks an AI agent to write it back.
+
+8
+00:00:16.630 --> 00:00:19.491
+To pass, the agent must match or beat the
+
+9
+00:00:19.561 --> 00:00:21.376
+reference on every metric
+
+10
+00:00:21.376 --> 00:00:23.190
+on every graded workload.
+
+11
+00:00:23.540 --> 00:00:25.616
+Three of this field's four tasks
+
+12
+00:00:25.681 --> 00:00:28.340
+build on one data structure, the e-graph.
+
+13
+00:00:28.690 --> 00:00:31.250
+We start with Egg, which maintains it.
+
+14
+00:00:31.830 --> 00:00:34.463
+A compiler that rewrites code must choose
+
+15
+00:00:34.527 --> 00:00:36.390
+which rewrite to apply first.
+
+16
+00:00:36.740 --> 00:00:39.435
+Equality saturation avoids the choice
+
+17
+00:00:39.435 --> 00:00:40.925
+it keeps every form
+
+18
+00:00:40.925 --> 00:00:43.620
+and extracts the cheapest at the end.
+
+19
+00:00:43.970 --> 00:00:45.876
+The forms live in an e-graph
+
+20
+00:00:45.941 --> 00:00:47.847
+which groups expressions into
+
+21
+00:00:47.913 --> 00:00:49.490
+classes of equal values.
+
+22
+00:00:49.840 --> 00:00:52.091
+Three parts keep it consistent
+
+23
+00:00:52.091 --> 00:00:54.197
+a union-find over class ids
+
+24
+00:00:54.197 --> 00:00:56.811
+a memo from each node to its class
+
+25
+00:00:56.811 --> 00:00:59.280
+and each class's list of parents.
+
+26
+00:00:59.860 --> 00:01:03.518
+Add a plus b, times two, and a plus c
+
+27
+00:01:03.518 --> 00:01:06.020
+times two: eight classes.
+
+28
+00:01:06.370 --> 00:01:09.741
+Then learn that b equals c, and merge them
+
+29
+00:01:09.741 --> 00:01:10.290
+seven.
+
+30
+00:01:10.640 --> 00:01:13.163
+Now the two sums have the same operator
+
+31
+00:01:13.227 --> 00:01:14.974
+and the same child classes
+
+32
+00:01:14.974 --> 00:01:16.720
+so they must be equal too.
+
+33
+00:01:17.070 --> 00:01:18.590
+This is congruence.
+
+34
+00:01:18.940 --> 00:01:20.940
+Rebuilding restores it.
+
+35
+00:01:21.290 --> 00:01:23.586
+It visits the merged class's parents
+
+36
+00:01:23.586 --> 00:01:25.386
+puts them in canonical form
+
+37
+00:01:25.386 --> 00:01:27.930
+and merges any that collide in the memo.
+
+38
+00:01:28.280 --> 00:01:31.560
+The two sums merge, then the two products.
+
+39
+00:01:31.910 --> 00:01:33.190
+Five classes.
+
+40
+00:01:33.770 --> 00:01:35.733
+The idea in Egg is to defer
+
+41
+00:01:35.733 --> 00:01:38.046
+apply a whole batch of rewrites
+
+42
+00:01:38.046 --> 00:01:41.130
+queue the merged classes, and rebuild once.
+
+43
+00:01:41.480 --> 00:01:44.427
+In our notes, one batch merges sixty-four
+
+44
+00:01:44.498 --> 00:01:45.720
+classes into one.
+
+45
+00:01:46.070 --> 00:01:48.845
+Rebuilding after every merge repairs four
+
+46
+00:01:48.913 --> 00:01:51.350
+thousand ninety-five parent entries.
+
+47
+00:01:51.700 --> 00:01:53.640
+Rebuilding once repairs one
+
+48
+00:01:53.711 --> 00:01:55.220
+hundred twenty-seven.
+
+49
+00:01:55.570 --> 00:01:56.338
+The price
+
+50
+00:01:56.338 --> 00:01:59.638
+between rebuilds the e-graph can be stale
+
+51
+00:01:59.638 --> 00:02:01.250
+so search must wait.
+
+52
+00:02:01.830 --> 00:02:03.739
+The task removes egg's rebuild
+
+53
+00:02:03.801 --> 00:02:05.956
+three methods that work through the
+
+54
+00:02:06.018 --> 00:02:08.112
+pending merges and put every class
+
+55
+00:02:08.174 --> 00:02:09.590
+back in canonical form.
+
+56
+00:02:09.940 --> 00:02:10.689
+Afterwards
+
+57
+00:02:10.689 --> 00:02:13.140
+congruent nodes must share a class
+
+58
+00:02:13.208 --> 00:02:15.046
+and analysis data must flow
+
+59
+00:02:15.115 --> 00:02:16.340
+up to the parents.
+
+60
+00:02:16.690 --> 00:02:19.490
+There are six tests, three of them hidden.
+
+61
+00:02:19.840 --> 00:02:20.353
+To pass
+
+62
+00:02:20.417 --> 00:02:23.303
+the code must be at least five percent faster
+
+63
+00:02:23.367 --> 00:02:25.483
+than the reference on every test
+
+64
+00:02:25.483 --> 00:02:27.920
+in total time and in congruence time.
+
+65
+00:02:28.500 --> 00:02:30.100
+Pause and predict.
+
+66
+00:02:30.450 --> 00:02:32.601
+Thirteen of sixteen models scored
+
+67
+00:02:32.666 --> 00:02:33.970
+above the reference.
+
+68
+00:02:34.320 --> 00:02:35.600
+How many passed?
+
+69
+00:02:39.150 --> 00:02:39.870
+None.
+
+70
+00:02:40.220 --> 00:02:42.969
+The score looks only at a run's mean time
+
+71
+00:02:43.035 --> 00:02:45.129
+but the pass rule asks for every
+
+72
+00:02:45.195 --> 00:02:46.700
+test and both measures.
+
+73
+00:02:47.780 --> 00:02:50.677
+Kimi K3.1 Pro scored sixty-two point three
+
+74
+00:02:50.744 --> 00:02:52.765
+against fifty-four point three
+
+75
+00:02:52.833 --> 00:02:54.045
+for the reference
+
+76
+00:02:54.113 --> 00:02:55.999
+but won only four of the six
+
+77
+00:02:56.066 --> 00:02:57.751
+tests on congruence time
+
+78
+00:02:57.751 --> 00:02:59.300
+and two on total time.
+
+79
+00:02:59.650 --> 00:03:02.905
+Gemini 4 Argon, in Pi and in Antigravity
+
+80
+00:03:02.905 --> 00:03:04.017
+came closest
+
+81
+00:03:04.017 --> 00:03:07.510
+faster on congruence time in all six tests
+
+82
+00:03:07.510 --> 00:03:10.050
+but on total time in only four.
+
+83
+00:03:10.400 --> 00:03:13.920
+Claude Opus 5.5 won none of the six.
+
+84
+00:03:14.500 --> 00:03:16.740
+On Egg, no model passed.
+
+85
+00:03:17.090 --> 00:03:18.770
+Three things to take away.
+
+86
+00:03:19.120 --> 00:03:21.322
+An e-graph is a union-find
+
+87
+00:03:21.322 --> 00:03:23.360
+a memo and parent lists.
+
+88
+00:03:23.710 --> 00:03:25.550
+Rebuild once per batch.
+
+89
+00:03:25.900 --> 00:03:28.140
+And an average is not a pass.
+
+90
+00:03:28.490 --> 00:03:31.412
+As an exercise, merge the classes in pairs
+
+91
+00:03:31.412 --> 00:03:33.450
+and count the work both ways.
+
+92
+00:03:33.800 --> 00:03:36.760
+Next comes BABBLE, which learns a library.

@@ -1,0 +1,477 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.468
+Welcome to Lecture 13 of the
+
+2
+00:00:02.545 --> 00:00:05.100
+FrontierCS 2 course, on robotics.
+
+3
+00:00:05.450 --> 00:00:07.865
+FrontierCS 2 takes a research paper
+
+4
+00:00:07.934 --> 00:00:09.728
+and the authors' own code
+
+5
+00:00:09.728 --> 00:00:11.799
+usually removes its key idea
+
+6
+00:00:11.799 --> 00:00:14.490
+and asks an AI agent to write it back.
+
+7
+00:00:14.840 --> 00:00:17.647
+A run passes only if it does at least as well
+
+8
+00:00:17.710 --> 00:00:20.018
+as the authors' code on every metric
+
+9
+00:00:20.018 --> 00:00:21.640
+on every hidden workload.
+
+10
+00:00:21.990 --> 00:00:24.390
+This last lecture has two tasks.
+
+11
+00:00:24.740 --> 00:00:27.078
+Diffusion Policy samples a robot's
+
+12
+00:00:27.146 --> 00:00:29.140
+next moves by removing noise.
+
+13
+00:00:29.490 --> 00:00:32.120
+MuJoCo Playground trains a four-legged
+
+14
+00:00:32.189 --> 00:00:34.750
+robot to follow a joystick in minutes
+
+15
+00:00:34.819 --> 00:00:35.650
+of GPU time.
+
+16
+00:00:36.000 --> 00:00:38.240
+We start with Diffusion Policy.
+
+17
+00:00:38.820 --> 00:00:41.228
+A robot policy maps what the robot
+
+18
+00:00:41.299 --> 00:00:43.140
+sees to what it does next.
+
+19
+00:00:43.490 --> 00:00:45.754
+The usual way to learn one from human
+
+20
+00:00:45.815 --> 00:00:47.589
+demonstrations is regression
+
+21
+00:00:47.589 --> 00:00:49.608
+predict the demonstrated action
+
+22
+00:00:49.608 --> 00:00:51.810
+with the squared error as the loss.
+
+23
+00:00:52.160 --> 00:00:53.920
+Here is a toy of our own.
+
+24
+00:00:54.270 --> 00:00:56.190
+The action is one number.
+
+25
+00:00:56.540 --> 00:00:58.843
+An obstacle stands straight ahead
+
+26
+00:00:58.843 --> 00:01:01.485
+and the demonstrators steer around it
+
+27
+00:01:01.485 --> 00:01:04.263
+to the left, minus one, or to the right
+
+28
+00:01:04.263 --> 00:01:04.940
+plus one.
+
+29
+00:01:05.290 --> 00:01:07.423
+Regression learns the average of
+
+30
+00:01:07.490 --> 00:01:09.290
+two hundred demonstrations
+
+31
+00:01:09.290 --> 00:01:10.890
+zero point one one two.
+
+32
+00:01:11.240 --> 00:01:12.837
+That steers almost straight
+
+33
+00:01:12.896 --> 00:01:13.960
+into the obstacle.
+
+34
+00:01:14.310 --> 00:01:16.487
+Not one demonstration lies within
+
+35
+00:01:16.553 --> 00:01:18.070
+zero point three of it.
+
+36
+00:01:18.650 --> 00:01:20.991
+Diffusion Policy, from RSS 2023
+
+37
+00:01:21.064 --> 00:01:23.552
+learns to generate actions the way
+
+38
+00:01:23.625 --> 00:01:25.893
+image models generate pictures
+
+39
+00:01:25.893 --> 00:01:27.722
+start from random noise
+
+40
+00:01:27.722 --> 00:01:29.770
+and remove it step by step.
+
+41
+00:01:30.120 --> 00:01:32.936
+Training adds noise to the demonstrated
+
+42
+00:01:33.008 --> 00:01:35.679
+actions at many levels; on our scale
+
+43
+00:01:35.679 --> 00:01:38.134
+from zero, clean, to one hundred
+
+44
+00:01:38.134 --> 00:01:39.000
+pure noise.
+
+45
+00:01:39.350 --> 00:01:41.464
+A cosine schedule sets how much
+
+46
+00:01:41.532 --> 00:01:43.510
+signal is left at each level.
+
+47
+00:01:43.860 --> 00:01:45.928
+We skip the training and use the best
+
+48
+00:01:45.984 --> 00:01:47.940
+possible guess of the clean action.
+
+49
+00:01:48.290 --> 00:01:49.986
+Start from a noisy action
+
+50
+00:01:50.054 --> 00:01:51.410
+of zero point three.
+
+51
+00:01:51.760 --> 00:01:54.470
+At level one hundred, no signal is left
+
+52
+00:01:54.470 --> 00:01:56.367
+and the best guess is zero
+
+53
+00:01:56.367 --> 00:01:58.400
+the average of the two modes.
+
+54
+00:01:58.750 --> 00:02:02.350
+At sixty, the guess is zero point two six.
+
+55
+00:02:02.700 --> 00:02:05.500
+At twenty, zero point nine three.
+
+56
+00:02:05.850 --> 00:02:07.103
+As the noise falls
+
+57
+00:02:07.103 --> 00:02:09.610
+the guess commits to the closer mode.
+
+58
+00:02:10.190 --> 00:02:11.790
+A sampler uses this.
+
+59
+00:02:12.140 --> 00:02:14.979
+It starts from pure noise, asks for a guess
+
+60
+00:02:14.979 --> 00:02:17.367
+moves the sample a little toward it
+
+61
+00:02:17.367 --> 00:02:19.432
+adds back a little fresh noise
+
+62
+00:02:19.432 --> 00:02:21.820
+and repeats at the next lower level.
+
+63
+00:02:22.170 --> 00:02:24.410
+This is the DDPM sampler.
+
+64
+00:02:24.760 --> 00:02:26.307
+The authors' loop takes
+
+65
+00:02:26.374 --> 00:02:27.853
+all one hundred steps
+
+66
+00:02:27.853 --> 00:02:29.400
+one network call each.
+
+67
+00:02:29.750 --> 00:02:32.230
+We drew one thousand actions this way.
+
+68
+00:02:32.580 --> 00:02:34.941
+Four hundred seventy-eight go left
+
+69
+00:02:34.941 --> 00:02:37.234
+five hundred twenty-two go right
+
+70
+00:02:37.234 --> 00:02:39.460
+and none goes into the obstacle.
+
+71
+00:02:40.040 --> 00:02:42.600
+But a hundred network calls are slow.
+
+72
+00:02:42.950 --> 00:02:44.033
+On the task's CPU
+
+73
+00:02:44.094 --> 00:02:46.682
+the authors' sampler takes one thousand one
+
+74
+00:02:46.742 --> 00:02:49.270
+hundred fifty milliseconds per prediction.
+
+75
+00:02:49.620 --> 00:02:52.900
+The DDIM update drops the fresh noise.
+
+76
+00:02:53.250 --> 00:02:55.648
+It splits the sample into a clean guess
+
+77
+00:02:55.710 --> 00:02:57.739
+and the noise that guess implies
+
+78
+00:02:57.739 --> 00:03:00.199
+then rebuilds it at a much lower level
+
+79
+00:03:00.199 --> 00:03:01.490
+with the same noise.
+
+80
+00:03:01.840 --> 00:03:03.312
+Spread the calls evenly
+
+81
+00:03:03.312 --> 00:03:05.520
+and count the misses in the middle.
+
+82
+00:03:05.870 --> 00:03:08.473
+With one call, all one thousand miss
+
+83
+00:03:08.544 --> 00:03:10.162
+one guess at full noise
+
+84
+00:03:10.232 --> 00:03:11.710
+is the average again.
+
+85
+00:03:12.060 --> 00:03:14.700
+Three calls miss two hundred fifty-eight.
+
+86
+00:03:15.050 --> 00:03:16.810
+Five miss fifty-three.
+
+87
+00:03:17.160 --> 00:03:18.412
+Ten miss only two
+
+88
+00:03:18.412 --> 00:03:20.360
+about as good as a hundred.
+
+89
+00:03:20.940 --> 00:03:22.540
+Pause and predict.
+
+90
+00:03:22.890 --> 00:03:25.698
+Three even calls, at levels one hundred
+
+91
+00:03:25.698 --> 00:03:27.803
+sixty-seven and thirty-three
+
+92
+00:03:27.803 --> 00:03:30.330
+miss two hundred fifty-eight times.
+
+93
+00:03:30.680 --> 00:03:32.801
+Will calls at ninety-five
+
+94
+00:03:32.801 --> 00:03:34.840
+fifty and ten do better?
+
+95
+00:03:38.390 --> 00:03:40.950
+Much better: forty-four misses.
+
+96
+00:03:41.300 --> 00:03:43.316
+Even spacing wastes a call at the
+
+97
+00:03:43.377 --> 00:03:45.026
+top of the cosine schedule
+
+98
+00:03:45.026 --> 00:03:46.980
+where almost no signal is left.
+
+99
+00:03:48.060 --> 00:03:49.142
+With five calls
+
+100
+00:03:49.142 --> 00:03:51.983
+placement alone gains nothing in our toy
+
+101
+00:03:51.983 --> 00:03:54.620
+fifty-four misses against fifty-three.
+
+102
+00:03:54.970 --> 00:03:56.435
+A second-order step
+
+103
+00:03:56.435 --> 00:03:58.560
+called DPM-Solver plus plus
+
+104
+00:03:58.560 --> 00:04:00.905
+also reuses the previous guess
+
+105
+00:04:00.905 --> 00:04:02.810
+at no extra network call.
+
+106
+00:04:03.160 --> 00:04:06.333
+At levels ninety-five, seventy, forty-five
+
+107
+00:04:06.333 --> 00:04:09.506
+twenty-two and five, it halves the misses
+
+108
+00:04:09.506 --> 00:04:10.760
+to twenty-three.
+
+109
+00:04:11.340 --> 00:04:13.763
+So: regression averages two good
+
+110
+00:04:13.839 --> 00:04:15.580
+actions into a bad one.
+
+111
+00:04:15.930 --> 00:04:19.050
+At full noise, the best guess is the mean.
+
+112
+00:04:19.400 --> 00:04:21.128
+And a sampler's time is its
+
+113
+00:04:21.192 --> 00:04:23.816
+number of network calls: place them well
+
+114
+00:04:23.816 --> 00:04:25.480
+and reuse the last guess.
+
+115
+00:04:25.830 --> 00:04:26.776
+As an exercise
+
+116
+00:04:26.839 --> 00:04:29.298
+make the demonstrations seventy percent
+
+117
+00:04:29.361 --> 00:04:31.252
+left and thirty percent right
+
+118
+00:04:31.252 --> 00:04:33.270
+and see how the sampler splits.
+
+119
+00:04:33.620 --> 00:04:35.780
+Next: the sampling task.

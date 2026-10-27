@@ -1,0 +1,301 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.161
+Welcome to Lecture 3 of the
+
+2
+00:00:02.230 --> 00:00:04.780
+FrontierCS 2 course, on architecture.
+
+3
+00:00:05.130 --> 00:00:07.662
+FrontierCS 2 takes a research paper
+
+4
+00:00:07.732 --> 00:00:09.490
+removes its key idea from
+
+5
+00:00:09.560 --> 00:00:11.107
+the authors' own code
+
+6
+00:00:11.107 --> 00:00:13.850
+and asks an AI agent to write it back.
+
+7
+00:00:14.200 --> 00:00:16.516
+This lecture covers three tasks
+
+8
+00:00:16.516 --> 00:00:19.629
+a branch predictor, a GPU matrix multiply
+
+9
+00:00:19.629 --> 00:00:21.800
+and a sparse matrix multiply.
+
+10
+00:00:22.150 --> 00:00:23.830
+We start with branches.
+
+11
+00:00:24.410 --> 00:00:26.682
+A processor fetches instructions far
+
+12
+00:00:26.745 --> 00:00:28.890
+ahead of the ones it is executing.
+
+13
+00:00:29.240 --> 00:00:30.752
+At a conditional branch
+
+14
+00:00:30.752 --> 00:00:33.208
+it cannot wait to learn the direction
+
+15
+00:00:33.208 --> 00:00:35.160
+so it predicts it and goes on.
+
+16
+00:00:35.510 --> 00:00:37.224
+A wrong guess throws away
+
+17
+00:00:37.293 --> 00:00:38.870
+the work fetched since.
+
+18
+00:00:39.220 --> 00:00:41.209
+The task counts both costs per
+
+19
+00:00:41.275 --> 00:00:43.794
+thousand instructions: mispredictions
+
+20
+00:00:43.794 --> 00:00:46.180
+and cycles spent on the wrong path.
+
+21
+00:00:46.760 --> 00:00:48.872
+The simplest predictor keeps one
+
+22
+00:00:48.938 --> 00:00:50.720
+two-bit counter per branch
+
+23
+00:00:50.720 --> 00:00:52.040
+from zero to three.
+
+24
+00:00:52.390 --> 00:00:54.632
+It predicts taken at two or three
+
+25
+00:00:54.632 --> 00:00:57.270
+and moves one step toward each outcome.
+
+26
+00:00:57.620 --> 00:00:59.421
+Take the exit test of a loop
+
+27
+00:00:59.485 --> 00:01:00.900
+that runs eight times.
+
+28
+00:01:01.250 --> 00:01:03.272
+Over eight hundred branches
+
+29
+00:01:03.272 --> 00:01:06.450
+the counter misses one hundred: every exit.
+
+30
+00:01:06.800 --> 00:01:08.633
+On a branch that alternates
+
+31
+00:01:08.633 --> 00:01:11.120
+it misses four hundred, half of them.
+
+32
+00:01:11.700 --> 00:01:13.234
+A predictor that remembers
+
+33
+00:01:13.293 --> 00:01:14.592
+history can do better.
+
+34
+00:01:14.651 --> 00:01:16.834
+It keeps one counter for each pattern
+
+35
+00:01:16.893 --> 00:01:18.900
+of the branch's last few outcomes.
+
+36
+00:01:19.250 --> 00:01:20.444
+Pause and predict.
+
+37
+00:01:20.510 --> 00:01:22.698
+How many outcomes of history does
+
+38
+00:01:22.765 --> 00:01:24.290
+the loop of eight need?
+
+39
+00:01:27.870 --> 00:01:28.590
+Seven.
+
+40
+00:01:28.940 --> 00:01:30.532
+One outcome is enough for
+
+41
+00:01:30.596 --> 00:01:32.060
+the alternating branch.
+
+42
+00:01:32.410 --> 00:01:34.733
+But only after seven takens in a
+
+43
+00:01:34.805 --> 00:01:37.926
+row is the loop's exit next, so with seven
+
+44
+00:01:37.926 --> 00:01:39.450
+it misses just once.
+
+45
+00:01:39.800 --> 00:01:41.619
+Real predictors such as TAGE
+
+46
+00:01:41.684 --> 00:01:42.983
+keep several tables
+
+47
+00:01:43.048 --> 00:01:44.673
+with histories from a few
+
+48
+00:01:44.738 --> 00:01:46.167
+branches to thousands
+
+49
+00:01:46.232 --> 00:01:48.051
+and use the longest one that
+
+50
+00:01:48.116 --> 00:01:49.480
+has seen the pattern.
+
+51
+00:01:49.830 --> 00:01:51.893
+A statistical corrector then adds
+
+52
+00:01:51.955 --> 00:01:53.830
+votes from other small tables.
+
+53
+00:01:54.410 --> 00:01:56.410
+Some branches follow data.
+
+54
+00:01:56.760 --> 00:01:59.750
+Our toy branch tests whether a loaded value
+
+55
+00:01:59.750 --> 00:02:01.517
+from zero to sixty-three
+
+56
+00:02:01.517 --> 00:02:03.080
+is divisible by three.
+
+57
+00:02:03.430 --> 00:02:06.070
+To any history, that looks random.
+
+58
+00:02:06.420 --> 00:02:08.503
+But if the load has already run
+
+59
+00:02:08.503 --> 00:02:10.976
+the value itself predicts the branch
+
+60
+00:02:11.041 --> 00:02:12.733
+and in our toy it is ready
+
+61
+00:02:12.798 --> 00:02:14.100
+three times in four.
+
+62
+00:02:14.450 --> 00:02:16.112
+Over a thousand branches
+
+63
+00:02:16.112 --> 00:02:18.770
+history misses four hundred and twenty.
+
+64
+00:02:19.120 --> 00:02:20.567
+With the register value
+
+65
+00:02:20.567 --> 00:02:23.280
+misses fall to one hundred and thirty-seven.
+
+66
+00:02:23.630 --> 00:02:25.869
+This is the idea of RUNLTS
+
+67
+00:02:25.952 --> 00:02:28.854
+the winner of the 2025 Championship
+
+68
+00:02:28.937 --> 00:02:30.430
+Branch Prediction.
+
+69
+00:02:31.010 --> 00:02:33.890
+So: a counter learns a bias.
+
+70
+00:02:34.240 --> 00:02:36.000
+History learns a pattern.
+
+71
+00:02:36.350 --> 00:02:38.430
+And some branches follow data.
+
+72
+00:02:38.780 --> 00:02:39.803
+As an exercise
+
+73
+00:02:39.803 --> 00:02:42.735
+make the value ready only one time in two
+
+74
+00:02:42.735 --> 00:02:44.780
+and predict the misses first.
+
+75
+00:02:45.130 --> 00:02:48.650
+Next, the RUNLTS task itself.

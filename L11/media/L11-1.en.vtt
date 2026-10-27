@@ -1,0 +1,429 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.268
+Welcome to Lecture 11 of the
+
+2
+00:00:02.339 --> 00:00:04.940
+FrontierCS 2 course, on cryptography.
+
+3
+00:00:05.290 --> 00:00:07.610
+This lecture comes in three parts.
+
+4
+00:00:07.960 --> 00:00:10.326
+This lecture covers three tasks
+
+5
+00:00:10.326 --> 00:00:12.027
+a hard secret to find
+
+6
+00:00:12.027 --> 00:00:14.394
+a noisy computation to predict
+
+7
+00:00:14.394 --> 00:00:16.760
+and a private lookup to shrink.
+
+8
+00:00:17.110 --> 00:00:20.950
+We start with the secret: Structured LWE.
+
+9
+00:00:21.530 --> 00:00:23.641
+Learning with errors, or LWE
+
+10
+00:00:23.714 --> 00:00:26.044
+is the hard problem beneath much
+
+11
+00:00:26.117 --> 00:00:28.010
+post-quantum cryptography.
+
+12
+00:00:28.360 --> 00:00:30.850
+You are given a public matrix A
+
+13
+00:00:30.928 --> 00:00:32.951
+and a vector b that equals
+
+14
+00:00:33.029 --> 00:00:35.831
+A times a secret s, plus an error e
+
+15
+00:00:35.831 --> 00:00:36.920
+all modulo q.
+
+16
+00:00:37.270 --> 00:00:40.150
+Both the secret and the error are small.
+
+17
+00:00:40.500 --> 00:00:41.631
+Without the error
+
+18
+00:00:41.694 --> 00:00:43.329
+Gaussian elimination would
+
+19
+00:00:43.391 --> 00:00:44.900
+find the secret at once.
+
+20
+00:00:45.250 --> 00:00:47.490
+The error is what makes it hard.
+
+21
+00:00:47.840 --> 00:00:49.247
+But extra structure
+
+22
+00:00:49.247 --> 00:00:52.273
+such as a secret with few nonzero entries
+
+23
+00:00:52.273 --> 00:00:53.680
+can open shortcuts.
+
+24
+00:00:54.030 --> 00:00:56.262
+A paper at CRYPTO 2024 studies
+
+25
+00:00:56.336 --> 00:00:58.270
+these structured variants.
+
+26
+00:00:58.850 --> 00:01:01.255
+Here is a small instance of our own
+
+27
+00:01:01.255 --> 00:01:03.593
+twelve unknowns, twenty equations
+
+28
+00:01:03.593 --> 00:01:05.330
+and modulus ninety-seven.
+
+29
+00:01:05.680 --> 00:01:07.423
+The secret is ternary
+
+30
+00:01:07.423 --> 00:01:10.749
+so every entry is minus one, zero or one
+
+31
+00:01:10.749 --> 00:01:13.680
+and exactly two entries are nonzero.
+
+32
+00:01:14.030 --> 00:01:17.870
+Each error is also minus one, zero or one.
+
+33
+00:01:18.450 --> 00:01:19.970
+How do we check a guess?
+
+34
+00:01:20.320 --> 00:01:22.241
+With a simple version of the
+
+35
+00:01:22.310 --> 00:01:24.918
+task's public rules: the right length
+
+36
+00:01:24.918 --> 00:01:27.800
+the right alphabet, exactly two nonzeros
+
+37
+00:01:27.800 --> 00:01:29.310
+and a small residual
+
+38
+00:01:29.310 --> 00:01:31.162
+b minus A times the guess
+
+39
+00:01:31.162 --> 00:01:34.250
+centered modulo q, must be between minus one
+
+40
+00:01:34.319 --> 00:01:35.760
+and one in every row.
+
+41
+00:01:36.110 --> 00:01:38.187
+The all-zero guess fails
+
+42
+00:01:38.187 --> 00:01:40.430
+the planted secret passes.
+
+43
+00:01:40.780 --> 00:01:43.066
+And any secret that passes counts
+
+44
+00:01:43.066 --> 00:01:45.420
+not only the one that was planted.
+
+45
+00:01:46.000 --> 00:01:47.600
+Pause and predict.
+
+46
+00:01:48.150 --> 00:01:51.078
+Twelve entries, two of them nonzero
+
+47
+00:01:51.078 --> 00:01:53.030
+each plus or minus one.
+
+48
+00:01:53.380 --> 00:01:55.140
+How many candidates are there?
+
+49
+00:01:58.490 --> 00:02:01.496
+Sixty-six ways to choose the two positions
+
+50
+00:02:01.496 --> 00:02:03.453
+times four choices of sign
+
+51
+00:02:03.453 --> 00:02:05.130
+two hundred sixty-four.
+
+52
+00:02:06.210 --> 00:02:09.370
+Our search tries all two hundred sixty-four
+
+53
+00:02:09.370 --> 00:02:12.530
+and exactly one passes: the planted secret.
+
+54
+00:02:12.880 --> 00:02:15.667
+A dense ternary secret of the same length would
+
+55
+00:02:15.727 --> 00:02:17.921
+have three to the twelfth candidates
+
+56
+00:02:17.921 --> 00:02:19.937
+five hundred thirty-one thousand
+
+57
+00:02:19.937 --> 00:02:21.360
+four hundred forty-one.
+
+58
+00:02:21.940 --> 00:02:23.238
+At realistic sizes
+
+59
+00:02:23.238 --> 00:02:25.152
+neither search is possible
+
+60
+00:02:25.220 --> 00:02:26.997
+but sparsity still shrinks
+
+61
+00:02:27.065 --> 00:02:28.500
+the space enormously.
+
+62
+00:02:28.850 --> 00:02:31.532
+With, say, two hundred fifty-six unknowns
+
+63
+00:02:31.597 --> 00:02:33.036
+and fourteen nonzeros
+
+64
+00:02:33.102 --> 00:02:35.588
+there are about two to the eighty-nine
+
+65
+00:02:35.653 --> 00:02:36.830
+sparse candidates
+
+66
+00:02:36.896 --> 00:02:38.924
+against two to the four hundred
+
+67
+00:02:38.989 --> 00:02:39.970
+six dense ones.
+
+68
+00:02:40.320 --> 00:02:42.567
+Real attacks combine lattice reduction
+
+69
+00:02:42.626 --> 00:02:44.400
+with guessing the sparse part.
+
+70
+00:02:44.980 --> 00:02:47.540
+Here there is no solver to restore.
+
+71
+00:02:47.890 --> 00:02:50.186
+The agent writes its own attacks and
+
+72
+00:02:50.250 --> 00:02:52.290
+submits one secret per instance.
+
+73
+00:02:52.640 --> 00:02:55.363
+There are two hundred public instances
+
+74
+00:02:55.433 --> 00:02:57.179
+in ten families of matrix
+
+75
+00:02:57.249 --> 00:02:58.715
+and secret structure
+
+76
+00:02:58.715 --> 00:03:01.368
+dense or sparse matrices, and binary
+
+77
+00:03:01.368 --> 00:03:02.486
+ternary, small
+
+78
+00:03:02.486 --> 00:03:04.720
+sparse or unrestricted secrets.
+
+79
+00:03:05.070 --> 00:03:07.863
+The score is the share of instances solved
+
+80
+00:03:07.863 --> 00:03:10.590
+and a pass means solving all two hundred.
+
+81
+00:03:11.170 --> 00:03:12.610
+No model passed.
+
+82
+00:03:12.960 --> 00:03:15.728
+GPT-6 Astra and GPT-6.1 Terra
+
+83
+00:03:15.823 --> 00:03:18.400
+solved eighty-four percent.
+
+84
+00:03:18.750 --> 00:03:22.022
+Claude Opus 5.5 solved seventy-two percent
+
+85
+00:03:22.022 --> 00:03:24.990
+one hundred forty-four of two hundred.
+
+86
+00:03:25.340 --> 00:03:27.764
+It solved all twenty in six families
+
+87
+00:03:27.830 --> 00:03:30.581
+including all eighty instances of the four
+
+88
+00:03:30.647 --> 00:03:32.940
+families with unrestricted secrets.
+
+89
+00:03:33.290 --> 00:03:34.580
+In the other four
+
+90
+00:03:34.580 --> 00:03:36.730
+it solved only the first six.
+
+91
+00:03:37.080 --> 00:03:39.600
+Those have binary or ternary secrets
+
+92
+00:03:39.670 --> 00:03:41.560
+with two to eight nonzeros.
+
+93
+00:03:41.910 --> 00:03:44.477
+Structure makes a family attackable
+
+94
+00:03:44.477 --> 00:03:45.190
+not easy.
+
+95
+00:03:45.770 --> 00:03:48.397
+By the benchmark's difficulty measure
+
+96
+00:03:48.397 --> 00:03:51.370
+Structured LWE is its second-hardest task.
+
+97
+00:03:51.720 --> 00:03:53.320
+Three things to take away.
+
+98
+00:03:53.670 --> 00:03:55.882
+LWE hides a small secret
+
+99
+00:03:55.974 --> 00:03:57.910
+behind a small error.
+
+100
+00:03:58.260 --> 00:04:00.980
+A sparse secret shrinks the search.
+
+101
+00:04:01.330 --> 00:04:03.650
+And here the bar is absolute
+
+102
+00:04:03.650 --> 00:04:05.970
+all two hundred, or no pass.
+
+103
+00:04:06.320 --> 00:04:07.292
+As an exercise
+
+104
+00:04:07.292 --> 00:04:10.013
+allow secrets with one to three nonzeros
+
+105
+00:04:10.078 --> 00:04:12.152
+and see whether the search still
+
+106
+00:04:12.216 --> 00:04:14.160
+finds only the planted secret.
+
+107
+00:04:14.510 --> 00:04:17.150
+Next, CKKS Noise.

@@ -1,0 +1,309 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.588
+Two tasks write the part of a reinforcement-learning
+
+2
+00:00:03.652 --> 00:00:05.991
+loop that turns what a model did into
+
+3
+00:00:06.055 --> 00:00:06.940
+training data.
+
+4
+00:00:07.290 --> 00:00:10.090
+Mistakes here do not crash anything.
+
+5
+00:00:10.440 --> 00:00:12.840
+They quietly teach the wrong thing.
+
+6
+00:00:13.190 --> 00:00:16.346
+First, RAGEN, which trains language models
+
+7
+00:00:16.422 --> 00:00:18.150
+to act over many turns.
+
+8
+00:00:18.730 --> 00:00:21.386
+The model sees a puzzle, here Sokoban
+
+9
+00:00:21.386 --> 00:00:22.784
+replies with moves
+
+10
+00:00:22.784 --> 00:00:25.370
+and gets the next view and a reward.
+
+11
+00:00:25.720 --> 00:00:28.760
+Each game is packed into one row of tokens.
+
+12
+00:00:29.110 --> 00:00:31.241
+A mask marks what the model wrote
+
+13
+00:00:31.241 --> 00:00:33.622
+because the loss is taken only there
+
+14
+00:00:33.685 --> 00:00:35.314
+and the reward goes on the
+
+15
+00:00:35.377 --> 00:00:36.630
+last token it wrote.
+
+16
+00:00:36.980 --> 00:00:39.537
+Four games from the same start form a group
+
+17
+00:00:39.595 --> 00:00:41.455
+and each reward is compared with
+
+18
+00:00:41.513 --> 00:00:43.140
+the group's mean and spread.
+
+19
+00:00:43.490 --> 00:00:46.008
+In our toy, the solved game stands out
+
+20
+00:00:46.074 --> 00:00:47.730
+at one point seven three.
+
+21
+00:00:48.080 --> 00:00:50.251
+A group that all failed the same
+
+22
+00:00:50.319 --> 00:00:52.015
+way gets zero everywhere
+
+23
+00:00:52.015 --> 00:00:53.440
+and teaches nothing.
+
+24
+00:00:54.020 --> 00:00:56.660
+The task removes this context manager.
+
+25
+00:00:57.010 --> 00:00:59.232
+One training step runs six groups of
+
+26
+00:00:59.293 --> 00:01:01.453
+four games with a small Qwen model
+
+27
+00:01:01.515 --> 00:01:03.922
+and every group must beat the reference
+
+28
+00:01:03.984 --> 00:01:05.650
+on both success and reward.
+
+29
+00:01:06.000 --> 00:01:08.476
+The reference solved no game at all
+
+30
+00:01:08.476 --> 00:01:09.920
+and no model passed.
+
+31
+00:01:10.270 --> 00:01:12.736
+Opus noticed that the small model copies
+
+32
+00:01:12.798 --> 00:01:14.771
+whatever earlier answer it sees
+
+33
+00:01:14.771 --> 00:01:16.127
+broken ones included
+
+34
+00:01:16.189 --> 00:01:18.285
+so it keeps the previous turn only
+
+35
+00:01:18.347 --> 00:01:19.950
+when its moves were valid.
+
+36
+00:01:20.300 --> 00:01:21.922
+It shared the best score
+
+37
+00:01:21.922 --> 00:01:23.284
+eighteen point five
+
+38
+00:01:23.284 --> 00:01:25.100
+against eleven point seven.
+
+39
+00:01:25.680 --> 00:01:27.518
+The second task, Flow-OPD
+
+40
+00:01:27.589 --> 00:01:29.851
+teaches an image model to render
+
+41
+00:01:29.922 --> 00:01:31.760
+the words a prompt quotes.
+
+42
+00:01:32.110 --> 00:01:33.846
+The student draws its own
+
+43
+00:01:33.915 --> 00:01:36.970
+chain of latent states, from noise to image
+
+44
+00:01:37.039 --> 00:01:38.983
+and a teacher tuned for text
+
+45
+00:01:39.052 --> 00:01:40.510
+supervises each step.
+
+46
+00:01:40.860 --> 00:01:42.634
+Each step is a Gaussian
+
+47
+00:01:42.634 --> 00:01:44.704
+the velocity sets its mean
+
+48
+00:01:44.704 --> 00:01:46.700
+and noise sets its spread.
+
+49
+00:01:47.050 --> 00:01:49.595
+Training replays every recorded step
+
+50
+00:01:49.664 --> 00:01:51.727
+so the step must give the same
+
+51
+00:01:51.796 --> 00:01:54.410
+log-probability again, almost exactly.
+
+52
+00:01:54.990 --> 00:01:57.150
+How much can one step teach?
+
+53
+00:01:57.500 --> 00:02:00.252
+Near pure noise the spread is wide
+
+54
+00:02:00.252 --> 00:02:02.060
+so a step says little.
+
+55
+00:02:02.410 --> 00:02:03.873
+In our ten-step schedule
+
+56
+00:02:03.932 --> 00:02:06.389
+the first step carries about a hundred and
+
+57
+00:02:06.448 --> 00:02:08.730
+thirty times less signal than the last.
+
+58
+00:02:09.080 --> 00:02:11.960
+Capping the noise raises the early steps.
+
+59
+00:02:12.540 --> 00:02:14.089
+Pause and predict.
+
+60
+00:02:14.176 --> 00:02:16.327
+Claude Opus 5.5 put a cap
+
+61
+00:02:16.414 --> 00:02:19.340
+on the early noise, as in our toy.
+
+62
+00:02:19.690 --> 00:02:21.210
+Did it beat the reference?
+
+63
+00:02:24.760 --> 00:02:25.560
+No.
+
+64
+00:02:25.910 --> 00:02:28.023
+It scored fifty-five point nine
+
+65
+00:02:28.023 --> 00:02:30.070
+against sixty-one point eight.
+
+66
+00:02:30.420 --> 00:02:32.980
+Ten of sixteen models did beat it.
+
+67
+00:02:33.330 --> 00:02:35.527
+Step 5 Preview won seven of the
+
+68
+00:02:35.598 --> 00:02:38.503
+eight hidden workloads, and still failed
+
+69
+00:02:38.503 --> 00:02:40.770
+because a pass needs all eight.
+
+70
+00:02:41.120 --> 00:02:42.560
+No model passed.
+
+71
+00:02:43.640 --> 00:02:46.502
+So: put the mask on the model's own tokens
+
+72
+00:02:46.502 --> 00:02:48.765
+compare games within their group
+
+73
+00:02:48.832 --> 00:02:50.562
+and make every step replay
+
+74
+00:02:50.629 --> 00:02:51.960
+to a tiny tolerance.
+
+75
+00:02:52.310 --> 00:02:55.670
+Mistakes in any of these fail silently.
+
+76
+00:02:56.020 --> 00:02:59.057
+Next: losses over whole populations
+
+77
+00:02:59.057 --> 00:03:00.660
+and a world model.

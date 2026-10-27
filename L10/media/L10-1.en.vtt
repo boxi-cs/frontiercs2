@@ -1,0 +1,417 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.146
+Welcome to Lecture 10 of the
+
+2
+00:00:02.212 --> 00:00:03.531
+FrontierCS 2 course
+
+3
+00:00:03.531 --> 00:00:05.180
+on software engineering.
+
+4
+00:00:05.530 --> 00:00:08.038
+FrontierCS 2 takes a research paper
+
+5
+00:00:08.108 --> 00:00:09.850
+removes its key idea from
+
+6
+00:00:09.920 --> 00:00:11.453
+the authors' own code
+
+7
+00:00:11.453 --> 00:00:14.170
+and asks an AI agent to write it back.
+
+8
+00:00:14.520 --> 00:00:17.024
+This field has one task: CREST
+
+9
+00:00:17.024 --> 00:00:19.043
+a concolic tester for C
+
+10
+00:00:19.043 --> 00:00:20.739
+from Burnim and Sen
+
+11
+00:00:20.739 --> 00:00:22.920
+at ASE two thousand eight.
+
+12
+00:00:23.270 --> 00:00:25.549
+The task removes its search strategy
+
+13
+00:00:25.611 --> 00:00:27.150
+the rule that picks which
+
+14
+00:00:27.212 --> 00:00:28.629
+condition to flip next
+
+15
+00:00:28.629 --> 00:00:30.230
+and the agent writes one.
+
+16
+00:00:30.580 --> 00:00:32.600
+With one task, we go deeper
+
+17
+00:00:32.600 --> 00:00:35.197
+concolic testing on a tiny program
+
+18
+00:00:35.197 --> 00:00:37.289
+a race of search strategies
+
+19
+00:00:37.289 --> 00:00:38.660
+and then the task.
+
+20
+00:00:39.240 --> 00:00:42.680
+Concolic means concrete plus symbolic.
+
+21
+00:00:43.030 --> 00:00:45.649
+The tester runs the program on real inputs
+
+22
+00:00:45.709 --> 00:00:47.780
+and at the same time records every
+
+23
+00:00:47.841 --> 00:00:50.155
+condition along the path that depended
+
+24
+00:00:50.216 --> 00:00:51.190
+on those inputs.
+
+25
+00:00:51.540 --> 00:00:54.205
+Joined together, those conditions are the
+
+26
+00:00:54.270 --> 00:00:55.700
+run's path constraint.
+
+27
+00:00:56.050 --> 00:00:57.690
+Any input that satisfies
+
+28
+00:00:57.758 --> 00:00:59.330
+it takes the same path.
+
+29
+00:00:59.680 --> 00:01:00.955
+To reach new code
+
+30
+00:01:00.955 --> 00:01:03.009
+keep the first k conditions
+
+31
+00:01:03.009 --> 00:01:04.426
+negate condition k
+
+32
+00:01:04.426 --> 00:01:06.480
+and ask a solver for inputs.
+
+33
+00:01:06.830 --> 00:01:08.497
+The next run follows the old
+
+34
+00:01:08.557 --> 00:01:10.104
+path up to that condition
+
+35
+00:01:10.104 --> 00:01:11.950
+and then takes the other side.
+
+36
+00:01:12.530 --> 00:01:14.218
+Here is a toy of our own
+
+37
+00:01:14.218 --> 00:01:17.188
+a packet parser over twelve small integers
+
+38
+00:01:17.188 --> 00:01:19.010
+each from zero to fifteen.
+
+39
+00:01:19.360 --> 00:01:21.472
+The header has ten conditions
+
+40
+00:01:21.472 --> 00:01:22.880
+arranged as a tree.
+
+41
+00:01:23.230 --> 00:01:24.750
+Then a loop checks each
+
+42
+00:01:24.816 --> 00:01:26.270
+payload byte for zero.
+
+43
+00:01:26.620 --> 00:01:29.878
+Every condition has two branches: taken
+
+44
+00:01:29.878 --> 00:01:31.100
+and not taken.
+
+45
+00:01:31.450 --> 00:01:33.320
+So eleven conditions give
+
+46
+00:01:33.394 --> 00:01:34.890
+twenty-two branches.
+
+47
+00:01:35.240 --> 00:01:37.010
+The loop's condition appears
+
+48
+00:01:37.073 --> 00:01:38.590
+six times on every path
+
+49
+00:01:38.590 --> 00:01:40.360
+with the same two branches.
+
+50
+00:01:40.940 --> 00:01:42.300
+Take one input.
+
+51
+00:01:42.650 --> 00:01:45.042
+Its path passes three checks
+
+52
+00:01:45.042 --> 00:01:48.671
+x zero is below eight, x zero equals three
+
+53
+00:01:48.671 --> 00:01:50.650
+and x one equals seven.
+
+54
+00:01:51.000 --> 00:01:53.399
+Then it fails the fourth check
+
+55
+00:01:53.399 --> 00:01:55.720
+x two equals x one plus four.
+
+56
+00:01:56.070 --> 00:01:58.070
+Now negate that condition.
+
+57
+00:01:58.420 --> 00:02:00.536
+Our solver may change only the
+
+58
+00:02:00.606 --> 00:02:02.581
+inputs this condition reads
+
+59
+00:02:02.581 --> 00:02:03.780
+x one and x two.
+
+60
+00:02:04.130 --> 00:02:07.288
+But the earlier check, x one equals seven
+
+61
+00:02:07.288 --> 00:02:10.370
+also reads x one, so it must still hold.
+
+62
+00:02:10.720 --> 00:02:13.236
+The solver tries values in order
+
+63
+00:02:13.236 --> 00:02:15.600
+and x two equals eleven works.
+
+64
+00:02:15.950 --> 00:02:18.179
+The new run follows the old path
+
+65
+00:02:18.179 --> 00:02:19.666
+takes the other side
+
+66
+00:02:19.733 --> 00:02:21.490
+and reaches a condition no
+
+67
+00:02:21.557 --> 00:02:22.976
+earlier run had seen
+
+68
+00:02:22.976 --> 00:02:25.070
+x three greater than thirteen.
+
+69
+00:02:25.650 --> 00:02:27.069
+Pause and predict.
+
+70
+00:02:27.147 --> 00:02:29.275
+A run passed x three equals
+
+71
+00:02:29.354 --> 00:02:32.821
+two times x four, and x five equals fifteen
+
+72
+00:02:32.821 --> 00:02:36.210
+and then failed x four greater than seven.
+
+73
+00:02:36.560 --> 00:02:38.640
+Negate it: what happens?
+
+74
+00:02:41.690 --> 00:02:43.850
+The negation is infeasible.
+
+75
+00:02:44.200 --> 00:02:46.280
+x four above seven would need x
+
+76
+00:02:46.347 --> 00:02:48.293
+three to be at least sixteen
+
+77
+00:02:48.293 --> 00:02:50.440
+but the inputs stop at fifteen.
+
+78
+00:02:50.790 --> 00:02:53.027
+So the solver returns nothing
+
+79
+00:02:53.027 --> 00:02:55.190
+one solver call, and no run.
+
+80
+00:02:56.270 --> 00:02:58.430
+Why not just try random inputs?
+
+81
+00:02:58.780 --> 00:03:01.864
+A random input passes x one equals seven
+
+82
+00:03:01.941 --> 00:03:04.408
+only if x zero is three as well
+
+83
+00:03:04.408 --> 00:03:07.260
+one chance in two hundred fifty-six.
+
+84
+00:03:07.610 --> 00:03:09.733
+Each further equality divides
+
+85
+00:03:09.806 --> 00:03:11.050
+by sixteen again.
+
+86
+00:03:11.400 --> 00:03:13.868
+Of one hundred thousand random inputs
+
+87
+00:03:13.933 --> 00:03:15.426
+only two passed x three
+
+88
+00:03:15.491 --> 00:03:16.920
+greater than thirteen.
+
+89
+00:03:17.270 --> 00:03:20.101
+Concolic testing starts from all zeros
+
+90
+00:03:20.101 --> 00:03:21.190
+as CREST does.
+
+91
+00:03:21.540 --> 00:03:23.742
+It flips one failed check per run
+
+92
+00:03:23.742 --> 00:03:25.620
+and gets there in five runs.
+
+93
+00:03:26.200 --> 00:03:28.731
+So: a path constraint is the list of
+
+94
+00:03:28.801 --> 00:03:30.840
+conditions a run depended on.
+
+95
+00:03:31.190 --> 00:03:34.373
+Keep a prefix, negate one condition, solve
+
+96
+00:03:34.373 --> 00:03:36.150
+and you get a new path.
+
+97
+00:03:36.500 --> 00:03:37.875
+And equality checks
+
+98
+00:03:37.875 --> 00:03:39.799
+which defeat random inputs
+
+99
+00:03:39.799 --> 00:03:41.380
+are easy for a solver.
+
+100
+00:03:41.730 --> 00:03:42.674
+As an exercise
+
+101
+00:03:42.674 --> 00:03:45.444
+always flip the last condition of the path
+
+102
+00:03:45.507 --> 00:03:47.459
+and see whether it ever reaches
+
+103
+00:03:47.522 --> 00:03:49.410
+x three greater than thirteen.
+
+104
+00:03:49.760 --> 00:03:52.160
+Next: which condition to flip.

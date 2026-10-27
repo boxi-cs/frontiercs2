@@ -1,0 +1,493 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.011
+Private information retrieval, or PIR
+
+2
+00:00:03.083 --> 00:00:05.723
+lets a client read one database entry
+
+3
+00:00:05.794 --> 00:00:08.220
+without the server learning which.
+
+4
+00:00:08.570 --> 00:00:10.285
+QuarterPIR, by Ghoshal
+
+5
+00:00:10.360 --> 00:00:12.224
+Zhou and Shi at EUROCRYPT
+
+6
+00:00:12.298 --> 00:00:13.715
+twenty twenty-four
+
+7
+00:00:13.715 --> 00:00:16.250
+needs no public-key cryptography.
+
+8
+00:00:16.600 --> 00:00:18.612
+The client streams the database
+
+9
+00:00:18.677 --> 00:00:20.040
+once and keeps hints.
+
+10
+00:00:20.390 --> 00:00:22.572
+Each lookup then needs one short
+
+11
+00:00:22.640 --> 00:00:24.550
+request and one short reply.
+
+12
+00:00:25.130 --> 00:00:27.832
+Picture sixteen entries, A to P
+
+13
+00:00:27.832 --> 00:00:29.690
+in four rows of four.
+
+14
+00:00:30.040 --> 00:00:34.180
+A hint is one entry per row, say B, G
+
+15
+00:00:34.180 --> 00:00:35.160
+I and O.
+
+16
+00:00:35.510 --> 00:00:37.401
+The client stores only the
+
+17
+00:00:37.474 --> 00:00:40.310
+XOR of their values: the hint's parity.
+
+18
+00:00:40.890 --> 00:00:41.839
+To read G
+
+19
+00:00:41.839 --> 00:00:45.636
+the client asks for the parity of B, F
+
+20
+00:00:45.636 --> 00:00:46.490
+I and O.
+
+21
+00:00:46.840 --> 00:00:49.107
+G was swapped for a spare entry F
+
+22
+00:00:49.107 --> 00:00:50.373
+from the same row
+
+23
+00:00:50.373 --> 00:00:52.440
+whose value the client stored.
+
+24
+00:00:52.790 --> 00:00:55.750
+XOR the reply with the stored parity
+
+25
+00:00:55.750 --> 00:00:58.870
+and everything cancels except G XOR F.
+
+26
+00:00:59.220 --> 00:01:02.820
+One more XOR with F gives G.
+
+27
+00:01:03.170 --> 00:01:05.468
+The server sees one position per row
+
+28
+00:01:05.468 --> 00:01:07.890
+and cannot tell which one was swapped.
+
+29
+00:01:08.240 --> 00:01:10.000
+Each hint serves one lookup
+
+30
+00:01:10.000 --> 00:01:12.640
+and is then refreshed from a backup hint.
+
+31
+00:01:13.220 --> 00:01:15.922
+A real database has thousands of rows
+
+32
+00:01:15.922 --> 00:01:18.980
+so a request cannot name an entry in each.
+
+33
+00:01:19.330 --> 00:01:22.210
+QuarterPIR puts the rows in groups.
+
+34
+00:01:22.560 --> 00:01:25.054
+A sixteen-byte key expands into one
+
+35
+00:01:25.125 --> 00:01:27.120
+position per row of a group.
+
+36
+00:01:27.470 --> 00:01:29.669
+A request sends one key per group
+
+37
+00:01:29.669 --> 00:01:31.286
+except the wanted group
+
+38
+00:01:31.286 --> 00:01:33.550
+which goes as a list of positions.
+
+39
+00:01:33.900 --> 00:01:36.379
+The reply carries one candidate per group
+
+40
+00:01:36.379 --> 00:01:37.914
+and every group's parity
+
+41
+00:01:37.973 --> 00:01:40.453
+because asking for just the one the client
+
+42
+00:01:40.512 --> 00:01:42.460
+needs would reveal its last read.
+
+43
+00:01:42.810 --> 00:01:44.736
+At sixty-seven million entries
+
+44
+00:01:44.798 --> 00:01:47.531
+the reference sends seven hundred thirty-six
+
+45
+00:01:47.593 --> 00:01:50.263
+bytes up and one thousand twenty-four back
+
+46
+00:01:50.263 --> 00:01:52.810
+one thousand seven hundred sixty in all.
+
+47
+00:01:53.390 --> 00:01:54.990
+Pause and predict.
+
+48
+00:01:55.540 --> 00:01:58.185
+The server's group parities and the client's
+
+49
+00:01:58.245 --> 00:02:00.229
+own agree in every group but two
+
+50
+00:02:00.229 --> 00:02:02.093
+the group of the wanted entry
+
+51
+00:02:02.153 --> 00:02:04.257
+and the group of the entry inserted
+
+52
+00:02:04.317 --> 00:02:05.940
+at the hint's last refresh.
+
+53
+00:02:06.290 --> 00:02:08.370
+The client knows both groups.
+
+54
+00:02:08.720 --> 00:02:11.280
+How few numbers must the server send?
+
+55
+00:02:14.630 --> 00:02:15.270
+Two.
+
+56
+00:02:15.620 --> 00:02:18.180
+Two equations give two unknowns.
+
+57
+00:02:19.260 --> 00:02:20.767
+Of the passing runs
+
+58
+00:02:20.767 --> 00:02:23.478
+Muse Wonder 1.0 cut the most bytes
+
+59
+00:02:23.478 --> 00:02:26.341
+with a trick from RAID-6 disk arrays
+
+60
+00:02:26.341 --> 00:02:29.580
+two checksums can rebuild two lost values.
+
+61
+00:02:29.930 --> 00:02:32.204
+The server sends only a plain sum and a
+
+62
+00:02:32.262 --> 00:02:34.303
+weighted sum of its group parities
+
+63
+00:02:34.303 --> 00:02:36.810
+and the client compares them with its own.
+
+64
+00:02:37.160 --> 00:02:38.749
+With ordinary numbers
+
+65
+00:02:38.821 --> 00:02:41.132
+the server's sums are twenty-one
+
+66
+00:02:41.205 --> 00:02:42.360
+and fifty-seven.
+
+67
+00:02:42.710 --> 00:02:45.430
+The client's are thirteen and thirty-five.
+
+68
+00:02:45.780 --> 00:02:48.365
+So the two differences add up to eight
+
+69
+00:02:48.432 --> 00:02:50.619
+and two times the first plus four
+
+70
+00:02:50.685 --> 00:02:52.740
+times the second is twenty-two.
+
+71
+00:02:53.090 --> 00:02:55.478
+So group four differs by three
+
+72
+00:02:55.478 --> 00:02:57.250
+and group two by five.
+
+73
+00:02:57.600 --> 00:03:00.030
+The real scheme works with XOR
+
+74
+00:03:00.030 --> 00:03:01.520
+in a finite field.
+
+75
+00:03:02.100 --> 00:03:03.058
+By themselves
+
+76
+00:03:03.126 --> 00:03:05.453
+two sixteen-byte checksums replace
+
+77
+00:03:05.521 --> 00:03:07.300
+thirty-two group parities.
+
+78
+00:03:07.650 --> 00:03:08.444
+At full size
+
+79
+00:03:08.505 --> 00:03:10.399
+the reply falls to five hundred
+
+80
+00:03:10.460 --> 00:03:11.498
+forty-four bytes
+
+81
+00:03:11.559 --> 00:03:13.758
+and the whole lookup to one thousand
+
+82
+00:03:13.819 --> 00:03:14.980
+two hundred eighty
+
+83
+00:03:14.980 --> 00:03:16.690
+twenty-seven percent fewer.
+
+84
+00:03:17.270 --> 00:03:19.501
+A new message format would normally
+
+85
+00:03:19.565 --> 00:03:21.350
+need a new proof of privacy.
+
+86
+00:03:21.700 --> 00:03:24.100
+The task makes it checkable instead.
+
+87
+00:03:24.450 --> 00:03:25.610
+For every lookup
+
+88
+00:03:25.679 --> 00:03:27.590
+the trusted harness computes
+
+89
+00:03:27.658 --> 00:03:29.296
+the authors' request, R
+
+90
+00:03:29.296 --> 00:03:32.094
+and passes it alone to the agent's code
+
+91
+00:03:32.094 --> 00:03:34.346
+in a separate process: no index
+
+92
+00:03:34.346 --> 00:03:36.530
+no client state, no randomness.
+
+93
+00:03:36.880 --> 00:03:39.160
+The server receives only the output
+
+94
+00:03:39.223 --> 00:03:41.060
+a public function of what the
+
+95
+00:03:41.123 --> 00:03:42.770
+authors' server would see
+
+96
+00:03:42.770 --> 00:03:44.480
+so it learns nothing more.
+
+97
+00:03:45.060 --> 00:03:47.895
+A pass needs fewer bytes on every lookup
+
+98
+00:03:47.895 --> 00:03:50.660
+lower times, and no more client memory.
+
+99
+00:03:51.010 --> 00:03:53.490
+Eleven of sixteen models passed.
+
+100
+00:03:53.840 --> 00:03:55.813
+Gemini 4 Argon with Antigravity
+
+101
+00:03:55.877 --> 00:03:57.467
+had the best final score
+
+102
+00:03:57.467 --> 00:03:58.931
+sixty-two point eight
+
+103
+00:03:58.995 --> 00:04:00.649
+against twenty-seven point
+
+104
+00:04:00.713 --> 00:04:02.240
+three for the reference.
+
+105
+00:04:02.590 --> 00:04:03.504
+At full size
+
+106
+00:04:03.574 --> 00:04:05.752
+Kimi K3 sent only seven hundred
+
+107
+00:04:05.823 --> 00:04:07.790
+thirty-six bytes per lookup.
+
+108
+00:04:08.140 --> 00:04:09.982
+But it kept six hundred six point
+
+109
+00:04:10.038 --> 00:04:11.712
+eight megabytes on the client
+
+110
+00:04:11.768 --> 00:04:13.163
+against eighty-five point
+
+111
+00:04:13.219 --> 00:04:15.340
+three for the reference, so it failed.
+
+112
+00:04:15.920 --> 00:04:18.058
+That ends the Cryptography lecture
+
+113
+00:04:18.058 --> 00:04:19.280
+with three lessons.
+
+114
+00:04:19.630 --> 00:04:21.488
+The bar can be absolute
+
+115
+00:04:21.488 --> 00:04:24.430
+no run found all two hundred secrets.
+
+116
+00:04:24.780 --> 00:04:27.660
+An estimator must be right and fast.
+
+117
+00:04:28.010 --> 00:04:30.731
+And redesign the message, not just the code
+
+118
+00:04:30.793 --> 00:04:33.205
+the passing run that cut the most bytes
+
+119
+00:04:33.267 --> 00:04:35.370
+borrowed an idea from disk arrays.
+
+120
+00:04:35.720 --> 00:04:36.793
+As an exercise
+
+121
+00:04:36.793 --> 00:04:39.154
+read entry O with the same hint
+
+122
+00:04:39.154 --> 00:04:41.800
+and find which spare entry you need.
+
+123
+00:04:42.150 --> 00:04:45.430
+Next time: Lecture 12, security.

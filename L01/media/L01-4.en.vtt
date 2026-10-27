@@ -1,0 +1,301 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:04.060
+DBSCAN groups points by density.
+
+2
+00:00:04.410 --> 00:00:06.689
+A point with at least min-samples
+
+3
+00:00:06.758 --> 00:00:09.796
+points within distance eps, itself included
+
+4
+00:00:09.796 --> 00:00:10.970
+is a core point.
+
+5
+00:00:11.320 --> 00:00:13.395
+Core points within eps of each
+
+6
+00:00:13.464 --> 00:00:15.400
+other link into one cluster.
+
+7
+00:00:15.750 --> 00:00:17.871
+A non-core point next to a core
+
+8
+00:00:17.939 --> 00:00:20.950
+point is a border point; the rest are noise.
+
+9
+00:00:21.300 --> 00:00:23.288
+On our one hundred fifty points
+
+10
+00:00:23.288 --> 00:00:24.966
+that gives three clusters
+
+11
+00:00:24.966 --> 00:00:27.700
+with five border points and fourteen noise.
+
+12
+00:00:28.280 --> 00:00:30.947
+The task checks a result against the plain
+
+13
+00:00:31.010 --> 00:00:33.677
+version with the adjusted Rand index, ARI
+
+14
+00:00:33.677 --> 00:00:36.280
+which ignores how clusters are numbered.
+
+15
+00:00:36.630 --> 00:00:39.087
+But swap the noise with a whole cluster
+
+16
+00:00:39.087 --> 00:00:40.439
+and ARI is still one
+
+17
+00:00:40.500 --> 00:00:42.097
+although forty-two percent
+
+18
+00:00:42.159 --> 00:00:43.510
+of the points changed.
+
+19
+00:00:43.860 --> 00:00:46.900
+So the task also counts noise mismatches.
+
+20
+00:00:47.480 --> 00:00:49.400
+Five of sixteen passed.
+
+21
+00:00:49.750 --> 00:00:52.812
+Gemini 4 Argon in Pi was the fastest
+
+22
+00:00:52.812 --> 00:00:54.550
+and failed on noise.
+
+23
+00:00:54.900 --> 00:00:56.984
+Claude Opus 5.5 took two point
+
+24
+00:00:57.053 --> 00:00:58.720
+three five milliseconds
+
+25
+00:00:58.720 --> 00:01:01.220
+against the reference's twenty-one.
+
+26
+00:01:01.570 --> 00:01:03.169
+It skipped tile pairs that
+
+27
+00:01:03.230 --> 00:01:04.337
+lie too far apart
+
+28
+00:01:04.337 --> 00:01:06.858
+settled the clear pairs on tensor cores
+
+29
+00:01:06.920 --> 00:01:08.642
+and rechecked only the pairs
+
+30
+00:01:08.703 --> 00:01:09.810
+near the boundary.
+
+31
+00:01:10.160 --> 00:01:12.320
+Its noise matched exactly.
+
+32
+00:01:12.900 --> 00:01:15.909
+IVF-PQ is a standard index for approximate
+
+33
+00:01:15.981 --> 00:01:17.700
+nearest-neighbor search.
+
+34
+00:01:18.050 --> 00:01:20.417
+IVF splits the vectors into lists
+
+35
+00:01:20.489 --> 00:01:22.210
+by their nearest center.
+
+36
+00:01:22.560 --> 00:01:25.372
+PQ compresses each vector's offset from
+
+37
+00:01:25.445 --> 00:01:27.680
+that center into m short codes.
+
+38
+00:01:28.030 --> 00:01:30.973
+A query probes only its few nearest lists
+
+39
+00:01:30.973 --> 00:01:33.566
+and builds one small table per list
+
+40
+00:01:33.636 --> 00:01:35.528
+so each stored vector costs
+
+41
+00:01:35.598 --> 00:01:37.070
+just m table lookups.
+
+42
+00:01:37.650 --> 00:01:38.909
+Pause and predict.
+
+43
+00:01:38.979 --> 00:01:40.797
+Our index has two thousand
+
+44
+00:01:40.867 --> 00:01:42.616
+vectors in sixteen lists.
+
+45
+00:01:42.686 --> 00:01:45.413
+Probing four lists instead of one scans
+
+46
+00:01:45.483 --> 00:01:47.651
+about four times as many codes.
+
+47
+00:01:47.651 --> 00:01:49.330
+What happens to recall?
+
+48
+00:01:52.880 --> 00:01:55.839
+It rises from zero point eight five to one.
+
+49
+00:01:55.839 --> 00:01:57.009
+Past four lists
+
+50
+00:01:57.009 --> 00:01:59.280
+more scanning buys nothing here.
+
+51
+00:02:00.360 --> 00:02:03.480
+On the real task, eight of sixteen passed.
+
+52
+00:02:03.830 --> 00:02:05.711
+Claude Opus 5.5 took one point
+
+53
+00:02:05.774 --> 00:02:07.341
+seven three milliseconds
+
+54
+00:02:07.404 --> 00:02:08.846
+against the reference's
+
+55
+00:02:08.909 --> 00:02:10.288
+one hundred fifty-one
+
+56
+00:02:10.351 --> 00:02:12.232
+by decoding each list once for
+
+57
+00:02:12.295 --> 00:02:13.988
+every query that probes it
+
+58
+00:02:13.988 --> 00:02:15.430
+as one matrix product.
+
+59
+00:02:15.780 --> 00:02:18.153
+It scored eighty point five against
+
+60
+00:02:18.221 --> 00:02:19.780
+seventy-five point six.
+
+61
+00:02:20.130 --> 00:02:21.415
+That gap looks small
+
+62
+00:02:21.415 --> 00:02:23.250
+but the score is logarithmic
+
+63
+00:02:23.311 --> 00:02:25.758
+it means about ten times the reference's
+
+64
+00:02:25.819 --> 00:02:27.410
+speed-up over the starter.
+
+65
+00:02:27.990 --> 00:02:30.904
+That ends the lecture on machine-learning systems
+
+66
+00:02:30.904 --> 00:02:32.070
+with three lessons.
+
+67
+00:02:32.420 --> 00:02:35.460
+Estimate what you skip, and rank by error.
+
+68
+00:02:35.810 --> 00:02:38.372
+Every workload, every metric
+
+69
+00:02:38.372 --> 00:02:41.730
+no model passed SVG-EAR or Continuum.
+
+70
+00:02:42.080 --> 00:02:45.321
+And bound, then be exact: Opus's k-NN
+
+71
+00:02:45.321 --> 00:02:48.648
+DBSCAN and IVF-PQ passes compute fast
+
+72
+00:02:48.648 --> 00:02:51.292
+prove how far off they can be
+
+73
+00:02:51.292 --> 00:02:54.960
+and redo only what lies near the boundary.
+
+74
+00:02:55.310 --> 00:02:57.024
+Next time: Lecture 2
+
+75
+00:02:57.024 --> 00:02:59.310
+high-performance computing.

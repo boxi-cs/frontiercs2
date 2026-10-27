@@ -1,0 +1,293 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.020
+Filling one cell at a time is slow.
+
+2
+00:00:03.370 --> 00:00:06.661
+Myers's bit-vector algorithm, from 1999
+
+3
+00:00:06.661 --> 00:00:09.130
+fills a whole column at once.
+
+4
+00:00:09.480 --> 00:00:11.196
+It starts from one fact
+
+5
+00:00:11.196 --> 00:00:14.200
+neighbouring cells differ by at most one.
+
+6
+00:00:14.550 --> 00:00:16.692
+So a column can be stored as
+
+7
+00:00:16.768 --> 00:00:19.827
+the steps going down it: plus one, zero
+
+8
+00:00:19.827 --> 00:00:21.510
+or minus one per row.
+
+9
+00:00:21.860 --> 00:00:23.940
+The first target column of
+
+10
+00:00:24.020 --> 00:00:27.540
+our example goes one, zero, one, two, three.
+
+11
+00:00:27.890 --> 00:00:29.848
+Its steps are minus one
+
+12
+00:00:29.848 --> 00:00:32.050
+then plus one three times.
+
+13
+00:00:32.630 --> 00:00:35.590
+Myers keeps these steps in two bit vectors.
+
+14
+00:00:35.940 --> 00:00:37.198
+One, called P V
+
+15
+00:00:37.198 --> 00:00:40.580
+marks the rows where the step is plus one.
+
+16
+00:00:40.930 --> 00:00:42.153
+The other, M V
+
+17
+00:00:42.153 --> 00:00:45.250
+marks the rows where it is minus one.
+
+18
+00:00:45.600 --> 00:00:47.580
+Masks say, for each letter
+
+19
+00:00:47.580 --> 00:00:50.000
+which rows of the query hold it.
+
+20
+00:00:50.350 --> 00:00:52.744
+The next column comes from the current one
+
+21
+00:00:52.801 --> 00:00:54.910
+with a handful of bitwise operations.
+
+22
+00:00:55.260 --> 00:00:57.891
+A machine word holds sixty-four rows
+
+23
+00:00:57.891 --> 00:01:01.020
+so each operation handles sixty-four cells.
+
+24
+00:01:01.600 --> 00:01:03.520
+The trick is one addition.
+
+25
+00:01:03.870 --> 00:01:06.030
+It carries a bit down a run of rows
+
+26
+00:01:06.090 --> 00:01:08.130
+just as a chain of matches carries
+
+27
+00:01:08.190 --> 00:01:09.870
+a low value down a diagonal.
+
+28
+00:01:10.220 --> 00:01:12.700
+Here are the four columns of our example.
+
+29
+00:01:13.050 --> 00:01:16.467
+The bottom cell goes three, two, two, one
+
+30
+00:01:16.467 --> 00:01:17.850
+as in the table.
+
+31
+00:01:18.200 --> 00:01:19.247
+On long strings
+
+32
+00:01:19.313 --> 00:01:21.407
+Edlib cuts the query into blocks
+
+33
+00:01:21.473 --> 00:01:23.633
+of sixty-four rows and passes the
+
+34
+00:01:23.698 --> 00:01:25.400
+carry from block to block.
+
+35
+00:01:25.750 --> 00:01:28.294
+A column of a thirty-thousand-base query
+
+36
+00:01:28.357 --> 00:01:30.710
+takes four hundred sixty-nine blocks.
+
+37
+00:01:31.290 --> 00:01:33.690
+The band skips cells altogether.
+
+38
+00:01:34.040 --> 00:01:37.015
+A path through a cell must make up the gap between
+
+39
+00:01:37.075 --> 00:01:39.217
+its row and its column to get there
+
+40
+00:01:39.217 --> 00:01:41.240
+and another gap to reach the end.
+
+41
+00:01:41.590 --> 00:01:43.470
+If the distance is at most k
+
+42
+00:01:43.535 --> 00:01:45.740
+any cell where the two gaps add up
+
+43
+00:01:45.805 --> 00:01:47.750
+to more than k can be skipped.
+
+44
+00:01:48.100 --> 00:01:51.357
+What is left is a band around the diagonal
+
+45
+00:01:51.357 --> 00:01:53.780
+an idea of Ukkonen's from 1985.
+
+46
+00:01:54.130 --> 00:01:56.963
+Edlib does not know the distance in advance
+
+47
+00:01:56.963 --> 00:01:59.088
+so it tries k equals sixty-four
+
+48
+00:01:59.153 --> 00:02:00.633
+and doubles k until the
+
+49
+00:02:00.698 --> 00:02:02.050
+band holds an answer.
+
+50
+00:02:02.630 --> 00:02:04.230
+Pause and predict.
+
+51
+00:02:04.580 --> 00:02:06.404
+At sixty percent similarity
+
+52
+00:02:06.404 --> 00:02:09.140
+the distance is three hundred fifty-five.
+
+53
+00:02:09.490 --> 00:02:11.890
+How many tries does the doubling need?
+
+54
+00:02:15.440 --> 00:02:16.160
+Four.
+
+55
+00:02:16.510 --> 00:02:17.227
+Sixty-four
+
+56
+00:02:17.293 --> 00:02:19.901
+one hundred twenty-eight and two hundred
+
+57
+00:02:19.966 --> 00:02:21.531
+fifty-six are too small
+
+58
+00:02:21.531 --> 00:02:24.270
+and five hundred twelve holds the answer.
+
+59
+00:02:24.620 --> 00:02:26.330
+Together the tries compute
+
+60
+00:02:26.396 --> 00:02:27.580
+most of the table.
+
+61
+00:02:27.930 --> 00:02:30.870
+At ninety-nine percent, one try is enough
+
+62
+00:02:30.940 --> 00:02:32.690
+about sixty-four thousand
+
+63
+00:02:32.760 --> 00:02:34.090
+cells of a million.
+
+64
+00:02:35.170 --> 00:02:37.669
+So: a column is a vector of steps
+
+65
+00:02:37.669 --> 00:02:39.506
+kept in two bit vectors
+
+66
+00:02:39.506 --> 00:02:41.490
+sixty-four rows to a word.
+
+67
+00:02:41.840 --> 00:02:44.608
+The band skips every cell that no path
+
+68
+00:02:44.681 --> 00:02:46.720
+of cost at most k can reach.
+
+69
+00:02:47.070 --> 00:02:48.791
+And path recovery already
+
+70
+00:02:48.860 --> 00:02:51.751
+knows the distance, so k can be set to it
+
+71
+00:02:51.751 --> 00:02:52.990
+with no doubling.
+
+72
+00:02:53.340 --> 00:02:55.877
+Next, how to recover the path without
+
+73
+00:02:55.946 --> 00:02:57.180
+storing the table.

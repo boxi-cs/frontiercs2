@@ -1,0 +1,409 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:02.286
+Welcome to Lecture 8 of the
+
+2
+00:00:02.359 --> 00:00:04.860
+FrontierCS 2 course, on databases.
+
+3
+00:00:05.210 --> 00:00:07.718
+FrontierCS 2 takes a research paper
+
+4
+00:00:07.788 --> 00:00:09.530
+removes its key idea from
+
+5
+00:00:09.600 --> 00:00:11.133
+the authors' own code
+
+6
+00:00:11.133 --> 00:00:13.850
+and asks an AI agent to write it back.
+
+7
+00:00:14.200 --> 00:00:16.839
+To pass, it must beat the human reference
+
+8
+00:00:16.903 --> 00:00:18.384
+on every measured case
+
+9
+00:00:18.384 --> 00:00:19.800
+hidden ones included.
+
+10
+00:00:20.150 --> 00:00:22.597
+This lecture has nine tasks
+
+11
+00:00:22.597 --> 00:00:24.870
+all from papers in PVLDB.
+
+12
+00:00:25.220 --> 00:00:26.820
+We start with joins.
+
+13
+00:00:27.400 --> 00:00:29.792
+A database joins tables two at a time
+
+14
+00:00:29.855 --> 00:00:32.814
+and a plan built that way can make intermediate
+
+15
+00:00:32.877 --> 00:00:35.080
+results far larger than the answer.
+
+16
+00:00:35.430 --> 00:00:36.897
+Take our small example
+
+17
+00:00:36.961 --> 00:00:38.683
+shaped like the task page's
+
+18
+00:00:38.747 --> 00:00:40.150
+Stack Overflow tables.
+
+19
+00:00:40.500 --> 00:00:43.060
+Four users are left after a filter.
+
+20
+00:00:43.410 --> 00:00:45.529
+There are a hundred twenty posts
+
+21
+00:00:45.595 --> 00:00:47.250
+and six hundred comments.
+
+22
+00:00:47.600 --> 00:00:49.709
+The binary plan joins comments
+
+23
+00:00:49.779 --> 00:00:52.240
+with posts first: six hundred rows.
+
+24
+00:00:52.590 --> 00:00:55.550
+Then it joins the users, and keeps sixty.
+
+25
+00:00:56.130 --> 00:00:57.883
+The Yannakakis algorithm
+
+26
+00:00:57.956 --> 00:00:59.490
+runs semijoins first.
+
+27
+00:00:59.840 --> 00:01:02.185
+A semijoin keeps the rows of one table
+
+28
+00:01:02.247 --> 00:01:04.160
+that have a partner in another.
+
+29
+00:01:04.510 --> 00:01:06.462
+Posts keep only the fifteen
+
+30
+00:01:06.535 --> 00:01:08.270
+owned by our four users.
+
+31
+00:01:08.620 --> 00:01:11.580
+Comments keep only the sixty on those posts.
+
+32
+00:01:11.930 --> 00:01:13.680
+Then it joins what is left
+
+33
+00:01:13.680 --> 00:01:15.041
+the same sixty rows
+
+34
+00:01:15.041 --> 00:01:17.050
+and nothing larger on the way.
+
+35
+00:01:17.630 --> 00:01:19.468
+But the system converts only
+
+36
+00:01:19.534 --> 00:01:21.109
+join trees of one shape
+
+37
+00:01:21.175 --> 00:01:23.341
+every join's keys must sit in the
+
+38
+00:01:23.406 --> 00:01:25.310
+leftmost table of both sides.
+
+39
+00:01:25.660 --> 00:01:27.337
+Add votes to our example
+
+40
+00:01:27.404 --> 00:01:29.484
+and the optimizer's plan breaks
+
+41
+00:01:29.551 --> 00:01:31.429
+the rule at its middle join
+
+42
+00:01:31.429 --> 00:01:33.173
+that join is on post ids
+
+43
+00:01:33.240 --> 00:01:34.917
+but the leftmost table on
+
+44
+00:01:34.984 --> 00:01:36.460
+its left is the users.
+
+45
+00:01:36.810 --> 00:01:38.576
+The agent writes the rewrite
+
+46
+00:01:38.639 --> 00:01:40.090
+that reshapes the tree.
+
+47
+00:01:40.440 --> 00:01:42.921
+Claude Opus 5.5 saw that the joins
+
+48
+00:01:42.994 --> 00:01:45.037
+link the tables into a tree
+
+49
+00:01:45.037 --> 00:01:47.080
+with any table as its root.
+
+50
+00:01:47.430 --> 00:01:49.624
+A left-deep spine from any root
+
+51
+00:01:49.624 --> 00:01:52.504
+with each child's subplan joined onto it
+
+52
+00:01:52.504 --> 00:01:53.670
+passes the rule.
+
+53
+00:01:54.020 --> 00:01:56.550
+In our model, rooting at the six hundred
+
+54
+00:01:56.613 --> 00:01:57.941
+comments is cheapest
+
+55
+00:01:57.941 --> 00:02:00.660
+because the largest table is never hashed.
+
+56
+00:02:01.240 --> 00:02:03.640
+The judge runs thirty-nine queries.
+
+57
+00:02:03.990 --> 00:02:05.665
+The score is speed against
+
+58
+00:02:05.730 --> 00:02:07.340
+the original binary plan
+
+59
+00:02:07.340 --> 00:02:09.273
+but the pass rule is harsher
+
+60
+00:02:09.338 --> 00:02:11.335
+every query must beat the human
+
+61
+00:02:11.399 --> 00:02:13.590
+reference's median time, strictly.
+
+62
+00:02:13.940 --> 00:02:15.380
+No model passed.
+
+63
+00:02:15.730 --> 00:02:17.300
+Thirteen of sixteen scored
+
+64
+00:02:17.360 --> 00:02:18.568
+above the reference
+
+65
+00:02:18.628 --> 00:02:20.560
+but thirty-nine strict wins were
+
+66
+00:02:20.621 --> 00:02:22.130
+too many for every model.
+
+67
+00:02:22.710 --> 00:02:24.390
+JoinBoost, from 2023
+
+68
+00:02:24.390 --> 00:02:27.590
+trains boosted trees inside a database
+
+69
+00:02:27.590 --> 00:02:30.150
+and never builds the full join.
+
+70
+00:02:30.500 --> 00:02:33.351
+After each tree, every sales row subtracts a
+
+71
+00:02:33.416 --> 00:02:35.100
+share of its leaf's value
+
+72
+00:02:35.165 --> 00:02:37.239
+and the leaf depends on features
+
+73
+00:02:37.303 --> 00:02:38.340
+in other tables.
+
+74
+00:02:38.690 --> 00:02:41.782
+The obvious way issues one update per leaf
+
+75
+00:02:41.782 --> 00:02:44.370
+and each one scans every sales row.
+
+76
+00:02:44.720 --> 00:02:47.007
+In our model of four hundred sales
+
+77
+00:02:47.007 --> 00:02:49.882
+a tree of depth five has thirty-one leaves
+
+78
+00:02:49.948 --> 00:02:51.646
+so that is twelve thousand
+
+79
+00:02:51.712 --> 00:02:53.280
+four hundred row visits.
+
+80
+00:02:53.630 --> 00:02:55.597
+One update with a case over the
+
+81
+00:02:55.660 --> 00:02:57.310
+leaves needs four hundred.
+
+82
+00:02:57.890 --> 00:03:00.550
+The task removes this residual update
+
+83
+00:03:00.550 --> 00:03:02.930
+and ten of sixteen models passed.
+
+84
+00:03:03.280 --> 00:03:05.080
+The best, Gemini 4 Argon
+
+85
+00:03:05.080 --> 00:03:06.808
+running in Antigravity
+
+86
+00:03:06.808 --> 00:03:09.112
+scored thirty-three point four
+
+87
+00:03:09.184 --> 00:03:11.128
+about ten times faster than
+
+88
+00:03:11.200 --> 00:03:12.640
+one update per leaf.
+
+89
+00:03:12.990 --> 00:03:16.510
+Claude Opus 5.5 reorganized the data.
+
+90
+00:03:16.860 --> 00:03:19.672
+It joined each branch of small tables once
+
+91
+00:03:19.737 --> 00:03:21.960
+into a side table with every split
+
+92
+00:03:22.025 --> 00:03:23.660
+test precomputed per key.
+
+93
+00:03:24.240 --> 00:03:26.292
+So: drop the rows that cannot
+
+94
+00:03:26.363 --> 00:03:27.920
+match before you join.
+
+95
+00:03:28.270 --> 00:03:30.263
+Reshape a plan by choosing the
+
+96
+00:03:30.329 --> 00:03:31.790
+root of its join tree.
+
+97
+00:03:32.140 --> 00:03:34.831
+And update the residuals in one pass
+
+98
+00:03:34.831 --> 00:03:36.140
+not one per leaf.
+
+99
+00:03:36.490 --> 00:03:37.466
+As an exercise
+
+100
+00:03:37.466 --> 00:03:39.873
+filter twenty users instead of four
+
+101
+00:03:39.873 --> 00:03:42.410
+and see how the cheapest root changes.
+
+102
+00:03:42.760 --> 00:03:44.360
+Next, FARGO.

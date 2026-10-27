@@ -1,0 +1,317 @@
+WEBVTT
+
+1
+00:00:00.300 --> 00:00:03.244
+An xor filter, also by Graf and Lemire
+
+2
+00:00:03.244 --> 00:00:05.660
+stores a table of small values.
+
+3
+00:00:06.010 --> 00:00:09.113
+Every key gets a short fingerprint, f of x
+
+4
+00:00:09.113 --> 00:00:10.340
+and three slots
+
+5
+00:00:10.340 --> 00:00:12.650
+one in each third of the table.
+
+6
+00:00:13.000 --> 00:00:15.361
+Construction must fill the table so
+
+7
+00:00:15.428 --> 00:00:17.856
+that the values in every key's three
+
+8
+00:00:17.924 --> 00:00:19.880
+slots XOR to its fingerprint.
+
+9
+00:00:20.230 --> 00:00:22.310
+A lookup checks that equation.
+
+10
+00:00:22.660 --> 00:00:25.060
+A stored key always passes.
+
+11
+00:00:25.410 --> 00:00:27.679
+An absent key passes by chance
+
+12
+00:00:27.679 --> 00:00:30.241
+one time in two hundred fifty-six
+
+13
+00:00:30.241 --> 00:00:32.290
+for eight-bit fingerprints.
+
+14
+00:00:32.870 --> 00:00:35.724
+Each key is an edge joining three slots
+
+15
+00:00:35.724 --> 00:00:38.150
+the keys form a three-hypergraph.
+
+16
+00:00:38.500 --> 00:00:41.648
+Peeling solves one XOR equation per key
+
+17
+00:00:41.648 --> 00:00:43.300
+without any algebra.
+
+18
+00:00:43.650 --> 00:00:46.370
+Here are eight keys in twelve slots.
+
+19
+00:00:46.720 --> 00:00:49.747
+For every slot, count how many keys use it
+
+20
+00:00:49.747 --> 00:00:52.000
+and keep the XOR of those keys.
+
+21
+00:00:52.580 --> 00:00:53.380
+Slots one
+
+22
+00:00:53.380 --> 00:00:56.500
+two and eleven each have a single key.
+
+23
+00:00:56.850 --> 00:00:59.396
+Such a slot belongs to that key alone
+
+24
+00:00:59.396 --> 00:01:02.210
+and the XOR kept there is the key itself.
+
+25
+00:01:02.560 --> 00:01:04.720
+Remove the key from its three slots
+
+26
+00:01:04.720 --> 00:01:07.120
+and remember the key with its own slot.
+
+27
+00:01:07.470 --> 00:01:10.830
+Key sixty-six goes first, from slot eleven.
+
+28
+00:01:11.180 --> 00:01:14.055
+That leaves slot five with a single key
+
+29
+00:01:14.055 --> 00:01:16.140
+twelve, so twelve goes next.
+
+30
+00:01:16.490 --> 00:01:17.290
+Repeat.
+
+31
+00:01:17.640 --> 00:01:19.880
+Here all eight keys come off.
+
+32
+00:01:20.460 --> 00:01:21.606
+Now fill the table
+
+33
+00:01:21.666 --> 00:01:23.295
+going back through the keys
+
+34
+00:01:23.355 --> 00:01:24.380
+in reverse order.
+
+35
+00:01:24.730 --> 00:01:26.879
+Each key's own slot is still free
+
+36
+00:01:26.942 --> 00:01:28.649
+so set it to whatever makes
+
+37
+00:01:28.712 --> 00:01:29.850
+its equation hold.
+
+38
+00:01:30.200 --> 00:01:31.480
+Why does this work?
+
+39
+00:01:31.830 --> 00:01:33.643
+Keys peeled later never use
+
+40
+00:01:33.711 --> 00:01:35.457
+an earlier key's own slot
+
+41
+00:01:35.457 --> 00:01:37.270
+and they are filled first.
+
+42
+00:01:37.620 --> 00:01:40.318
+So each key's other two slots are already
+
+43
+00:01:40.383 --> 00:01:42.423
+final when its own slot is set
+
+44
+00:01:42.423 --> 00:01:44.660
+and nothing that holds is broken.
+
+45
+00:01:45.240 --> 00:01:48.200
+Peeling needs a slot with one key to start.
+
+46
+00:01:48.550 --> 00:01:51.017
+With too few slots, it gets stuck
+
+47
+00:01:51.090 --> 00:01:53.266
+every remaining slot is shared
+
+48
+00:01:53.339 --> 00:01:54.790
+by two or more keys.
+
+49
+00:01:55.140 --> 00:01:56.939
+For random three-hypergraphs
+
+50
+00:01:57.001 --> 00:01:59.173
+there is a sharp threshold near one
+
+51
+00:01:59.235 --> 00:02:01.220
+point two two two slots per key.
+
+52
+00:02:01.570 --> 00:02:04.168
+With two thousand keys and ten seeds
+
+53
+00:02:04.168 --> 00:02:06.837
+at one point one eight slots per key
+
+54
+00:02:06.837 --> 00:02:07.890
+no seed peels.
+
+55
+00:02:08.240 --> 00:02:11.360
+At one point two one, one seed does.
+
+56
+00:02:11.710 --> 00:02:14.159
+At one point two four, eight do
+
+57
+00:02:14.159 --> 00:02:16.990
+and at one point two seven, all ten.
+
+58
+00:02:17.570 --> 00:02:18.864
+Pause and predict.
+
+59
+00:02:18.864 --> 00:02:20.374
+Below the threshold
+
+60
+00:02:20.374 --> 00:02:22.530
+would trying more seeds help?
+
+61
+00:02:26.080 --> 00:02:26.374
+No.
+
+62
+00:02:26.374 --> 00:02:28.869
+At two thousand keys the threshold
+
+63
+00:02:28.943 --> 00:02:30.191
+is still blurred
+
+64
+00:02:30.191 --> 00:02:33.200
+but with millions of keys it is a cliff.
+
+65
+00:02:33.550 --> 00:02:35.735
+So an xor filter uses one point
+
+66
+00:02:35.805 --> 00:02:37.497
+two three slots per key
+
+67
+00:02:37.497 --> 00:02:40.034
+nine point eight four bits per key
+
+68
+00:02:40.034 --> 00:02:42.430
+for one in two hundred fifty-six.
+
+69
+00:02:43.510 --> 00:02:44.470
+To sum up.
+
+70
+00:02:44.820 --> 00:02:46.842
+Every key's three slots XOR
+
+71
+00:02:46.917 --> 00:02:48.340
+to its fingerprint.
+
+72
+00:02:48.690 --> 00:02:51.076
+Peel the slots used by one key
+
+73
+00:02:51.076 --> 00:02:52.770
+then fill in reverse.
+
+74
+00:02:53.120 --> 00:02:55.214
+And peeling needs about one point
+
+75
+00:02:55.277 --> 00:02:56.800
+two three slots per key.
+
+76
+00:02:57.150 --> 00:03:00.183
+As an exercise, peel the eight keys by hand
+
+77
+00:03:00.183 --> 00:03:01.630
+and check the table.
+
+78
+00:03:01.980 --> 00:03:04.064
+Next, the binary fuse filter
+
+79
+00:03:04.064 --> 00:03:06.220
+which peels with fewer slots.
